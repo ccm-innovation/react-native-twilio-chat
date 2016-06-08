@@ -1,0 +1,15 @@
+PODS:
+  - TwilioCommon (0.2.2)
+  - TwilioIPMessagingClient (0.14.1):
+    - TwilioCommon (~> 0.2.2)
+
+DEPENDENCIES:
+  - TwilioIPMessagingClient (~> 0.14.1)
+
+SPEC CHECKSUMS:
+  TwilioCommon: b697446b6f151255c4118f065e959c3dedee44e5
+  TwilioIPMessagingClient: 3dac0818cd382b8d4d6f77ffe8bf8adabcaadcf9
+
+PODFILE CHECKSUM: 71ff44d237da51658d6651696d0eaf305fcc7742
+
+COCOAPODS: 1.0.0
