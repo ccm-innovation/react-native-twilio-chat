@@ -13,7 +13,6 @@
 		1DAE2D391D086CFD00D3FE06 /* RCTTwilioIPMessagingClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D311D086CFD00D3FE06 /* RCTTwilioIPMessagingClient.m */; };
 		1DAE2D3A1D086CFD00D3FE06 /* RCTTwilioIPMessagingMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D331D086CFD00D3FE06 /* RCTTwilioIPMessagingMembers.m */; };
 		1DAE2D3B1D086CFD00D3FE06 /* RCTTwilioIPMessagingMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D351D086CFD00D3FE06 /* RCTTwilioIPMessagingMessages.m */; };
-		3F1C65BACD047E1A5CC9739C /* Pods_RCTTwilioIPMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96262B9C03F11AD116E33E09 /* Pods_RCTTwilioIPMessaging.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,9 +41,6 @@
 		1DAE2D331D086CFD00D3FE06 /* RCTTwilioIPMessagingMembers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioIPMessagingMembers.m; sourceTree = "<group>"; };
 		1DAE2D341D086CFD00D3FE06 /* RCTTwilioIPMessagingMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioIPMessagingMessages.h; sourceTree = "<group>"; };
 		1DAE2D351D086CFD00D3FE06 /* RCTTwilioIPMessagingMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioIPMessagingMessages.m; sourceTree = "<group>"; };
-		96262B9C03F11AD116E33E09 /* Pods_RCTTwilioIPMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RCTTwilioIPMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A5CB45D1038BDB1B2EEE733 /* Pods-RCTTwilioIPMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCTTwilioIPMessaging.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RCTTwilioIPMessaging/Pods-RCTTwilioIPMessaging.debug.xcconfig"; sourceTree = "<group>"; };
-		ED571D7FC08B682C7F49DD90 /* Pods-RCTTwilioIPMessaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCTTwilioIPMessaging.release.xcconfig"; path = "Pods/Target Support Files/Pods-RCTTwilioIPMessaging/Pods-RCTTwilioIPMessaging.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +48,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F1C65BACD047E1A5CC9739C /* Pods_RCTTwilioIPMessaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,8 +59,6 @@
 			children = (
 				1DAE2D201D086CD600D3FE06 /* RCTTwilioIPMessaging */,
 				1DAE2D1F1D086CD600D3FE06 /* Products */,
-				EA78E72F1EB5D2D188AA4330 /* Pods */,
-				37B36233C4B9D9C74988146E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,23 +87,6 @@
 				1DAE2D351D086CFD00D3FE06 /* RCTTwilioIPMessagingMessages.m */,
 			);
 			path = RCTTwilioIPMessaging;
-			sourceTree = "<group>";
-		};
-		37B36233C4B9D9C74988146E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				96262B9C03F11AD116E33E09 /* Pods_RCTTwilioIPMessaging.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EA78E72F1EB5D2D188AA4330 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				9A5CB45D1038BDB1B2EEE733 /* Pods-RCTTwilioIPMessaging.debug.xcconfig */,
-				ED571D7FC08B682C7F49DD90 /* Pods-RCTTwilioIPMessaging.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,8 +241,11 @@
 		};
 		1DAE2D281D086CD600D3FE06 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9A5CB45D1038BDB1B2EEE733 /* Pods-RCTTwilioIPMessaging.debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ios/Pods/**",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../React/**",
@@ -284,8 +263,11 @@
 		};
 		1DAE2D291D086CD600D3FE06 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED571D7FC08B682C7F49DD90 /* Pods-RCTTwilioIPMessaging.release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../ios/Pods/**",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../React/**",
