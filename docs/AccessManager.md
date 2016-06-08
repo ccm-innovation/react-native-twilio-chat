@@ -24,9 +24,9 @@ The AccessManager is Twilio's separation of authenticating your instance of Twil
 ### Events
 You can specify handlers for events on the `accessManager` instance itself. For example, if you wanted to listen to the token expiration event, you would set `accessManager.onTokenExpired = function() { console.log('Token expired') }`.
 
-#### onTokenExpired
+#### `onTokenExpired()`
 Fired when the current token expires
-#### onTokenError
+#### `onTokenError({error, userInfo})`
 Generic error handler for Access Manager issues. Returns the error and objective-c userInfo attributes.
 
 |Name |Type |Description |
