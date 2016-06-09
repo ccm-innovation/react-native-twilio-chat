@@ -159,3 +159,62 @@ Update the last consumed index for this Member and Channel to the max message cu
 
 #### `close()`
 Close the channel and remove all listeners (call in `componentWillUnmount`).
+
+## Events
+
+#### `onSynchronizationStatusChanged(status)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*status*|Constants.TWMChannelSynchronizationStatus|The new synchronization status of the channel
+
+#### `onChannelChanged(channel)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*channel*|Channel|A new instance of the updated channel
+
+#### `onChannelDeleted()`
+
+#### `onMemberJoined(member)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*member*|Object|The object of the new member
+
+#### `onMemberChanged(member)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*member*|Object|The object of the changed member
+
+#### `onMemberLeft(member)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*member*|Object|The object of the left member
+
+#### `onMessageAdded(message)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*message*|Message|The instance of the new message
+
+#### `onMessageChanged(message)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*message*|Message|The instance of the changed message
+
+#### `onMessageDeleted(message)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*message*|Message|The instance of the deleted message
+
+#### `onTypingStarted(member)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*member*|Object|The member object who started typing
+
+#### `onTypingEnded(member)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*member*|Object|The member object who ended typing
+
+#### `onToastReceived(message)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*message*|Message|The instance of the toast message
