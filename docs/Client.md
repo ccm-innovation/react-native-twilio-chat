@@ -1,6 +1,32 @@
 # Client
 The Client is the main interface for interacting with the Twilio SDKs. 
 
+## Usage
+```JavaScript
+// create the client
+var client = new Client(accessManager);
+
+// specify any global events
+client.onError = ({error, userInfo}) => console.log(error)
+
+// initialize the client
+client.initialize()
+
+// wait for sync to finish
+client.onClientSynchronized = () => {
+  client.getChannels()
+  .then((channels) => console.log(channels))
+  
+  // create a new channel
+  client.createChannel({
+    friendlyName: 'My Channel',
+    uniqueName: 'my_channel',
+    type: Constants.TWMChannelType.Private
+  })
+  .then((channel) => console.log(channel))
+}
+```
+
 ## `new Client(accessManager[, synchronizationStrategy[, initialMessageCount]])`
 |Name |Type |Description |
 |--- |--- |--- |
