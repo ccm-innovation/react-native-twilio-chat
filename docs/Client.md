@@ -83,6 +83,27 @@ Create a new channel. Returns `Channel`.
 |--- |--- |--- |
 |*logLevel*|Constants.TWMLogLevel|Set the log level of the SDK
 
+#### `register(token)`
+Register APNS token for push notifications. This can be obtained in `PushNotificationIOS.addListener('register', handler)`.
+
+|Name |Type |Description |
+|--- |--- |--- |
+|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
+
+#### `deregister(token)`
+De-register from push notification updates.
+
+|Name |Type |Description |
+|--- |--- |--- |
+|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
+
+#### `handleNotification(notification)`
+Queue the incoming notification with the messaging library for processing - for React Native, this will come in `PushNotificationIOS.addEventListener('notification', handleNotification)`.
+
+|Name |Type |Description |
+|--- |--- |--- |
+|*notification*|Object|The incomming notification.
+
 #### `shutdown()`
 Terminate the instance of the client, and remove all the listeners. Note: this does not remove channel specific listeners.
 
