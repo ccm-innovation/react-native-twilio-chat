@@ -272,7 +272,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                     },
                 @"TWMClientSynchronizationStrategy": @{
                     @"All": @(TWMClientSynchronizationStrategyAll),
-                    @"ChannelList": @(TWMClientSynchronizationStrategyChannelsList)
+                    @"ChannelsList": @(TWMClientSynchronizationStrategyChannelsList)
                     },
                 @"TWMUserInfoUpdate": @{
                     @"FriendlyName": @(TWMUserInfoUpdateFriendlyName),
