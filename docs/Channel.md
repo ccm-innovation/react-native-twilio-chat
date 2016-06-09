@@ -155,6 +155,7 @@ Returns a `Message` instance.
 |*index*|Number|The index of the message consumed (should be greated than last consumed index)
 
 #### `setAllMessagesConsumed()`
+Update the last consumed index for this Member and Channel to the max message currently on this device.
 
 #### `close()`
 Close the channel and remove all listeners (call in `componentWillUnmount`).
