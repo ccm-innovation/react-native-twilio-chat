@@ -5,3 +5,4 @@
 - [Client](Client.md)
 - [Channel](Channel.md)
 - [Message](Message.md)
+- [Constants](Constants.md)
