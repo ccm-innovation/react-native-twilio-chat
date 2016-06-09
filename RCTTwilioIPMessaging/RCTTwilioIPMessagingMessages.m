@@ -94,6 +94,11 @@ RCT_REMAP_METHOD(messageWithIndex, channelSid:(NSString *)channelSid index:(NSNu
   resolve([RCTConvert TWMMessage:[messages messageWithIndex:index]]);
 }
 
+RCT_REMAP_METHOD(messageForConsumptionIndex, channelSid:(NSString *)channelSid index:(NSNumber *)index consumption_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
+    resolve([RCTConvert TWMMessage:[messages messageForConsumptionIndex:index]]);
+}
+
 RCT_REMAP_METHOD(setLastConsumedMessageIndex, channelSid:(NSString *)channelSid set_index:(NSNumber *)index) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   [messages setLastConsumedMessageIndex:index];
