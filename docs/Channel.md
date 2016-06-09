@@ -6,10 +6,10 @@ A class that handles the interactions with a specific channel.
 var channel = this.props.channel
 
 // specify channel specific events
-channel.onMessageAdded = ({message}) => console.log(message.author + ": " + message.body)
-channel.onTypingStarted = ({member}) => console.log(member.identity + " started typing...")
-channel.onTypingEnded = ({member}) => console.log(member.identity + " stopped typing...")
-channel.onMemberAdded = ({member}) => console.log(member.identity + " joined " + channel.friendlyName)
+channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body)
+channel.onTypingStarted = (member) => console.log(member.identity + " started typing...")
+channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...")
+channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName)
 
 channel.getMessages(20)
 .then((messages) => {
