@@ -55,10 +55,10 @@ client.onClientSynchronized = () => {
 var channel = this.props.channel
 
 // specify channel specific events
-channel.onMessageAdded = ({message}) => console.log(message.author + ": " + message.body)
-channel.onTypingStarted = ({member}) => console.log(member.identity + " started typing...")
-channel.onTypingEnded = ({member}) => console.log(member.identity + " stopped typing...")
-channel.onMemberAdded = ({member}) => console.log(member.identity + " joined " + channel.friendlyName)
+channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body)
+channel.onTypingStarted = (member) => console.log(member.identity + " started typing...")
+channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...")
+channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName)
 
 // sending a message
 <TextInput
