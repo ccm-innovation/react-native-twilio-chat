@@ -6,3 +6,15 @@
 - [Channel](Channel.md)
 - [Message](Message.md)
 - [Constants](Constants.md)
+ 
+## Objects
+ - Member
+```
+{
+  userInfo: {
+    identity: String,
+    friendlyName: String,
+    attributes: {}
+  }
+}
+```
