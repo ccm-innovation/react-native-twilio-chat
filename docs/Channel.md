@@ -67,12 +67,94 @@ Join the channel (if not a member or in reply to an invitation).
 #### `declineInvitation()` : Promise
 Decline joining the channel, in reply to an invitation.
 
+#### `leave()` : Promise
+Leave a channel.
 
+#### `destory()` : Promise
+Delete a channel.
 
+#### `typing()`
+Invoke whenever the user is typing a message.
 
+#### `getMember(identity)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*identity*|String|The identity of the user to return
+Returns a `Member` instance.
 
+#### `getMembers()` : Promise
+Returns an `Array<Member>` instances.
 
+#### `add(identity)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*identity*|String|The identity of the user to add (without inviting)
 
+#### `invite(identity)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*identity*|String|The identity of the user to invite
 
+#### `remove(identity)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*identity*|String|The identity of the user to remove
 
+#### `lastConsumedMessageIndex()` : Promise
+Returns `Number` index.
 
+#### `sendMessage(body)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*body*|String|The message body
+
+#### `removeMessage(index)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The index of the message to delete
+
+#### `getMessages(count = 10)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*count*|Number|Default 10. The number of most recent messages to get
+Returns an `Array<Message>` instances.
+
+#### `getMessagesBefore(index, count)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The starting point index
+|*count*|Number|The number of preceeding messages to return
+Returns an `Array<Message>` instances.
+
+#### `getMessagesAfter(index, count)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The starting point index
+|*count*|Number|The number of succeeding messages to return
+Returns an `Array<Message>` instances.
+
+#### `getMessage(index)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The index of the message to get
+
+#### `getMessageForConsumption(index)` : Promise
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The index of the last message reported as read (may refer to a deleted message)
+
+#### `setLastConsumedMessageIndex(index)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The index of the consumed message
+Returns a `Message` instance.
+
+#### `advanceLastConsumedMessageIndex(index)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*index*|Number|The index of the message consumed (should be greated than last consumed index)
+
+#### `setAllMessagesConsumed()`
+
+#### `close()`
+Close the channel and remove all listeners (call in `componentWillUnmount`).
