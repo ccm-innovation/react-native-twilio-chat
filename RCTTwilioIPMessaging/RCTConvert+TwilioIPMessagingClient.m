@@ -45,7 +45,7 @@ RCT_ENUM_CONVERTER(TWMUserInfoUpdate,(@{
 
 RCT_ENUM_CONVERTER(TWMClientSynchronizationStrategy,(@{
                                                        @"All" : @(TWMClientSynchronizationStrategyAll),
-                                                       @"ChannelList" : @(TWMClientSynchronizationStrategyChannelsList),
+                                                       @"ChannelsList" : @(TWMClientSynchronizationStrategyChannelsList),
                                                        }), TWMClientSynchronizationStrategyAll, integerValue)
 
 RCT_ENUM_CONVERTER(TWMLogLevel,(@{
