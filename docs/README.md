@@ -5,6 +5,7 @@
 - [Client](Client.md)
 - [Channel](Channel.md)
 - [Message](Message.md)
+- [UserInfo](UserInfo.md)
 - [Constants](Constants.md)
  
 ## Objects
