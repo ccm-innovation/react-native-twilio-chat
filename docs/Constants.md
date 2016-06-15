@@ -7,7 +7,7 @@ let {
 } = require('react-native-twilio-ip-messaging')
 
 client.onSynchronizationStatusChanged = (status) => {
-  if (status) == Constants.TWMSynchronizationStatus.Completed) {
+  if (status == Constants.TWMSynchronizationStatus.Completed) {
     console.log('Sync complete!')
   }
 }
