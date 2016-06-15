@@ -7,12 +7,12 @@
 ### iOS
 Install the Twilio IP Messaging SDK and this package via CocoaPods.
 
-    ```
-    pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging'
+```
+pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging'
   
-    source 'https://github.com/twilio/cocoapod-specs'
-    pod 'TwilioIPMessagingClient', '~> 0.14.1'
-    ```
+source 'https://github.com/twilio/cocoapod-specs'
+pod 'TwilioIPMessagingClient', '~> 0.14.1'
+```
     
 ## Usage
 ```JavaScript
