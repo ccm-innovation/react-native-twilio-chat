@@ -16,6 +16,44 @@ import {
 var GiftedMessenger = require('react-native-gifted-messenger');
 var Communications = require('react-native-communications');
 
+const BOT_GREETINGS = [
+  "Hello!",
+  "Good day, mate!",
+  "Why hello there!",
+  "Hola!",
+  "Bonjour",
+  "I'm booting up...",
+  "Hiya!",
+  "Heellllooooooooooooooo"
+]
+
+const BOT_QUESTIONS = [
+  "Let's be friends! What can I call you?",
+  "I'm your new pal! What's your name?",
+  "I am here to serve, how shall I address you?",
+  "You're my new friend! What is your preferred name?",
+  "Let me update my records... what is your name?",
+  "I'll help you get things started. What is your name?"
+]
+
+const BOT_CONFIRMATIONS = [
+  "You are now cleared to chat!",
+  "Feel free to chat with the group",
+  "I have now connected you to the channel",
+  "Chat away!",
+  "Feel free to start chatting",
+  "The group awaits your input",
+  "Go for the gold!"
+]
+
+var DeviceInfo = require('react-native-device-info')
+
+let {
+  Client,
+  Constants,
+  AccessManager
+} = require('react-native-twilio-ip-messaging')
+
 
 var STATUS_BAR_HEIGHT = Navigator.NavigationBar.Styles.General.StatusBarHeight;
 if (Platform.OS === 'android') {
@@ -40,33 +78,101 @@ class GiftedMessengerContainer extends Component {
     };
 
   }
+  
+  getToken(identity) {
+    return fetch('http://localhost:3000/token?device=iOS&identity=' + identity, {
+      method: 'get'
+    })
+    .then((res) => {
+      return res.json()
+    })
+  }
+  
+  parseMessage(message) {
+    return {
+      uniqueId: message.sid,
+      text: message.body,
+      name: message.author,
+      position: message.author == this.state.client.userInfo.identity ? 'right' : 'left',
+      date: message.timestamp
+    }
+  }
+  
+  initializeMessenging(identity) {
+    this.getToken(identity)
+    .then(({token}) => {
+      var accessManager = new AccessManager(token)
+      accessManager.onTokenExpired = () => {
+        this.getToken(identity)
+        .then(({token}) => accessManager.updateToken(token))
+      }
+      accessManager.onError = ({error}) => {
+        console.log(error)
+      }
+      
+      var client = new Client(accessManager)
+           
+      client.onError = ({error, userInfo}) => console.log(error)
+
+      client.onClientSynchronized = () => {
+        
+        client.getChannelByUniqueName('general')
+        .then((channel) => {
+          channel.initialize()
+          .then(() => {
+            if (channel.status != Constants.TWMChannelStatus.Joined) {
+              channel.join()
+            }
+          })
+          .catch(({error}) => {
+            console.log(error)
+          })
+          
+          channel.onTypingStarted = (member) => {
+            this.setState({typingMessage: member.userInfo.identity + ' is typing...'})
+          }
+          
+          channel.onTypingEnded = (member) => {
+            this.setState({typingMessage: ''})
+          }
+          
+          channel.onMessageAdded = (message) => this.handleReceive(this.parseMessage(message))
+          
+          this.setState({client, channel})        
+        }) 
+      }
+      
+      client.initialize()
+    })
+  }
+  
+  botTyping(time = 1000) {
+    
+    
+  }
+  
+  botMessage(message, time = 1000) {
+    this.setState({typingMessage: 'MessagingBot is typing...'})
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.setState({typingMessage: ''})
+        this.handleReceive({
+          text: message,
+          uniqueId: Math.round(Math.random() * 10000),
+          name: 'MessagingBot',
+          position: 'left',
+          internal: true
+        })
+        resolve() 
+      },time)
+    })
+  }
 
   componentDidMount() {
-    this._isMounted = true;
-
-    setTimeout(() => {
-      this.setState({
-        typingMessage: 'React-Bot is typing a message...',
-      });
-    }, 1000); // simulating network
-
-    setTimeout(() => {
-      this.setState({
-        typingMessage: '',
-      });
-    }, 3000); // simulating network
-
-
-    setTimeout(() => {
-      this.handleReceive({
-        text: 'Hello Awesome Developer',
-        name: 'React-Bot',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'left',
-        date: new Date(),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      });
-    }, 3300); // simulating network
+      setTimeout(() => {
+        this.botMessage(BOT_GREETINGS[Math.floor(Math.random()*BOT_GREETINGS.length)])
+        .then(() => this.botMessage(BOT_QUESTIONS[Math.floor(Math.random()*BOT_QUESTIONS.length)], 2000))
+      },500)
   }
 
   componentWillUnmount() {
@@ -74,24 +180,7 @@ class GiftedMessengerContainer extends Component {
   }
 
   getInitialMessages() {
-    return [
-      {
-        text: 'Are you building a chat app?',
-        name: 'React-Bot',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'left',
-        date: new Date(2016, 3, 14, 13, 0),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      },
-      {
-        text: "Yes, and I use Gifted Messenger!",
-        name: 'Awesome Developer',
-        image: null,
-        position: 'right',
-        date: new Date(2016, 3, 14, 13, 1),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      },
-    ];
+    return []
   }
 
   setMessageStatus(uniqueId, status) {
@@ -124,17 +213,27 @@ class GiftedMessengerContainer extends Component {
   }
 
   handleSend(message = {}) {
-
     // Your logic here
     // Send message.text to your server
-
-    message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
-    this.setMessages(this._messages.concat(message));
+    
+    if (this.state.client) {
+      this.state.channel.sendMessage(message.text)
+      .catch((error) => console.error(error))
+    } else {
+      this.initializeMessenging(message.text)
+      message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
+      this.setMessages(this._messages.concat(message));  
+      this.botMessage("Hello " + message.text + "!", 1000)
+      .then(() => this.botMessage(BOT_CONFIRMATIONS[Math.floor(Math.random()*BOT_CONFIRMATIONS.length)], 2000))
+    }
+    
+    // message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
+    // this.setMessages(this._messages.concat(message));
 
     // mark the sent message as Seen
-    setTimeout(() => {
-      this.setMessageStatus(message.uniqueId, 'Seen'); // here you can replace 'Seen' by any string you want
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setMessageStatus(message.uniqueId, 'Seen'); // here you can replace 'Seen' by any string you want
+    // }, 1000);
 
     // if you couldn't send the message to your server :
     // this.setMessageStatus(message.uniqueId, 'ErrorButton');
@@ -181,6 +280,7 @@ class GiftedMessengerContainer extends Component {
   }
 
   handleReceive(message = {}) {
+    console.log(message)
     // make sure that your message contains :
     // text, name, image, position: 'left', date, uniqueId
     this.setMessages(this._messages.concat(message));
@@ -225,6 +325,8 @@ class GiftedMessengerContainer extends Component {
         senderImage={null}
         onImagePress={this.onImagePress}
         displayNames={true}
+        
+        onChangeText={() => this.state.channel ? this.state.channel.typing() : false}
 
         parseText={true} // enable handlePhonePress, handleUrlPress and handleEmailPress
         handlePhonePress={this.handlePhonePress}

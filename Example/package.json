@@ -10,7 +10,9 @@
     "react": "^0.14.8",
     "react-native": "^0.23.1",
     "react-native-communications": "^1.0.1",
+    "react-native-device-info": "^0.9.3",
     "react-native-extra-dimensions-android": "^0.17.0",
-    "react-native-gifted-messenger": "*"
+    "react-native-gifted-messenger": "*",
+    "react-native-twilio-ip-messaging": "^0.1.1"
   }
 }
