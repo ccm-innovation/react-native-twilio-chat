@@ -146,11 +146,6 @@ class GiftedMessengerContainer extends Component {
     })
   }
   
-  botTyping(time = 1000) {
-    
-    
-  }
-  
   botMessage(message, time = 1000) {
     this.setState({typingMessage: 'MessagingBot is typing...'})
     return new Promise((resolve, reject) => {
@@ -280,7 +275,6 @@ class GiftedMessengerContainer extends Component {
   }
 
   handleReceive(message = {}) {
-    console.log(message)
     // make sure that your message contains :
     // text, name, image, position: 'left', date, uniqueId
     this.setMessages(this._messages.concat(message));
