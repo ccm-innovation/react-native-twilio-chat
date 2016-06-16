@@ -312,7 +312,7 @@ class GiftedMessengerContainer extends Component {
         onErrorButtonPress={this.onErrorButtonPress.bind(this)}
         maxHeight={Dimensions.get('window').height - Navigator.NavigationBar.Styles.General.NavBarHeight - STATUS_BAR_HEIGHT}
 
-        loadEarlierMessagesButton={!this.state.allLoaded}
+        loadEarlierMessagesButton={false}
         onLoadEarlierMessages={this.onLoadEarlierMessages.bind(this)}
 
         senderName='Awesome Developer'
