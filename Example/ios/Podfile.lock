@@ -1,0 +1,65 @@
+PODS:
+  - RCTTwilioIPMessaging (0.1.1):
+    - React
+    - TwilioIPMessagingClient
+  - React (0.23.1):
+    - React/Core (= 0.23.1)
+  - React/Core (0.23.1)
+  - React/RCTActionSheet (0.23.1):
+    - React/Core
+  - React/RCTGeolocation (0.23.1):
+    - React/Core
+  - React/RCTImage (0.23.1):
+    - React/Core
+    - React/RCTNetwork
+  - React/RCTLinkingIOS (0.23.1):
+    - React/Core
+  - React/RCTNetwork (0.23.1):
+    - React/Core
+  - React/RCTSettings (0.23.1):
+    - React/Core
+  - React/RCTText (0.23.1):
+    - React/Core
+  - React/RCTVibration (0.23.1):
+    - React/Core
+  - React/RCTWebSocket (0.23.1):
+    - React/Core
+  - RNDeviceInfo (0.9.2):
+    - React
+  - TwilioCommon (0.2.2)
+  - TwilioIPMessagingClient (0.14.1):
+    - TwilioCommon (~> 0.2.2)
+
+DEPENDENCIES:
+  - RCTTwilioIPMessaging (from `../node_modules/react-native-twilio-ip-messaging`)
+  - React/Core (from `../node_modules/react-native`)
+  - React/RCTActionSheet (from `../node_modules/react-native`)
+  - React/RCTGeolocation (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTSettings (from `../node_modules/react-native`)
+  - React/RCTText (from `../node_modules/react-native`)
+  - React/RCTVibration (from `../node_modules/react-native`)
+  - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - TwilioIPMessagingClient (~> 0.14.1)
+
+EXTERNAL SOURCES:
+  RCTTwilioIPMessaging:
+    :path: "../node_modules/react-native-twilio-ip-messaging"
+  React:
+    :path: "../node_modules/react-native"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
+
+SPEC CHECKSUMS:
+  RCTTwilioIPMessaging: fcdde1c835bf429e5322ecd53948ccadbbe9fa77
+  React: 0bc1e9a6369dc610ff0b29415ed0cab5229614f5
+  RNDeviceInfo: e3fe8d8fe52f74eab22b7d4784a4fdd2e9bf4a26
+  TwilioCommon: b697446b6f151255c4118f065e959c3dedee44e5
+  TwilioIPMessagingClient: 3dac0818cd382b8d4d6f77ffe8bf8adabcaadcf9
+
+PODFILE CHECKSUM: 2792b4a4475a04b35537d6c18a8a3f3654844a6f
+
+COCOAPODS: 1.0.0
