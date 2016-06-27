@@ -284,7 +284,13 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                     @"Warning" : @(TWMLogLevelWarning),
                     @"Info" : @(TWMLogLevelInfo),
                     @"Debug" : @(TWMLogLevelDebug)
-                    }
+                    },
+                @"TWMChannelOption": @{
+                        @"FriendlyName" : TWMChannelOptionFriendlyName,
+                        @"UniqueName" : TWMChannelOptionUniqueName,
+                        @"Type" : TWMChannelOptionType,
+                        @"Attributes" : TWMChannelOptionAttributes
+                        }
                 }
             };
 };
