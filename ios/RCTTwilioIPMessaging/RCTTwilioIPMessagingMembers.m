@@ -68,4 +68,9 @@ RCT_REMAP_METHOD(removeByIdentity, channelSid:(NSString *)channelSid identity:(N
   }];
 }
 
+
+RCT_REMAP_METHOD(getMember, channelSid:(NSString *)channelSid identity:(NSString *)identity member_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve([RCTConvert TWMMember:[[self loadMembersFromChannelSid:channelSid] memberWithIdentity:identity]);
+}
+
 @end
