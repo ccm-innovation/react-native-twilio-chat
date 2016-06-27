@@ -21,7 +21,6 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
         return "TwilioIPMessagingChannels";
     }
 
-    private Channels channels = RCTTwilioIPMessagingClient.getInstance().client.getChannels();
     private ReactApplicationContext reactContext;
 
 
@@ -30,9 +29,12 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
         this.reactContext = reactContext;
     }
 
+    private Channels channels() {
+        return RCTTwilioIPMessagingClient.getInstance().client.getChannels();
+    }
+
     private Channel loadChannelFromSid(String sid) {
-        Channel channel = channels.getChannel(sid);
-        return channel;
+        return channels().getChannel(sid);
     }
 
     @ReactMethod
@@ -46,10 +48,10 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess() {
-                promise.resolve(channels.getChannels());
+                promise.resolve(channels().getChannels());
             }
         };
-        channels.loadChannelsWithListener(listener);
+        channels().loadChannelsWithListener(listener);
     }
 
     @ReactMethod
@@ -66,17 +68,17 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
                 promise.resolve(newChannel);
             }
         };
-       channels.createChannel(options, listener);
+       channels().createChannel(options, listener);
     }
 
     @ReactMethod
     public void getChannel(String sid, Promise promise) {
-        promise.resolve(channels.getChannel(sid));
+        promise.resolve(channels().getChannel(sid));
     }
 
     @ReactMethod
     public void getChannelByUniqueName(String uniqueName, Promise promise) {
-        promise.resolve(channels.getChannelByUniqueName(uniqueName));
+        promise.resolve(channels().getChannelByUniqueName(uniqueName));
     }
 
     // Channel Instance Methods
