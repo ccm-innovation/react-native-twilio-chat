@@ -1,22 +1,16 @@
 package com.bradbumbalough.twilioipmessaging;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.twilio.common.TwilioAccessManager;
-import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.Constants;
 import com.twilio.ipmessaging.ErrorInfo;
-import com.twilio.ipmessaging.IPMessagingClientListener;
 import com.twilio.ipmessaging.TwilioIPMessagingClient;
 import com.twilio.ipmessaging.TwilioIPMessagingSDK;
-import com.twilio.ipmessaging.UserInfo;
 
 
 import java.util.Map;
@@ -29,12 +23,12 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
         return "TwilioIPMessagingClient";
     }
 
-    private TwilioIPMessagingClient client = null;
+    public TwilioIPMessagingClient client = null;
     private ReactApplicationContext reactContext;
 
     private static RCTTwilioIPMessagingClient rctTwilioIPMessagingClient = new RCTTwilioIPMessagingClient(null);
 
-    private static RCTTwilioIPMessagingClient getInstance() {
+    public static RCTTwilioIPMessagingClient getInstance() {
         return rctTwilioIPMessagingClient;
     }
 
@@ -44,7 +38,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void ipMessagingClientWithAccessManager(ReadableMap props) {
+    public void createClient(ReadableMap props) {
         final RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
         TwilioAccessManager accessManager = RCTTwilioAccessManager.getInstance().accessManager;
 
@@ -74,7 +68,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void registerWithToken(String token) {
+    public void register(String token) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
@@ -92,7 +86,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void deregisterWithToken(String token) {
+    public void unregister(String token) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
@@ -122,7 +116,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setFriendlyName(String friendlyName, Promise promise) {
+    public void setFriendlyName(String friendlyName, final Promise promise) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
@@ -133,7 +127,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess() {
-
+                promise.resolve(true);
             }
         };
 
@@ -141,7 +135,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAttributed(Map<String,String> attributes, final Promise promise) {
+    public void setAttributes(Map<String,String> attributes, final Promise promise) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
@@ -158,4 +152,8 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
 
         tmp.client.getMyUserInfo().setAttributes(attributes, listener);
     }
+
+    // TODO Constants
+
+    // TODO Listeners
 }

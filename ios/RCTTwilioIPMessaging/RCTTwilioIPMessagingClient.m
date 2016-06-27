@@ -34,7 +34,7 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_REMAP_METHOD(ipMessagingClientWithAccessManager, properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+RCT_REMAP_METHOD(createClient, properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   TwilioAccessManager *accessManager = [[RCTTwilioAccessManager sharedManager] accessManager];
   // TODO add check to see if AccessManager has been initialized or not
   TwilioIPMessagingClientProperties *props = nil;
@@ -62,12 +62,12 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback) {
   callback(@[client.version]);
 }
 
-RCT_EXPORT_METHOD(registerWithToken:(NSData *)token) {
+RCT_EXPORT_METHOD(register:(NSData *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[_client client] registerWithToken:token];
 }
 
-RCT_EXPORT_METHOD(deregisterWithToken:(NSData *)token) {
+RCT_EXPORT_METHOD(unregister:(NSData *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[_client client] deregisterWithToken:token];
 }
