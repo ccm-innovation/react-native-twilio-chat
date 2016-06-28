@@ -4,11 +4,16 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.UserInfo;
+import com.twilio.ipmessaging.Message;
+import com.twilio.ipmessaging.Member;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.sql.Wrapper;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Calendar;
 
 public class RCTConvert {
 
@@ -40,6 +45,26 @@ public class RCTConvert {
         map.putString("identity", userInfo.getIdentity());
         map.putString("friendlyName", userInfo.getFriendlyName());
         map.putMap("attributes", convertMapToWritableMap(userInfo.getAttributes()));
+
+        return map;
+    }
+
+    public static WritableMap Message(Message message) {
+        WritableMap map = Arguments.createMap();
+
+        map.putString("sid", message.getSid());
+        map.putString("index", String.valueOf(message.getMessageIndex()));
+        map.putString("author", message.getAuthor());
+        map.putString("body", message.getMessageBody());
+        map.putString("timestamp", message.getTimeStamp());
+
+        return map;
+    }
+
+    public static WritableMap Member(Member member) {
+        WritableMap map = Arguments.createMap();
+
+        map.putMap("userInfo", UserInfo(member.getUserInfo()));
 
         return map;
     }

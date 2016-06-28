@@ -1,16 +1,24 @@
 package com.bradbumbalough.twilioipmessaging;
 
+import android.support.annotation.Nullable;
+
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.twilio.ipmessaging.Channel;
+import com.twilio.ipmessaging.ChannelListener;
 import com.twilio.ipmessaging.Constants;
 import com.twilio.ipmessaging.ErrorInfo;
 import com.twilio.ipmessaging.Channels;
+import com.twilio.ipmessaging.Member;
+import com.twilio.ipmessaging.Message;
 
-
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -22,11 +30,112 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
     }
 
     private ReactApplicationContext reactContext;
-
+    private HashMap<String,ChannelListener> channelListeners = new HashMap<String, ChannelListener>();
 
     public RCTTwilioIPMessagingChannels(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+    }
+
+    private void sendEvent(String eventName, @Nullable WritableMap params) {
+        this.reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+    private ChannelListener generateListener(final Channel channel) {
+        final String channelSid = channel.getSid();
+
+        ChannelListener listener = new ChannelListener() {
+            @Override
+            public void onMessageAdd(Message message) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("message", RCTConvert.Message(message));
+
+                sendEvent("ipMessagingClient:channel:messageAdded", map);
+            }
+
+            @Override
+            public void onMessageChange(Message message) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("message", RCTConvert.Message(message));
+
+                sendEvent("ipMessagingClient:channel:messageChanged", map);
+            }
+
+            @Override
+            public void onMessageDelete(Message message) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("message", RCTConvert.Message(message));
+
+                sendEvent("ipMessagingClient:channel:messageDeleted", map);
+            }
+
+            @Override
+            public void onMemberJoin(Member member) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("member", RCTConvert.Member(member));
+
+                sendEvent("ipMessagingClient:channel:memberJoined", map);
+            }
+
+            @Override
+            public void onMemberChange(Member member) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("member", RCTConvert.Member(member));
+
+                sendEvent("ipMessagingClient:channel:memberChanged", map);
+            }
+
+            @Override
+            public void onMemberDelete(Member member) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("member", RCTConvert.Member(member));
+
+                sendEvent("ipMessagingClient:channel:memberLeft", map);
+            }
+
+            // TODO
+            @Override
+            public void onAttributesChange(Map<String, String> map) {
+
+            }
+
+            @Override
+            public void onTypingStarted(Member member) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("member", RCTConvert.Member(member));
+
+                sendEvent("ipMessagingClient:typingStartedOnChannel", map);
+            }
+
+            @Override
+            public void onTypingEnded(Member member) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putMap("member", RCTConvert.Member(member));
+
+                sendEvent("ipMessagingClient:typingEndedOnChannel", map);
+            }
+
+            @Override
+            public void onSynchronizationChange(Channel channel) {
+                WritableMap map = Arguments.createMap();
+                map.putString("channelSid", channelSid);
+                map.putString("status", channel.getSynchronizationStatus().toString());
+
+                sendEvent("ipMessagingClient:channel:synchronizationStatusChanged", map);
+            }
+        };
+
+        return listener;
     }
 
     private Channels channels() {
@@ -34,7 +143,13 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
     }
 
     private Channel loadChannelFromSid(String sid) {
-        return channels().getChannel(sid);
+        Channel channel = channels().getChannel(sid);
+        if (channel.getListener() == null) {
+            ChannelListener listener = generateListener(channel);
+            channel.setListener(listener);
+            channelListeners.put(channel.getSid(),listener);
+        }
+        return channel;
     }
 
     @ReactMethod

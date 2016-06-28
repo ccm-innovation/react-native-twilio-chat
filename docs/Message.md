@@ -8,8 +8,8 @@
 |*author*|String|The identity of the author
 |*body*|String|The message body
 |*timestamp*|Date|The date object of the timestamp
-|*dateUpdated*|Date|The date object of when the message was last updated
-|*lastUpdatedBy*|String|The identity of the user who last updated the message
+|*dateUpdated*|Date|The date object of when the message was last updated **iOS Only**
+|*lastUpdatedBy*|String|The identity of the user who last updated the message **iOS Only**
 
 ## Methods
 
