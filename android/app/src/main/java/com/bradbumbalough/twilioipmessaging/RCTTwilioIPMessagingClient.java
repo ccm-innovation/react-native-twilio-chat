@@ -1,28 +1,38 @@
 package com.bradbumbalough.twilioipmessaging;
 
+import android.support.annotation.Nullable;
+
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.twilio.common.TwilioAccessManager;
 import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.Constants;
 import com.twilio.ipmessaging.ErrorInfo;
+import com.twilio.ipmessaging.IPMessagingClientListener;
 import com.twilio.ipmessaging.TwilioIPMessagingClient;
 import com.twilio.ipmessaging.TwilioIPMessagingSDK;
+import com.twilio.ipmessaging.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
+public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule implements IPMessagingClientListener {
 
     @Override
     public String getName() {
         return "TwilioIPMessagingClient";
     }
+
+    // Constants
 
     @Override
     public Map<String, Object> getConstants() {
@@ -62,7 +72,6 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
         return constants;
     }
 
-
     public TwilioIPMessagingClient client = null;
     private ReactApplicationContext reactContext;
 
@@ -76,6 +85,20 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
         super(reactContext);
         this.reactContext = reactContext;
     }
+
+    private void sendEvent(String eventName, @Nullable WritableMap params) {
+        this.reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+    private void sendEvent(String eventName, @Nullable String body) {
+        this.reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, body);
+    }
+
+    // Methods
 
     @ReactMethod
     public void createClient(ReadableMap props) {
@@ -155,6 +178,8 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
         tmp.client.shutdown();
     }
 
+    // UserInfo methods
+
     @ReactMethod
     public void setFriendlyName(String friendlyName, final Promise promise) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
@@ -193,7 +218,52 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
         tmp.client.getMyUserInfo().setAttributes(attributes, listener);
     }
 
-    // TODO Constants
+    // Listeners
 
-    // TODO Listeners
+    @Override
+    public void onChannelAdd(Channel channel) {
+        sendEvent("ipMessagingClient:channelAdded", RCTConvert.Channel(channel));
+    }
+
+    @Override
+    public void onChannelChange(Channel channel) {
+        sendEvent("ipMessagingClient:channelChanged", RCTConvert.Channel(channel));
+    }
+
+    @Override
+    public void onChannelDelete(Channel channel){
+        sendEvent("ipMessagingClient:channelRemoved", RCTConvert.Channel(channel));
+    }
+
+    @Override
+    public void onChannelSynchronizationChange(Channel channel) {
+        WritableMap map = Arguments.createMap();
+        map.putString("channelSid",channel.getSid());
+        map.putString("status", channel.getSynchronizationStatus().toString());
+
+        sendEvent("ipMessagingClient:channel:synchronizationStatusChanged", map);
+    }
+
+    @Override
+    public void onClientSynchronization(TwilioIPMessagingClient.SynchronizationStatus synchronizationStatus) {
+        sendEvent("ipMessagingClient:synchronizationStatusChanged", synchronizationStatus.toString());
+    }
+
+    @Override
+    public void onError(ErrorInfo errorInfo) {
+        WritableMap map = Arguments.createMap();
+        map.putString("error",errorInfo.getErrorText());
+        map.putString("userInfo", errorInfo.toString());
+
+        sendEvent("ipMessagingClient:errorReceived", map);
+    }
+
+    @Override
+    public void onUserInfoChange(UserInfo userInfo) {
+        WritableMap map = Arguments.createMap();
+        map.putMap("userInfo",RCTConvert.UserInfo(userInfo));
+        map.putNull("updated");
+
+        sendEvent("ipMessagingClient:userInfoUpdated", map);
+    }
 }
