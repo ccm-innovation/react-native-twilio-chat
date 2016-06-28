@@ -23,7 +23,7 @@ RCT_EXPORT_MODULE()
 
 #pragma mark Messages Methods
 
-RCT_REMAP_METHOD(lastConsumedMessageIndex, channelSid:(NSString *)channelSid last_consumed_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLastConsumedMessageIndex, channelSid:(NSString *)channelSid last_consumed_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   resolve(@[RCTNullIfNil(messages.lastConsumedMessageIndex)]);
 }
