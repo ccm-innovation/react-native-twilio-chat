@@ -138,8 +138,7 @@ Returns an `Array<Message>` instances.
 |--- |--- |--- |
 |*index*|Number|The index of the message to get
 
-#### `getMessageForConsumption(index)` : Promise
-**iOS Only**
+#### `getMessageForConsumption(index)` : Promise **(iOS Only)**
 |Name |Type |Description |
 |--- |--- |--- |
 |*index*|Number|The index of the last message reported as read (may refer to a deleted message)
