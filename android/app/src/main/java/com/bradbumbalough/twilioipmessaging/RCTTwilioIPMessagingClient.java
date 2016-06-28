@@ -7,12 +7,13 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.twilio.common.TwilioAccessManager;
+import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.Constants;
 import com.twilio.ipmessaging.ErrorInfo;
 import com.twilio.ipmessaging.TwilioIPMessagingClient;
 import com.twilio.ipmessaging.TwilioIPMessagingSDK;
 
-
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -22,6 +23,45 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule {
     public String getName() {
         return "TwilioIPMessagingClient";
     }
+
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+
+        Map<String, String> channelStatus = new HashMap<>();
+        channelStatus.put("Invited", Channel.ChannelStatus.INVITED.toString());
+        channelStatus.put("Joined",Channel.ChannelStatus.JOINED.toString());
+        channelStatus.put("NotParticipating",Channel.ChannelStatus.NOT_PARTICIPATING.toString());
+        constants.put("TWMChannelStatus", channelStatus);
+
+        Map<String, String> channelSyncStatus = new HashMap<>();
+        channelSyncStatus.put("None",Channel.SynchronizationStatus.NONE.toString());
+        channelSyncStatus.put("Identifier",Channel.SynchronizationStatus.IDENTIFIER.toString());
+        channelSyncStatus.put("Metadata",Channel.SynchronizationStatus.METADATA.toString());
+        channelSyncStatus.put("All",Channel.SynchronizationStatus.ALL.toString());
+        channelSyncStatus.put("Failed",Channel.SynchronizationStatus.FAILED.toString());
+        constants.put("TWMChannelSynchronizationStatus", channelSyncStatus);
+
+        Map<String, String> channelType = new HashMap<>();
+        channelType.put("Public",Channel.ChannelType.CHANNEL_TYPE_PUBLIC.toString());
+        channelType.put("Private",Channel.ChannelType.CHANNEL_TYPE_PRIVATE.toString());
+        constants.put("TWMChannelType", channelType);
+
+        Map<String, String> clientSyncStatus = new HashMap<>();
+        clientSyncStatus.put("Started",TwilioIPMessagingClient.SynchronizationStatus.STARTED.toString());
+        clientSyncStatus.put("ChannelListCompleted",TwilioIPMessagingClient.SynchronizationStatus.CHANNELS_COMPLETED.toString());
+        clientSyncStatus.put("Completed",TwilioIPMessagingClient.SynchronizationStatus.COMPLETED.toString());
+        clientSyncStatus.put("Failed",TwilioIPMessagingClient.SynchronizationStatus.FAILED.toString());
+        constants.put("TWMClientSynchronizationStatus", clientSyncStatus);
+
+        Map<String, String> clientSyncStrategy = new HashMap<>();
+        clientSyncStrategy.put("All",TwilioIPMessagingClient.SynchronizationStrategy.ALL.toString());
+        clientSyncStrategy.put("ChannelsList",TwilioIPMessagingClient.SynchronizationStrategy.CHANNELS_LIST.toString());
+        constants.put("TWMClientSynchronizationStrategy", clientSyncStrategy);
+
+        return constants;
+    }
+
 
     public TwilioIPMessagingClient client = null;
     private ReactApplicationContext reactContext;

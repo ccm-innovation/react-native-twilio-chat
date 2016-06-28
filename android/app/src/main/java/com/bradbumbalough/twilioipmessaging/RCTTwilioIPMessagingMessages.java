@@ -11,7 +11,6 @@ import com.twilio.ipmessaging.ErrorInfo;
 import com.twilio.ipmessaging.Message;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
 
@@ -188,4 +187,5 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
         }
     }
+
 }
