@@ -36,7 +36,7 @@ RCT_REMAP_METHOD(sendMessageWithBody, channelSid:(NSString *)channelSid body:(NS
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"send-message-error", @"error", result.error);
+      reject(@"send-message-error", @"Error occured while attempting to send a message.", result.error);
     }
   }];
 }
@@ -48,7 +48,7 @@ RCT_REMAP_METHOD(removeMessage, channelSid:(NSString *)channelSid index:(NSNumbe
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"remove-message-error", @"error", result.error);
+      reject(@"remove-message-error", @"Error occured while attempting to delete a message.", result.error);
     }
   }];
 }
@@ -60,7 +60,7 @@ RCT_REMAP_METHOD(getLastMessagesWithCount, channelSid:(NSString *)channelSid cou
       resolve([RCTConvert TWMMessages:messages]);
     }
     else {
-      reject(@"get-message-error", @"error", result.error);
+      reject(@"get-message-error", @"Error occured while attempting to getLastMessages.", result.error);
     }
   }];
 }
@@ -72,7 +72,7 @@ RCT_REMAP_METHOD(getMessagesBefore, channelSid:(NSString *)channelSid index:(NSU
       resolve([RCTConvert TWMMessages:messages]);
     }
     else {
-      reject(@"get-message-error", @"error", result.error);
+      reject(@"get-message-error", @"Error occured while attempting to getMessagesBefore.", result.error);
     }
   }];
 }
@@ -84,7 +84,7 @@ RCT_REMAP_METHOD(getMessagesAfter, channelSid:(NSString *)channelSid index:(NSUI
       resolve([RCTConvert TWMMessages:messages]);
     }
     else {
-      reject(@"get-message-error", @"error", result.error);
+      reject(@"get-message-error", @"Error occured while attempting to getMessagesAfter.", result.error);
     }
   }];
 }
@@ -123,7 +123,7 @@ RCT_REMAP_METHOD(updateBody, channelSid:(NSString *)channelSid index:(NSNumber *
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"update-message-error", @"error", result.error);
+      reject(@"update-message-error", @"Error occured while attempting to update the body of the message.", result.error);
     }
   }];
 }

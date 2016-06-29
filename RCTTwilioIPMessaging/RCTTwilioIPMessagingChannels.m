@@ -41,7 +41,7 @@ RCT_REMAP_METHOD(createChannelWithOptions, options:(NSDictionary *)options creat
       resolve([RCTConvert TWMChannel:channel]);
     }
     else {
-      reject(@"create-error", @"error", result.error);
+      reject(@"create-error", @"Error occured while creating a new channel.", result.error);
     }
   }];
 }
@@ -53,7 +53,8 @@ RCT_REMAP_METHOD(channelWithId, sid:(NSString *)sid sid_resolver:(RCTPromiseReso
     resolve([RCTConvert TWMChannel:channel]);
   }
   else {
-    reject(@"not-found", @"error", [NSError init]);
+      NSError *error = nil;
+      reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with sid: %@.", sid], error);
   }
 }
 
@@ -64,7 +65,8 @@ RCT_REMAP_METHOD(channelWithUniqueName, uniqueName:(NSString *)uniqueName sid_re
     resolve([RCTConvert TWMChannel:channel]);
   }
   else {
-    reject(@"not-found", @"error", [NSError init]);
+      NSError *error = nil;
+      reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with uniqueName: %@.", uniqueName], error);
   }
 }
 
@@ -82,7 +84,7 @@ RCT_REMAP_METHOD(synchronizeWithCompletion, sid:(NSString *)sid synchronize_reso
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"sync-error", @"error", result.error);
+      reject(@"sync-error", @"Error occured during channel syncronization.", result.error);
     }
   }];
 }
@@ -94,7 +96,7 @@ RCT_REMAP_METHOD(setAttributes, sid:(NSString *)sid attributes:(NSDictionary *)a
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"set-attributes-error", @"error", result.error);
+      reject(@"set-attributes-error", @"Error occuring while attempting to setAttributes on channel.", result.error);
     }
   }];
 }
@@ -106,7 +108,7 @@ RCT_REMAP_METHOD(setFriendlyName, sid:(NSString *)sid friendlyName:(NSString *)f
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"set-friendlyName-error", @"error", result.error);
+      reject(@"set-friendlyName-error", @"Error occured while attempting to setFriendlyName on channel.", result.error);
     }
   }];
 }
@@ -118,7 +120,7 @@ RCT_REMAP_METHOD(setUniqueName, sid:(NSString *)sid uniqueName:(NSString *)uniqu
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"set-friendlyName-error", @"error", result.error);
+      reject(@"set-friendlyName-error", @"Error occured while attempting to setUniqueName on channel.", result.error);
     }
   }];
 }
@@ -130,7 +132,7 @@ RCT_REMAP_METHOD(joinWithCompletion, sid:(NSString *)sid join_resolver:(RCTPromi
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"join-channel-error", @"error", result.error);
+      reject(@"join-channel-error", @"Error occured while attempting to join the channel.", result.error);
     }
   }];
 }
@@ -142,7 +144,7 @@ RCT_REMAP_METHOD(declineInvitationWithCompletion, sid:(NSString *)sid decline_re
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"decline-invitation-error", @"error", result.error);
+      reject(@"decline-invitation-error", @"Error occured while attempting to decline the invitation to join the channel.", result.error);
     }
   }];
 }
@@ -154,7 +156,7 @@ RCT_REMAP_METHOD(leaveWithCompletion, sid:(NSString *)sid leave_resolver:(RCTPro
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"leave-channel-error", @"error", result.error);
+      reject(@"leave-channel-error", @"Error occured while attempting to leave the channel.", result.error);
     }
   }];
 }
@@ -166,7 +168,7 @@ RCT_REMAP_METHOD(destroyWithCompletion, sid:(NSString *)sid destroy_resolver:(RC
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"destroy-channel-error", @"error", result.error);
+      reject(@"destroy-channel-error", @"Error occured while attempting to delete the channel.", result.error);
     }
   }];
 }

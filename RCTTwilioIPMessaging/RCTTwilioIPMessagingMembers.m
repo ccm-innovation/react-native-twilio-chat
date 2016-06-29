@@ -39,7 +39,7 @@ RCT_REMAP_METHOD(addByIdentity, channelSid:(NSString *)channelSid identity:(NSSt
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"add-identity-error", @"error", result.error);
+      reject(@"add-identity-error", @"Error occured while attempting to add a user to the channel.", result.error);
     }
   }];
 }
@@ -50,7 +50,7 @@ RCT_REMAP_METHOD(inviteByIdentity, channelSid:(NSString *)channelSid identity:(N
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"invite-identity-error", @"error", result.error);
+      reject(@"invite-identity-error", @"Error occured while attempting to inviate a user to the channel.", result.error);
     }
   }];
 }
@@ -63,7 +63,7 @@ RCT_REMAP_METHOD(removeByIdentity, channelSid:(NSString *)channelSid identity:(N
       resolve(@[@TRUE]);
     }
     else {
-      reject(@"remove-member-error", @"error", result.error);
+      reject(@"remove-member-error", @"Error occured while attempting to remove a user from the channel.", result.error);
     }
   }];
 }
