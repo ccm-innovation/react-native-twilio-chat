@@ -167,12 +167,9 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 |--- |--- |--- |
 |*status*|Constants.TWMChannelSynchronizationStatus|The new synchronization status of the channel
 
-#### `onChannelChanged(channel)`
-|Name |Type |Description |
-|--- |--- |--- |
-|*channel*|Channel|A new instance of the updated channel
+#### `onChanged()`
 
-#### `onChannelDeleted()`
+#### `onDeleted()`
 
 #### `onMemberJoined(member)`
 |Name |Type |Description |
