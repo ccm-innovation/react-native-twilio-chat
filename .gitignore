@@ -1,2 +1,13 @@
+# ios
 example/ios/Pods
 *.xcuserstate
+
+# android
+*.iml
+.gradle
+android/local.properties
+android/.idea/workspace.xml
+android/.idea/libraries
+.DS_Store
+android/build
+android/captures
