@@ -28,6 +28,10 @@ public class RCTTwilioIPMessaging implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
 
         modules.add(new RCTTwilioAccessManager(reactContext));
+        modules.add(new RCTTwilioIPMessagingClient(reactContext));
+        modules.add(new RCTTwilioIPMessagingChannels(reactContext));
+        modules.add(new RCTTwilioIPMessagingMembers(reactContext));
+        modules.add(new RCTTwilioIPMessagingMessages(reactContext));
 
         return modules;
     }
