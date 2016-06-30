@@ -1,4 +1,6 @@
 # React Native Twilio IP Messaging
+[![npm version](https://badge.fury.io/js/react-native-twilio-ip-messaging.svg)](https://badge.fury.io/js/react-native-twilio-ip-messaging)
+
 >React Native wrapper for the Twilio IP Messaging SDKs
 
 ## Installation
