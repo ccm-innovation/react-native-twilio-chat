@@ -10,4 +10,5 @@ android/.idea/workspace.xml
 android/.idea/libraries
 .DS_Store
 android/build
+android/app/build
 android/captures
