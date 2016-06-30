@@ -30,7 +30,7 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getMembers(String channelSid, Promise promise) {
-        promise.resolve(loadMembersFromChannelSid(channelSid).getMembers());
+        promise.resolve(RCTConvert.Members(loadMembersFromChannelSid(channelSid).getMembers()));
     }
 
     @ReactMethod
@@ -102,7 +102,7 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
         try {
             for (Member m : members) {
                 if (m.getUserInfo().getIdentity() == identity) {
-                    promise.resolve(m);
+                    promise.resolve(RCTConvert.Member(m));
                     break;
                 }
             }

@@ -139,7 +139,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             @Override
             public void onSuccess(TwilioIPMessagingClient twilioIPMessagingClient) {
                 tmp.client = twilioIPMessagingClient;
-                promise.resolve(tmp.client);
+                promise.resolve(RCTConvert.TwilioIPMessagingClient(tmp.client));
             }
         };
 
@@ -149,7 +149,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     @ReactMethod
     public void userInfo(Promise promise) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
-        promise.resolve(tmp.client.getMyUserInfo());
+        promise.resolve(RCTConvert.UserInfo(tmp.client.getMyUserInfo()));
     }
 
     @ReactMethod

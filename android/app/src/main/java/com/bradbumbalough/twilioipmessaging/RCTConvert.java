@@ -1,8 +1,12 @@
 package com.bradbumbalough.twilioipmessaging;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.twilio.common.TwilioAccessManager;
 import com.twilio.ipmessaging.Channel;
+import com.twilio.ipmessaging.Channels;
+import com.twilio.ipmessaging.TwilioIPMessagingClient;
 import com.twilio.ipmessaging.UserInfo;
 import com.twilio.ipmessaging.Message;
 import com.twilio.ipmessaging.Member;
@@ -13,6 +17,7 @@ import org.json.JSONObject;
 import java.sql.Wrapper;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
 import java.util.Calendar;
 
 public class RCTConvert {
@@ -67,6 +72,55 @@ public class RCTConvert {
         map.putMap("userInfo", UserInfo(member.getUserInfo()));
 
         return map;
+    }
+
+    public static WritableMap TwilioIPMessagingClient(TwilioIPMessagingClient client) {
+        WritableMap map = Arguments.createMap();
+
+        map.putMap("userInfo", UserInfo(client.getMyUserInfo()));
+
+        return map;
+    }
+
+    public static WritableMap TwilioAccessManager(TwilioAccessManager accessManager) {
+        WritableMap map = Arguments.createMap();
+
+        map.putString("identity", accessManager.getIdentity());
+        map.putString("token", accessManager.getToken());
+        map.putBoolean("isExpired", accessManager.isExpired());
+        map.putString("expirationDate", accessManager.getExpirationDate().toString());
+
+        return map;
+    }
+
+    public static WritableArray Channels(Channel[] channels) {
+        WritableArray array = Arguments.createArray();
+
+        for (Channel c : channels) {
+            array.pushMap(Channel(c));
+        }
+
+        return array;
+    }
+
+    public static WritableArray Members(Member[] members) {
+        WritableArray array = Arguments.createArray();
+
+        for (Member m : members) {
+            array.pushMap(Member(m));
+        }
+
+        return array;
+    }
+
+    public static WritableArray Messages(List<Message> messages) {
+        WritableArray array = Arguments.createArray();
+
+        for (Message m : messages) {
+            array.pushMap(Message(m));
+        }
+
+        return array;
     }
 }
 

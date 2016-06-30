@@ -99,7 +99,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
 
             public void onSuccess(List<Message> messages) {
-                promise.resolve(messages);
+                promise.resolve(RCTConvert.Messages(messages));
             }
         };
 
@@ -117,7 +117,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
 
             public void onSuccess(List<Message> messages) {
-                promise.resolve(messages);
+                promise.resolve(RCTConvert.Messages(messages));
             }
         };
 
@@ -135,7 +135,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
 
             public void onSuccess(List<Message> messages) {
-                promise.resolve(messages);
+                promise.resolve(RCTConvert.Messages(messages));
             }
         };
 
@@ -152,7 +152,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
 
             public void onSuccess(List<Message> messages) {
-                promise.resolve(messages.get(0));
+                promise.resolve(RCTConvert.Message(messages.get(0)));
             }
         };
 

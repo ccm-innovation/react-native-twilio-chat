@@ -164,7 +164,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess() {
-                promise.resolve(channels().getChannels());
+                promise.resolve(RCTConvert.Channels(channels().getChannels()));
             }
         };
         channels().loadChannelsWithListener(listener);
@@ -182,7 +182,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onCreated(Channel newChannel) {
-                promise.resolve(newChannel);
+                promise.resolve(RCTConvert.Channel(newChannel));
             }
         };
        channels().createChannel(options, listener);

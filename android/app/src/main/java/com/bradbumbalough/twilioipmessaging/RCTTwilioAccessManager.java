@@ -1,6 +1,7 @@
 package com.bradbumbalough.twilioipmessaging;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.twilio.common.TwilioAccessManager;
@@ -33,9 +34,10 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     }
 
     @ReactMethod
-    public void accessManagerWithToken(String token) {
+    public void accessManagerWithToken(String token, Promise promise) {
         RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
         tmp.accessManager = TwilioAccessManagerFactory.createAccessManager(token, this);
+        promise.resolve(RCTConvert.TwilioAccessManager(tmp.accessManager));
     }
 
     @Override
