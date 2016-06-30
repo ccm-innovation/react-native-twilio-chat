@@ -43,6 +43,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("send-message-error","Error occurred while attempting to sendMessage.");
             }
 
             @Override
@@ -59,18 +60,23 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
         Messages messages = loadMessagesFromChannelSid(channelSid);
 
         Message messageToRemove = null;
-
-        for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
-            if (m.getMessageIndex() == index) {
-                messageToRemove = m;
-                break;
+        try {
+            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
+                if (m.getMessageIndex() == index) {
+                    messageToRemove = m;
+                    break;
+                }
             }
+        }
+        catch (Exception e) {
+            promise.reject("remove-message-error","Error occurred while attempting to remove message.");
         }
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("remove-message-error","Error occurred while attempting to remove message.");
             }
 
             @Override
@@ -89,6 +95,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("get-last-message-error","Error occurred while attempting to getLastMessage.");
             }
 
             public void onSuccess(List<Message> messages) {
@@ -106,6 +113,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("get-messages-after-error","Error occurred while attempting to getMessagesAfter.");
             }
 
             public void onSuccess(List<Message> messages) {
@@ -123,6 +131,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("get-messages-before-error","Error occurred while attempting to getMessagesBefore.");
             }
 
             public void onSuccess(List<Message> messages) {
@@ -139,6 +148,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("get-message-error","Error occurred while attempting to getMessage.");
             }
 
             public void onSuccess(List<Message> messages) {
@@ -173,6 +183,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("update-body-error","Error occurred while attempting to updateBody.");
             }
 
             public void onSuccess() {
@@ -180,11 +191,16 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
         };
 
-        for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
-            if (m.getMessageIndex() == index) {
-                m.updateMessageBody(body, listener);
-                break;
+        try {
+            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
+                if (m.getMessageIndex() == index) {
+                    m.updateMessageBody(body, listener);
+                    break;
+                }
             }
+        }
+        catch (Exception e) {
+            promise.reject("update-body-error","Error occurred while attempting to updateBody.");
         }
     }
 

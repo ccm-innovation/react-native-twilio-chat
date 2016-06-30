@@ -159,6 +159,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("get-channels-error", "Error occurred while attempting to getChannels.");
             }
 
             @Override
@@ -176,6 +177,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("create-channel-error", "Error occurred while attempting to createChannel.");
             }
 
             @Override
@@ -205,6 +207,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("synchronize-error", "Error occurred while attempting to synchronize channel.");
             }
 
             @Override
@@ -223,6 +226,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on channel.");
             }
 
             @Override
@@ -241,6 +245,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("set-friendly-name-error", "Error occurred while attempting to setFriendlyName on channel.");
             }
 
             @Override
@@ -259,6 +264,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("set-unique-name-error", "Error occurred while attempting to setUniqueName on channel.");
             }
 
             @Override
@@ -277,6 +283,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("join-error", "Error occurred while attempting to join channel.");
             }
 
             @Override
@@ -295,6 +302,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("decline-error", "Error occurred while attempting to decline channel.");
             }
 
             @Override
@@ -313,6 +321,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("leave-error", "Error occurred while attempting to leave channel.");
             }
 
             @Override
@@ -331,6 +340,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("delete-error", "Error occurred while attempting to delete channel.");
             }
 
             @Override

@@ -40,6 +40,7 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("add-error","Error occurred while attempting to add user to channel.");
             }
 
             @Override
@@ -57,6 +58,7 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("invite-error","Error occurred while attempting to invite user to channel.");
             }
 
             @Override
@@ -74,6 +76,7 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("remove-error","Error occurred while attempting to remove user from channel.");
             }
 
             @Override
@@ -96,12 +99,16 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getMember(String channelSid, String identity, final Promise promise) {
         Member[] members = loadMembersFromChannelSid(channelSid).getMembers();
-
-        for (Member m : members) {
-            if (m.getUserInfo().getIdentity() == identity) {
-                promise.resolve(m);
-                break;
+        try {
+            for (Member m : members) {
+                if (m.getUserInfo().getIdentity() == identity) {
+                    promise.resolve(m);
+                    break;
+                }
             }
+        }
+        catch (Exception e) {
+            promise.reject("get-members-error","Error occurred while attempting to getMembers.");
         }
     }
 

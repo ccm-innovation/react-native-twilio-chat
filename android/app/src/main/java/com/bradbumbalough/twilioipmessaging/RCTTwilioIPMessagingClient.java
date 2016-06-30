@@ -98,26 +98,48 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
                 .emit(eventName, body);
     }
 
+    private Constants.StatusListener generateStatusListener(final Promise promise, final String errorCode, final String errorMessage) {
+        return new Constants.StatusListener() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject(errorCode, errorMessage + " Error Message: " + errorInfo.getErrorText());
+            }
+
+            @Override
+            public void onSuccess() {
+                promise.resolve(true);
+            }
+        };
+    }
+
     // Methods
 
     @ReactMethod
-    public void createClient(ReadableMap props) {
+    public void createClient(ReadableMap props, final Promise promise) {
         final RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
         TwilioAccessManager accessManager = RCTTwilioAccessManager.getInstance().accessManager;
 
         TwilioIPMessagingClient.Properties.Builder builder = new TwilioIPMessagingClient.Properties.Builder();
-        builder.setInitialMessageCount(props.getInt("initialMessageCount"));
-        builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.ALL);
+
+        if (props.hasKey("initialMessageCount")) {
+            builder.setInitialMessageCount(props.getInt("initialMessageCount"));
+        }
+        if (props.hasKey("synchronizationStrategy")) {
+            builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
+        }
 
         Constants.CallbackListener<TwilioIPMessagingClient> listener = new Constants.CallbackListener<TwilioIPMessagingClient>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("create-client-error", "Error occurred while attempting to create the client. Error Message: " + errorInfo.getErrorText());
             }
 
             @Override
             public void onSuccess(TwilioIPMessagingClient twilioIPMessagingClient) {
                 tmp.client = twilioIPMessagingClient;
+                promise.resolve(tmp.client);
             }
         };
 
@@ -188,6 +210,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("set-friendly-name-error", "Error occurred while attempting to setFriendlyName on user.");
             }
 
             @Override
@@ -207,6 +230,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
+                promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on user.");
             }
 
             @Override
