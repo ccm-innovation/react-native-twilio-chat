@@ -4,11 +4,11 @@ example/ios/Pods
 
 # android
 *.iml
-.gradle
+/android/.gradle
 android/local.properties
-android/.idea/workspace.xml
-android/.idea/libraries
+android/.idea
+android/.idea
 .DS_Store
 android/build
-android/app/build
 android/captures
+
