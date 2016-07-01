@@ -16,7 +16,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "TwilioIPMessagingMembers";
+        return "TwilioIPMessagingMessages";
     }
 
     private ReactApplicationContext reactContext;
