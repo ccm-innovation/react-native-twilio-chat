@@ -1,4 +1,4 @@
-package com.bradbumbalough.twilioipmessaging;
+package com.bradbumbalough.RCTTwilioIPMessaging;
 
 import android.support.annotation.Nullable;
 

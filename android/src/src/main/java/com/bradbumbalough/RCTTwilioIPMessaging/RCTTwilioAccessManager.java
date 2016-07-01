@@ -1,4 +1,4 @@
-package com.bradbumbalough.twilioipmessaging;
+package com.bradbumbalough.RCTTwilioIPMessaging;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
