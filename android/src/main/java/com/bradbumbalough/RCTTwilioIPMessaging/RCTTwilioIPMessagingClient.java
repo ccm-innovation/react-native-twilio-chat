@@ -189,9 +189,10 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     }
 
     @ReactMethod
-    public void handleNotification(Map<String,String> notification) {
+    public void handleNotification(ReadableMap notification) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
-        tmp.client.handleNotification(notification);
+        HashMap map = RCTConvert.convertReadableMapToHashMap(notification);
+        tmp.client.handleNotification(map);
     }
 
     @ReactMethod
@@ -223,8 +224,9 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     }
 
     @ReactMethod
-    public void setAttributes(Map<String,String> attributes, final Promise promise) {
+    public void setAttributes(ReadableMap attributes, final Promise promise) {
         RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        HashMap map = RCTConvert.convertReadableMapToHashMap(attributes);
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
@@ -239,7 +241,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             }
         };
 
-        tmp.client.getMyUserInfo().setAttributes(attributes, listener);
+        tmp.client.getMyUserInfo().setAttributes(map, listener);
     }
 
     // Listeners

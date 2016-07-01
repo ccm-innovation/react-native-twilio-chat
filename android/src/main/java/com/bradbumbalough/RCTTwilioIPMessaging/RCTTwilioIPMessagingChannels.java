@@ -171,7 +171,8 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createChannel(Map<String,Object> options, final Promise promise) {
+    public void createChannel(ReadableMap options, final Promise promise) {
+        HashMap<String, Object> map = RCTConvert.convertReadableMapToHashMap(options);
 
         Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
             @Override
@@ -185,7 +186,8 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
                 promise.resolve(RCTConvert.Channel(newChannel));
             }
         };
-       channels().createChannel(options, listener);
+
+        channels().createChannel(map, listener);
     }
 
     @ReactMethod
@@ -220,7 +222,8 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAttributes(String sid, Map<String,String> attributes, final Promise promise) {
+    public void setAttributes(String sid, ReadableMap attributes, final Promise promise) {
+        HashMap map = RCTConvert.convertReadableMapToHashMap(attributes);
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
@@ -235,7 +238,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             }
         };
 
-        loadChannelFromSid(sid).setAttributes(attributes, listener);
+        loadChannelFromSid(sid).setAttributes(map, listener);
     }
 
     @ReactMethod

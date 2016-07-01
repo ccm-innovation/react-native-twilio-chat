@@ -30,6 +30,16 @@ public class RCTConvert {
         return writableMap;
     }
 
+    public static HashMap<String, Object> convertReadableMapToHashMap(ReadableMap readableMap) {
+        HashMap map = new HashMap<String, Object>();
+        ReadableMapKeySetIterator keySetIterator = readableMap.keySetIterator();
+        while (keySetIterator.hasNextKey()) {
+            String key = keySetIterator.nextKey();
+            map.put(key, readableMap.getString(key));
+        }
+        return map;
+    }
+
     public static WritableMap Channel(Channel channel) {
         WritableMap map = Arguments.createMap();
 
