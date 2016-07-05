@@ -144,7 +144,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     private Channel loadChannelFromSid(String sid) {
         Channel channel = channels().getChannel(sid);
-        if (channel.getListener() == null) {
+        if (!channelListeners.containsKey(sid)) {
             ChannelListener listener = generateListener(channel);
             channel.setListener(listener);
             channelListeners.put(channel.getSid(),listener);
