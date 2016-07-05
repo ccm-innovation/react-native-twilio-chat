@@ -122,11 +122,13 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
         TwilioIPMessagingClient.Properties.Builder builder = new TwilioIPMessagingClient.Properties.Builder();
 
-        if (props.hasKey("initialMessageCount")) {
-            builder.setInitialMessageCount(props.getInt("initialMessageCount"));
-        }
-        if (props.hasKey("synchronizationStrategy")) {
-            builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
+        if (props != null) {
+            if (props.hasKey("initialMessageCount")) {
+                builder.setInitialMessageCount(props.getInt("initialMessageCount"));
+            }
+            if (props.hasKey("synchronizationStrategy")) {
+                builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
+            }
         }
 
         Constants.CallbackListener<TwilioIPMessagingClient> listener = new Constants.CallbackListener<TwilioIPMessagingClient>() {

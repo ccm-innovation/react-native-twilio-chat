@@ -3,6 +3,9 @@ package com.bradbumbalough.RCTTwilioIPMessaging;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+
 import com.twilio.common.TwilioAccessManager;
 import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.Channels;
@@ -17,8 +20,10 @@ import org.json.JSONObject;
 import java.sql.Wrapper;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
+
 
 public class RCTConvert {
 
