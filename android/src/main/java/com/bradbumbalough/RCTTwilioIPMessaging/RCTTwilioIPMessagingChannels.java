@@ -8,9 +8,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
+
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-
 import com.twilio.ipmessaging.Channel;
 import com.twilio.ipmessaging.ChannelListener;
 import com.twilio.ipmessaging.Constants;
@@ -53,7 +53,6 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
-
                 sendEvent("ipMessagingClient:channel:messageAdded", map);
             }
 
@@ -198,7 +197,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getChannelByUniqueName(String uniqueName, Promise promise) {
-        promise.resolve(channels().getChannelByUniqueName(uniqueName));
+        promise.resolve(RCTConvert.Channel(channels().getChannelByUniqueName(uniqueName)));
     }
 
     // Channel Instance Methods

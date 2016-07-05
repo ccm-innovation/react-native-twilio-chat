@@ -75,7 +75,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     public TwilioIPMessagingClient client = null;
     private ReactApplicationContext reactContext;
 
-    private static RCTTwilioIPMessagingClient rctTwilioIPMessagingClient = new RCTTwilioIPMessagingClient(null);
+    private static RCTTwilioIPMessagingClient rctTwilioIPMessagingClient;
 
     public static RCTTwilioIPMessagingClient getInstance() {
         return rctTwilioIPMessagingClient;
@@ -84,16 +84,19 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     public RCTTwilioIPMessagingClient(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        rctTwilioIPMessagingClient = this;
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
-        this.reactContext
+        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
 
     private void sendEvent(String eventName, @Nullable String body) {
-        this.reactContext
+        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, body);
     }
@@ -144,8 +147,8 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
                 promise.resolve(RCTConvert.TwilioIPMessagingClient(tmp.client));
             }
         };
-
-        TwilioIPMessagingSDK.createClient(accessManager, builder.createProperties(), listener);
+        tmp.client = TwilioIPMessagingSDK.createClient(accessManager, builder.createProperties(), listener);
+        tmp.client.setListener(this);
     }
 
     @ReactMethod

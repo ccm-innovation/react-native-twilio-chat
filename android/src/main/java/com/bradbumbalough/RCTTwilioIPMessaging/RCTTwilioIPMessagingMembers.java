@@ -17,11 +17,9 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
         return "TwilioIPMessagingMembers";
     }
 
-    private ReactApplicationContext reactContext;
 
     public RCTTwilioIPMessagingMembers(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.reactContext = reactContext;
     }
 
     private Members loadMembersFromChannelSid(String sid) {

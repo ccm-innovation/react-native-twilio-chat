@@ -24,10 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
 
-
 public class RCTConvert {
 
     private static WritableMap convertMapToWritableMap(Map<String,String> map) {
+        if (map == null) {
+            return null;
+        }
         WritableMap writableMap = Arguments.createMap();
         for (String key : map.keySet()) {
             writableMap.putString(key, map.get(key));
@@ -36,6 +38,9 @@ public class RCTConvert {
     }
 
     public static HashMap<String, Object> convertReadableMapToHashMap(ReadableMap readableMap) {
+        if (readableMap == null) {
+            return null;
+        }
         HashMap map = new HashMap<String, Object>();
         ReadableMapKeySetIterator keySetIterator = readableMap.keySetIterator();
         while (keySetIterator.hasNextKey()) {
@@ -138,4 +143,3 @@ public class RCTConvert {
         return array;
     }
 }
-

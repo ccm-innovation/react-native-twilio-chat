@@ -22,7 +22,7 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     public TwilioAccessManager accessManager = null;
     private ReactApplicationContext reactContext;
 
-    public static RCTTwilioAccessManager rctTwilioAccessManager = new RCTTwilioAccessManager(null);
+    public static RCTTwilioAccessManager rctTwilioAccessManager;
 
     public static RCTTwilioAccessManager getInstance() {
         return rctTwilioAccessManager;
@@ -31,6 +31,7 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     public RCTTwilioAccessManager(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        rctTwilioAccessManager = this;
     }
 
     @ReactMethod
