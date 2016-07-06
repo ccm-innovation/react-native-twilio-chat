@@ -1,6 +1,6 @@
 # Example App
 
-Run `npm install` and then `pod install` to bring in the xcode dependencies. 
+Run `npm install` (in this directory) and then `pod install` (for iOS) to bring in the xcode dependencies. 
 
 This is an example app using [React Native Gifted Messenger](https://github.com/FaridSafi/react-native-gifted-messenger).
 
