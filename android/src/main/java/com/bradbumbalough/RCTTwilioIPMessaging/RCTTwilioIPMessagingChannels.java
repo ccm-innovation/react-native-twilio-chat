@@ -192,7 +192,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getChannel(String sid, Promise promise) {
-        promise.resolve(channels().getChannel(sid));
+        promise.resolve(RCTConvert.Channel(channels().getChannel(sid)));
     }
 
     @ReactMethod
