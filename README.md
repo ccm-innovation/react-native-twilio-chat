@@ -36,10 +36,12 @@ dependencies {
 
 ```
 
-Register the module in `MainActivity.java` by calling addPackage()
+Register the module in `MainActivity.java` by calling addPackage():
 ```Java
 // import package
 import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
+
+...
 
 // register package in getPackages()
 @Override
