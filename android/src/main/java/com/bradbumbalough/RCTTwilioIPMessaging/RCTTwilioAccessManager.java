@@ -41,6 +41,12 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
         promise.resolve(RCTConvert.TwilioAccessManager(tmp.accessManager));
     }
 
+    @ReactMethod
+    public void updateToken(String token) {
+      RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
+      tmp.accessManager.updateToken(token);
+    }
+
     @Override
     public void onTokenExpired(TwilioAccessManager twilioAccessManager) {
         reactContext
