@@ -174,4 +174,8 @@ RCT_REMAP_METHOD(typing, sid:(NSString *)sid) {
   [channel typing];
 }
 
+RCT_REMAP_METHOD(getMember, channelSid:(NSString *)channelSid identity:(NSString *)identity member_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve([RCTConvert TWMMember:[[self loadChannelFromSid:channelSid] memberWithIdentity:identity]]);
+}
+
 @end

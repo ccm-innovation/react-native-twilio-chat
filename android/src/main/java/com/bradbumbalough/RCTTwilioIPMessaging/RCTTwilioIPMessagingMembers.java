@@ -94,20 +94,4 @@ public class RCTTwilioIPMessagingMembers extends ReactContextBaseJavaModule {
         loadMembersFromChannelSid(channelSid).removeMember(memberToDelete, listener);
     }
 
-    @ReactMethod
-    public void getMember(String channelSid, String identity, final Promise promise) {
-        Member[] members = loadMembersFromChannelSid(channelSid).getMembers();
-        try {
-            for (Member m : members) {
-                if (m.getUserInfo().getIdentity() == identity) {
-                    promise.resolve(RCTConvert.Member(m));
-                    break;
-                }
-            }
-        }
-        catch (Exception e) {
-            promise.reject("get-members-error","Error occurred while attempting to getMembers.");
-        }
-    }
-
 }
