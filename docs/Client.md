@@ -50,7 +50,7 @@ Initialize the Client with the provided Access Manager and begin synchronization
 #### `getChannels()` : Promise
 Get all of the user's channels. Returns `Array<Channel>`.
 
-#### `getChannelBySid(sid)` : Promise
+#### `getChannel(sid)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
 |*sid*|String|Sid of the channel to return
