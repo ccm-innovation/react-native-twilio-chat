@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {
-  Component,
+  Component
 } from 'react';
 import {
   Linking,
@@ -11,7 +11,10 @@ import {
   View,
   Text,
   Navigator,
+  NativeModules,
+  NativeAppEventEmitter
 } from 'react-native';
+
 
 var GiftedMessenger = require('react-native-gifted-messenger');
 var Communications = require('react-native-communications');
@@ -46,8 +49,6 @@ const BOT_CONFIRMATIONS = [
   "Go for the gold!"
 ]
 
-var DeviceInfo = require('react-native-device-info')
-
 let {
   Client,
   Constants,
@@ -78,16 +79,16 @@ class GiftedMessengerContainer extends Component {
     };
 
   }
-  
+
   getToken(identity) {
-    return fetch('http://localhost:3000/token?device=iOS&identity=' + identity, {
+    return fetch('http://localhost:3000/token?device=' + Platform.OS + '&identity=' + identity, {
       method: 'get'
     })
     .then((res) => {
       return res.json()
     })
   }
-  
+
   parseMessage(message) {
     return {
       uniqueId: message.sid,
@@ -97,7 +98,7 @@ class GiftedMessengerContainer extends Component {
       date: message.timestamp
     }
   }
-  
+
   initializeMessenging(identity) {
     this.getToken(identity)
     .then(({token}) => {
@@ -109,13 +110,13 @@ class GiftedMessengerContainer extends Component {
       accessManager.onError = ({error}) => {
         console.log(error)
       }
-      
+
       var client = new Client(accessManager)
-           
+
       client.onError = ({error, userInfo}) => console.log(error)
 
       client.onClientSynchronized = () => {
-        
+
         client.getChannelByUniqueName('general')
         .then((channel) => {
           channel.initialize()
@@ -124,28 +125,30 @@ class GiftedMessengerContainer extends Component {
               channel.join()
             }
           })
-          .catch(({error}) => {
+          .catch((error) => {
             console.log(error)
           })
-          
+
           channel.onTypingStarted = (member) => {
             this.setState({typingMessage: member.userInfo.identity + ' is typing...'})
           }
-          
+
           channel.onTypingEnded = (member) => {
             this.setState({typingMessage: ''})
           }
-          
+
           channel.onMessageAdded = (message) => this.handleReceive(this.parseMessage(message))
-          
-          this.setState({client, channel})        
-        }) 
+
+          this.setState({client, channel})
+        })
       }
-      
+
+      console.log(Constants)
+
       client.initialize()
     })
   }
-  
+
   botMessage(message, time = 1000) {
     this.setState({typingMessage: 'MessagingBot is typing...'})
     return new Promise((resolve, reject) => {
@@ -158,7 +161,7 @@ class GiftedMessengerContainer extends Component {
           position: 'left',
           internal: true
         })
-        resolve() 
+        resolve()
       },time)
     })
   }
@@ -168,6 +171,7 @@ class GiftedMessengerContainer extends Component {
         this.botMessage(BOT_GREETINGS[Math.floor(Math.random()*BOT_GREETINGS.length)])
         .then(() => this.botMessage(BOT_QUESTIONS[Math.floor(Math.random()*BOT_QUESTIONS.length)], 2000))
       },500)
+      var test = NativeAppEventEmitter.addListener("bradtest", (test) => console.log(test));
   }
 
   componentWillUnmount() {
@@ -210,18 +214,18 @@ class GiftedMessengerContainer extends Component {
   handleSend(message = {}) {
     // Your logic here
     // Send message.text to your server
-    
+
     if (this.state.client) {
       this.state.channel.sendMessage(message.text)
       .catch((error) => console.error(error))
     } else {
       this.initializeMessenging(message.text)
       message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
-      this.setMessages(this._messages.concat(message));  
+      this.setMessages(this._messages.concat(message));
       this.botMessage("Hello " + message.text + "!", 1000)
       .then(() => this.botMessage(BOT_CONFIRMATIONS[Math.floor(Math.random()*BOT_CONFIRMATIONS.length)], 2000))
     }
-    
+
     // message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
     // this.setMessages(this._messages.concat(message));
 
@@ -319,7 +323,7 @@ class GiftedMessengerContainer extends Component {
         senderImage={null}
         onImagePress={this.onImagePress}
         displayNames={true}
-        
+
         onChangeText={() => this.state.channel ? this.state.channel.typing() : false}
 
         parseText={true} // enable handlePhonePress, handleUrlPress and handleEmailPress

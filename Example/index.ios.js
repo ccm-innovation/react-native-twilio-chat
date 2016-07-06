@@ -6,4 +6,4 @@ var {
 } = ReactNative;
 
 
-AppRegistry.registerComponent('GiftedMessengerExample', () => require('./Navigation'));
+AppRegistry.registerComponent('ReactNativeTwilioIPMessagingExample', () => require('./Navigation'));
