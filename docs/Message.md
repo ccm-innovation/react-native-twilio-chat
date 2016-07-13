@@ -10,6 +10,7 @@
 |*timestamp*|Date|The date object of the timestamp
 |*dateUpdated*|Date|The date object of when the message was last updated **iOS Only**
 |*lastUpdatedBy*|String|The identity of the user who last updated the message **iOS Only**
+|*attributes*|Object|Any attributes added to the message
 
 ## Methods
 
@@ -17,3 +18,8 @@
 |Name |Type |Description |
 |--- |--- |--- |
 |*body*|String|The new body of the message
+
+### `setAttributes(attribtes) : Promise`
+|Name |Type |Description |
+|--- |--- |--- |
+|*attributes*|Object|The new attributes to set on the message

@@ -202,4 +202,36 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void setAttributes(String channelSid, Integer index, ReadableMap attributes, final Promise promise) {
+        JSONObject json = RCTConvert.readableMapToJson(attributes);
+
+        Constants.StatusListener listener = new Constants.StatusListener() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
+            }
+
+            @Override
+            public void onSuccess() {
+                promise.resolve(true);
+            }
+        };
+
+        try {
+            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
+                if (m.getMessageIndex() == index) {
+                    m.setAttributes(json, listener);
+                    break;
+                }
+            }
+        }
+        catch (Exception e) {
+            promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
+        }
+
+        loadChannelFromSid(sid).setAttributes(map, listener);
+    }
+
 }

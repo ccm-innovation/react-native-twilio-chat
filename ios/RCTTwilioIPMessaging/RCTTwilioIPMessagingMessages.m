@@ -128,4 +128,16 @@ RCT_REMAP_METHOD(updateBody, channelSid:(NSString *)channelSid index:(NSNumber *
   }];
 }
 
+RCT_REMAP_METHOD(setAttributes, channelSid:(NSString *)channelSid index:(NSNumber *)index attributes:(NSDictionary *)attributes set_attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
+    [[messages messageWithIndex:index] setAttributes:attributes completion:^(TWMResult *result) {
+        if (result.isSuccessful) {
+            resolve(@[@TRUE]);
+        }
+        else {
+            reject(@"set-attributes-error", @"Error occured while attempting to set attributes of the message.", result.error);
+        }
+    }];
+}
+
 @end
