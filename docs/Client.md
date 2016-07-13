@@ -41,6 +41,7 @@ client.onClientSynchronized = () => {
 |*userInfo*|UserInfo|The current user properties
 |*version*|String|The version of the SDK
 |*synchronizationStatus*|Constants.TWMClientSynchronizationStatus|The current status of the client's initialization
+|*isReachabilityEnabled*|Boolean|Whether or not reacability has been enabled for the messaging instance
 
 ## Methods
 

@@ -227,6 +227,7 @@ public class RCTConvert {
         WritableMap map = Arguments.createMap();
 
         map.putMap("userInfo", UserInfo(client.getMyUserInfo()));
+        map.putBoolean("isReachabilityEnabled", client.isReachabilityEnabled());
 
         return map;
     }

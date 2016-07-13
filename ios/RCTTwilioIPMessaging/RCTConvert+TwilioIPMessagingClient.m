@@ -76,7 +76,8 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
   return @{
            @"userInfo": [self TWMUserInfo:client.userInfo],
            @"synchronizationStatus": @(client.synchronizationStatus),
-           @"version": client.version
+           @"version": client.version,
+           @"isReachabilityEnabled": @(client.isReachabilityEnabled)
            };
 }
 
