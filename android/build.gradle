@@ -13,5 +13,5 @@ android {
 }
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile 'com.twilio:ip-messaging-android:0.7.0'
+    compile 'com.twilio:ip-messaging-android:0.8.1'
 }
