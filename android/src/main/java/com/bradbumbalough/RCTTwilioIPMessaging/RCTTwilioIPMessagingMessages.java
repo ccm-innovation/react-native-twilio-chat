@@ -50,7 +50,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             }
         };
 
-        messages.sendMessage(messages.createMessage(body), listener);
+        messages.sendMessage(body, listener);
     }
 
     @ReactMethod
