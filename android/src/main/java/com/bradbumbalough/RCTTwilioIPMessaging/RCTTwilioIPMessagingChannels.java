@@ -240,7 +240,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
             }
         };
 
-        loadChannelFromSid(sid).setAttributes(map, listener);
+        loadChannelFromSid(sid).setAttributes(json, listener);
     }
 
     @ReactMethod

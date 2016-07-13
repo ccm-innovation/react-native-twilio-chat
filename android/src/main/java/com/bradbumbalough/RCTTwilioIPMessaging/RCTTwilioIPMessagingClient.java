@@ -248,7 +248,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             }
         };
 
-        tmp.client.getMyUserInfo().setAttributes(map, listener);
+        tmp.client.getMyUserInfo().setAttributes(json, listener);
     }
 
     // Listeners
