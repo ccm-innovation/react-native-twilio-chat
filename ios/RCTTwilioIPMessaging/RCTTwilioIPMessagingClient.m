@@ -276,7 +276,9 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                     },
                 @"TWMUserInfoUpdate": @{
                     @"FriendlyName": @(TWMUserInfoUpdateFriendlyName),
-                    @"Attributes": @(TWMUserInfoUpdateAttributes)
+                    @"Attributes": @(TWMUserInfoUpdateAttributes),
+                    @"ReachabilityOnline": @(TWMUserInfoUpdateReachabilityOnline),
+                    @"ReachabilityNotifiable": @(TWMUserInfoUpdateReachabilityNotifiable)
                     },
                 @"TWMLogLevel": @{
                     @"Fatal" : @(TWMLogLevelFatal),

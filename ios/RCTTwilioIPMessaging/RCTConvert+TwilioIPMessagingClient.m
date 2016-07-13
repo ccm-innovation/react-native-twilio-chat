@@ -41,6 +41,8 @@ RCT_ENUM_CONVERTER(TWMChannelType,(@{
 RCT_ENUM_CONVERTER(TWMUserInfoUpdate,(@{
                                         @"FriendlyName" : @(TWMUserInfoUpdateFriendlyName),
                                         @"Attributes" : @(TWMUserInfoUpdateAttributes),
+                                        @"ReachabilityOnline": @(TWMUserInfoUpdateReachabilityOnline),
+                                        @"ReachabilityNotifiable": @(TWMUserInfoUpdateReachabilityNotifiable),
                                         }), TWMUserInfoUpdateFriendlyName, integerValue)
 
 RCT_ENUM_CONVERTER(TWMClientSynchronizationStrategy,(@{
@@ -89,7 +91,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
   return @{
            @"identity": userInfo.identity,
            @"friendlyName": userInfo.friendlyName,
-           @"attributes": RCTNullIfNil(userInfo.attributes)
+           @"attributes": RCTNullIfNil(userInfo.attributes),
+           @"isOnline": @(userInfo.isOnline),
+           @"isNotifiable": @(userInfo.isNotifiable)
            };
 }
 

@@ -61,7 +61,9 @@ client.createChannel({
 - Debug
 
 ### TWMUserInfoUpdate - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMUserInfoUpdate.html)
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TWMUserInfoUpdate.html)
 - FriendlyName
 - Attributes
+- ReachabilityOnline
+- ReachabilityNotifiable
 

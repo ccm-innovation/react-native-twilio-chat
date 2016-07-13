@@ -211,5 +211,5 @@ Fired when the client has finished synchronizing and populated all of its attrib
 #### `onUserInfoUpdated({updated, userInfo})`
 |Name |Type |Description |
 |--- |--- |--- |
-|*updated*|Constants.TWMUserInfoUpdated|Whether the update was friendly name or attributes
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
 |*userInfo*|UserInfo|The new UserInfo instance

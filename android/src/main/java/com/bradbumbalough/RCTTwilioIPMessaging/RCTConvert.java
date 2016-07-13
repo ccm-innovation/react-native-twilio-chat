@@ -199,6 +199,8 @@ public class RCTConvert {
         map.putString("identity", userInfo.getIdentity());
         map.putString("friendlyName", userInfo.getFriendlyName());
         map.putMap("attributes", jsonToWritableMap(userInfo.getAttributes()));
+        map.putBoolean("isOnline", userInfo.isOnline());
+        map.putBoolean("isNotifiable", userInfo.isNotifiable());
 
         return map;
     }
