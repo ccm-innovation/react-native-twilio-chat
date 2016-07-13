@@ -243,6 +243,15 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                        }];
 }
 
+- (void)ipMessagingClient:(TwilioIPMessagingClient *)client channel:(TWMChannel *)channel member:(TWMMember *)member userInfo:(TWMUserInfo *)userInfo updated:(TWMUserInfoUpdate)updated) {
+    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:channel:member:userInfoUpdated"
+                                                 body: @{@"channelSid": channel.sid,
+                                                         @"updated": @(updated),
+                                                         @"userInfo": [RCTConvert TWMUserInfo:userInfo]
+                                                         }];
+
+}
+
 #pragma mark Enums
 
 - (NSDictionary *)constantsToExport

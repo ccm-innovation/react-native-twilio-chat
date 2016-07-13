@@ -188,6 +188,12 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 |--- |--- |--- |
 |*member*|Object|The object of the left member
 
+#### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
+|Name |Type |Description |
+|--- |--- |--- |
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*userInfo*|UserInfo|The new UserInfo instance
+
 #### `onMessageAdded(message)`
 |Name |Type |Description |
 |--- |--- |--- |

@@ -158,6 +158,13 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |*channelSid*|String|The sid of the channel
 |*member*|Object|The left member
 
+#### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
+|Name |Type |Description |
+|--- |--- |--- |
+|*channelSid*|String|The Sid of the channel the member is part of
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*userInfo*|UserInfo|The new UserInfo instance
+
 #### `onMessageAdded({channelSid, message})`
 |Name |Type |Description |
 |--- |--- |--- |
