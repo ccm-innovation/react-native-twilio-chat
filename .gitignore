@@ -9,6 +9,8 @@ android/local.properties
 android/.idea
 android/.idea
 android/build
+android/app/build
+android/gradle
 android/captures
 
 # android example
@@ -17,6 +19,8 @@ Example/android/local.properties
 Example/android/.idea
 Example/android/.idea
 Example/android/build
+Example/android/app/build
+Example/android/gradle
 Example/android/captures
 
 Example/node_modules
