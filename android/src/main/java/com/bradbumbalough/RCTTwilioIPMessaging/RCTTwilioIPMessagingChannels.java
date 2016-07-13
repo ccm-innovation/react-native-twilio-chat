@@ -22,6 +22,8 @@ import com.twilio.ipmessaging.Message;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 
 public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
@@ -172,7 +174,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void createChannel(ReadableMap options, final Promise promise) {
-        HashMap<String, Object> map = RCTConvert.convertReadableMapToHashMap(options);
+        HashMap<String, Object> map = RCTConvert.readableMapToHashMap(options);
 
         Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
             @Override
@@ -223,7 +225,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setAttributes(String sid, ReadableMap attributes, final Promise promise) {
-        HashMap map = RCTConvert.convertReadableMapToHashMap(attributes);
+        JSONObject json = RCTConvert.readableMapToJson(attributes);
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
