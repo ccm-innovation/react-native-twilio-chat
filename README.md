@@ -13,7 +13,7 @@ Install the Twilio IP Messaging SDK and this package via CocoaPods.
 pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioIPMessagingClient', '~> 0.14.1'
+pod 'TwilioIPMessagingClient', '~> 0.14.2'
 ```
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
