@@ -9,12 +9,11 @@ target 'GiftedMessengerExample' do
   inherit! :search_paths
   source 'https://github.com/CocoaPods/Specs.git'
   pod 'React', :subspecs => ['Core', 'RCTActionSheet', 'RCTGeolocation', 'RCTImage', 'RCTLinkingIOS', 'RCTNetwork', 'RCTText', 'RCTSettings', 'RCTVibration', 'RCTWebSocket'], :path => '../node_modules/react-native'
-  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info' 
   
   source 'https://github.com/twilio/cocoapod-specs'
   pod 'TwilioIPMessagingClient', '~> 0.14.1'
 
-  pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging'
+  pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
 
   
   target 'GiftedMessengerExampleTests' do
