@@ -20,3 +20,13 @@
 |Name |Type |Description |
 |--- |--- |--- |
 |*friendlyName*|String|The new friendlyName
+
+#### `close()`
+Remove the listeners on this instance. Call in `componentWillUnmount()`.
+
+### Events
+
+#### `onUpdated(type)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*type*|Constants.TWMUserInfoUpdate|The type of update **iOS Only**
