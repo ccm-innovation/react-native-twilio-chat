@@ -129,7 +129,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
            @"status": @(channel.status),
            @"type": @(channel.type),
            @"attributes": RCTNullIfNil(channel.attributes),
-           @"synchronizationStatus": @(channel.synchronizationStatus)
+           @"synchronizationStatus": @(channel.synchronizationStatus),
+           @"dateCreated": channel.dateCreated,
+           @"dateUpdated": channel.dateUpdated
            };
 }
 

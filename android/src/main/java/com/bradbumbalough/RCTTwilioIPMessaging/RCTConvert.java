@@ -60,7 +60,8 @@ public class RCTConvert {
         map.putString("type", channel.getType().toString());
         map.putMap("attributes", convertMapToWritableMap(channel.getAttributes()));
         map.putString("synchronizationStatus", channel.getSynchronizationStatus().toString());
-
+        map.putString("dateCreated", channel.getDateCreated().toString());
+        map.putString("dateUpdated", channel.getDateUpdated().toString());
         return map;
     }
 

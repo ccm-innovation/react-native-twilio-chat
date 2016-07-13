@@ -40,6 +40,8 @@ channel.setAllMessagesConsumed()
 |*status*|Constants.TWMChannelStatus|The user's association with the channel
 |*type*|Constants.TWMChannelType|Whether the channel is public or private
 |*attributes*|Object|Any custom attributes added to the channel
+|*dateCreated*|Date|When the channel was created
+|*dateUpdated*|Date|When the channel was last updated
 
 ## Methods
 
