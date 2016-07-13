@@ -3,6 +3,8 @@
 
 >React Native wrapper for the Twilio IP Messaging SDKs
 
+####[Changelog](CHANGELOG.md)
+
 ## Installation
 ```npm install --save react-native-twilio-ip-messaging@0.2.0-rc1```
 
