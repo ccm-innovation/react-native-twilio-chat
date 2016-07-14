@@ -120,7 +120,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
     return RCTNullIfNil(nil);
   }
   return @{
-           @"userInfo": [RCTConvert TWMUserInfo:member.userInfo]
+           @"userInfo": [RCTConvert TWMUserInfo:member.userInfo],
+           @"lastConsumedMessageIndex": member.lastConsumedMessageIndex,
+           @"lastConsumedMessageTimestamp": member.lastConsumedMessageTimestamp
            };
 }
 

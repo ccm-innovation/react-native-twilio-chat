@@ -176,17 +176,17 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onMemberJoined(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the new member
+|*member*|Member|The instance of the new member
 
 #### `onMemberChanged(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the changed member
+|*member*|Member|The changed member instance
 
 #### `onMemberLeft(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the left member
+|*member*|Member|The member instance who left
 
 #### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
 |Name |Type |Description |
@@ -212,12 +212,12 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onTypingStarted(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The member object who started typing
+|*member*|Member|The member who started typing
 
 #### `onTypingEnded(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The member object who ended typing
+|*member*|Member|The member who ended typing
 
 #### `onToastReceived(message)`
 |Name |Type |Description |
