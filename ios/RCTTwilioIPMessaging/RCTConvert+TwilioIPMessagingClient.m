@@ -111,7 +111,7 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
            @"dateUpdated": message.dateUpdated,
            @"dateUpdatedDate": @(message.dateUpdatedAsDate.timeIntervalSince1970 * 1000),
            @"lastUpdatedBy": message.lastUpdatedBy,
-           @"attributes": message.attributes
+           @"attributes": RCTNullIfNil(message.attributes)
            };
 }
 
