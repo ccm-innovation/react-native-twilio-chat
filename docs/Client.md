@@ -203,13 +203,13 @@ Fired when the client has finished synchronizing and populated all of its attrib
 
 #### `onToastSubscribed()`
 
-#### `onToastReceived({channelSid, message})`
+#### `onToastReceived({channelSid, messageSid})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*channelSid*|String|The sid of the channel
-|*message*|Message|The instance of the Message in the toast
+|*messageSid*|String|The message sid (if applicable)
 
-#### `onToastRegistrationFailed({error, userId})`
+#### `onToastFailed({error, userId})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*error*|String|The error message from the SDK

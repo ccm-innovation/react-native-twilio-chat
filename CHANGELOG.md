@@ -13,6 +13,7 @@
 - Updated Twilio SDK to 0.8.1
 - Updated attributes to be JSONObject instead of Maps
 - `sendMessage()` now uses a build in method instead of combing `createMessage` with `sendMessage`
+- Added `onToastFailed`, `onToastReceived`, and `onToastSubscribed` events (previously was iOS only)
 
 #### iOS
 - Updated Twilio SDK to 0.14.2
@@ -21,3 +22,4 @@
 #### Depreciated
 - `client.getChannelBySid(sid)` is now replaced with `client.getChannel(sid)`
 - `client.deregister(token)` is now replaced with `client.unregister(token)`
+- `onToastRegistrationFailed` Client event is now replaced with `onToastFailed`

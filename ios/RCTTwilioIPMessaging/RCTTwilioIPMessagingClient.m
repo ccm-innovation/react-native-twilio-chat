@@ -222,15 +222,15 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 }
 
 - (void)ipMessagingClient:(TwilioIPMessagingClient *)client toastReceivedOnChannel:(TWMChannel *)channel message:(TWMMessage *)message {
-    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastReceivedOnChannel"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastReceived"
                                                body: @{
                                                        @"channelSid": channel.sid,
-                                                       @"message": [RCTConvert TWMMessage:message]
+                                                       @"messageSid": message.sid
                                                        }];
 }
 
 - (void)ipMessagingClient:(TwilioIPMessagingClient *)client toastRegistrationFailedWithError:(TWMError *)error {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastRegistrationFailedWithError"
+  [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastFailed"
                                                body:@{@"error": [error localizedDescription],
                                                       @"userInfo": [error userInfo]
                                                       }];

@@ -299,4 +299,27 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
         sendEvent("ipMessagingClient:userInfoUpdated", map);
     }
+
+    @Override
+    public void onToastFailed(ErrorInfo errorInfo) {
+        WritableMap map = Arguments.createMap();
+        map.putString("error",errorInfo.getErrorText());
+        map.putString("userInfo", errorInfo.toString());
+
+        sendEvent("ipMessagingClient:toastFailed", map);
+    }
+
+    @Override
+    public void onToastSubscribed() {
+        sendEvent("ipMessagingClient:toastSubscribed", null);
+    }
+
+    @Override
+    public void onToastNotification(String channelSid, String messageSid) {
+        WritableMap map = Arguments.createMap();
+        map.putString("channelSid", channelSid);
+        map.putString("messageSid", messageSid);
+
+        sendEvent("ipMessagingClient:toastReceived", map);
+    }
 }
