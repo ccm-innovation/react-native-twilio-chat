@@ -311,7 +311,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @Override
     public void onToastSubscribed() {
-        sendEvent("ipMessagingClient:toastSubscribed", null);
+        sendEvent("ipMessagingClient:toastSubscribed", "");
     }
 
     @Override
