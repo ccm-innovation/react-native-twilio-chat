@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReadableMap;
 
 import com.twilio.ipmessaging.Messages;
 import com.twilio.ipmessaging.Constants;
@@ -11,6 +12,8 @@ import com.twilio.ipmessaging.ErrorInfo;
 import com.twilio.ipmessaging.Message;
 
 import java.util.List;
+
+import org.json.JSONObject;
 
 public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
 
@@ -231,7 +234,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
             promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
         }
 
-        loadChannelFromSid(sid).setAttributes(map, listener);
+        loadChannelFromSid(channelSid).setAttributes(json, listener);
     }
 
 }
