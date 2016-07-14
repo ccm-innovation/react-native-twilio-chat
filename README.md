@@ -6,7 +6,7 @@
 ####[Changelog](CHANGELOG.md)
 
 ## Installation
-```npm install --save react-native-twilio-ip-messaging@0.2.0-rc1```
+```npm install --save react-native-twilio-ip-messaging@0.2.0-rc2```
 
 ### iOS
 Install the Twilio IP Messaging SDK and this package via CocoaPods.
