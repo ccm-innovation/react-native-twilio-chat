@@ -8,7 +8,7 @@
 - Added `isReachabilityEnabeld` to Client
 - Added `isOnline` and `isNotifiable` properties to UserInfo
 - Added `onUpdate` and `close` methods to UserInfo
-- Added `lastConsumedMessageIndex` and `lastConsumedMessageTimestamp` to Member class
+- Added `lastConsumedMessageIndex` and `lastConsumptionTimestamp` to Member class
 
 #### Android
 - Updated Twilio SDK to 0.8.1

@@ -223,8 +223,8 @@ public class RCTConvert {
         WritableMap map = Arguments.createMap();
 
         map.putMap("userInfo", UserInfo(member.getUserInfo()));
-        map.putNumber("lastConsumedMessageIndex", member.getLastConsumedMessageIndex());
-        map.putString("lastConsumedMessageTimestamp", member.getLastConsumedMessageTimestamp().toString());
+        map.putInt("lastConsumedMessageIndex", member.getLastConsumedMessageIndex().intValue());
+        map.putString("lastConsumedMessageTimestamp", member.getLastConsumptionTimestamp());
 
         return map;
     }
