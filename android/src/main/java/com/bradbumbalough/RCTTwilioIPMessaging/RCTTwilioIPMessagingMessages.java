@@ -233,8 +233,6 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
         catch (Exception e) {
             promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
         }
-
-        loadChannelFromSid(channelSid).setAttributes(json, listener);
     }
 
 }
