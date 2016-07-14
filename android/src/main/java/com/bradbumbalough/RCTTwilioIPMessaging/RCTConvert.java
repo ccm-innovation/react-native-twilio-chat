@@ -3,6 +3,8 @@ package com.bradbumbalough.RCTTwilioIPMessaging;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
@@ -213,7 +215,7 @@ public class RCTConvert {
         map.putString("author", message.getAuthor());
         map.putString("body", message.getMessageBody());
         map.putString("timestamp", message.getTimeStamp());
-        map.putMap("attributes", jsonToWritableMap(message.getAttributes()))
+        map.putMap("attributes", jsonToWritableMap(message.getAttributes()));
         return map;
     }
 
