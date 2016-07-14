@@ -54,7 +54,7 @@ android {
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
-        variant.outpuee43qts.each { output ->
+        variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
             def versionCodes = ["armeabi-v7a":1, "x86":2]
