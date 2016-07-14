@@ -2,7 +2,28 @@
 
 ## 0.2.0-rc2
 
-#### Both
+#### Upgrading
+Update your `package.json` to use the `0.2.0-rc2` version.
+```
+npm install --save react-native-twilio-ip-messaging@0.2.0-rc2
+```
+
+###### iOS
+Modify your `Podfile` for the Twilio dependency as follows:
+```
+pod 'TwilioIPMessagingClient', '~> 0.14.2'
+```
+
+###### Android
+Indicate to Android Studio to refresh the gradle dependencies.
+
+Or, remove the cache and it will be auto-generated on the next build.
+
+```
+rm -rf $HOME/.gradle/caches/
+```
+
+#### Changes (both)
 - Added `dateCreated` and `dateUpdated` to Channel
 - Added `attributes` and `setAttributes` to Message
 - Added `isReachabilityEnabeld` to Client
