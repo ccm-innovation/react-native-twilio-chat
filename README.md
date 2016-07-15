@@ -16,6 +16,8 @@ pod 'TwilioIPMessagingClient', '~> 0.14.1'
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
     
+**Checkout the Android release candidate at branch `0.2.0-rc2`.**
+
 ## Usage
 ```JavaScript
 /* Initialization */
