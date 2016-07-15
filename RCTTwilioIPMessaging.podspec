@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 
   s.license      = "MIT"
   s.authors      = { "Brad Bumbalough" => "bradley.bumbalough@gmail.com" }
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "8.1"
 
   s.source       = { :git => "https://github.com/ccm-innovation/react-native-twilio-ip-messaging.git" }
 
