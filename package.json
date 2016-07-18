@@ -12,7 +12,8 @@
     "react",
     "ios",
     "twilio",
-    "messaging"
+    "messaging",
+    "android"
   ],
   "author": "Brad Bumbalough <bradley.bumbalough@gmail.com>",
   "license": "MIT",
