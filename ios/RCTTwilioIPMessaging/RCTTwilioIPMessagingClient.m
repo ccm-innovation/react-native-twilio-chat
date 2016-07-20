@@ -93,8 +93,11 @@ RCT_EXPORT_METHOD(logLevel:(TWMLogLevel)logLevel callback:(RCTResponseSenderBloc
 RCT_REMAP_METHOD(setFriendlyName, friendlyName:(NSString *)friendlyName friendlyName_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[[_client client]userInfo] setFriendlyName:friendlyName completion:^(TWMResult *result) {
-    if (!result.isSuccessful) {
+    if (result.isSuccessful) {
       resolve(@[@TRUE]);
+    }
+    else {
+      reject(@"set-friendly-name-error", @"Error occured while attempting to set friendly name for the user.", result.error);
     }
   }];
 }
@@ -102,8 +105,11 @@ RCT_REMAP_METHOD(setFriendlyName, friendlyName:(NSString *)friendlyName friendly
 RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[[_client client]userInfo] setAttributes:attributes completion:^(TWMResult *result) {
-    if (!result.isSuccessful) {
+    if (result.isSuccessful) {
       resolve(@[@TRUE]);
+    }
+    else {
+      reject(@"set-attributes-error", @"Error occured while attempting to set attributes for the user.", result.error);
     }
   }];
 }
