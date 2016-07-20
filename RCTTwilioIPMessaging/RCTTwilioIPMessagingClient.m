@@ -62,14 +62,14 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback) {
   callback(@[client.version]);
 }
 
-RCT_EXPORT_METHOD(registerWithToken:(NSData *)token) {
+RCT_EXPORT_METHOD(registerWithToken:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
-  [[_client client] registerWithToken:token];
+  [[_client client] registerWithToken:[RCTConvert dataWithHexString:token]];
 }
 
-RCT_EXPORT_METHOD(deregisterWithToken:(NSData *)token) {
+RCT_EXPORT_METHOD(deregisterWithToken:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
-  [[_client client] deregisterWithToken:token];
+  [[_client client] deregisterWithToken:[RCTConvert dataWithHexString:token]];
 }
 
 RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)notification) {

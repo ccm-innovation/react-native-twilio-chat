@@ -30,4 +30,6 @@
 + (NSArray *)TWMMembers:(NSArray<TWMMember *>*)members;
 + (NSArray *)TWMMessages:(NSArray<TWMMessage *> *)messages;
 
++ (NSData *)dataWithHexString:(NSString*)hex;
+
 @end
