@@ -155,5 +155,23 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
   return response;
 }
 
++ (NSData *)dataWithHexString:(NSString *)hex {
+  // Source:  https://opensource.apple.com/source/Security/Security-55471.14.18/libsecurity_transform/NSData+HexString.m
+  char buf[3];
+  buf[2] = '\0';
+  NSAssert(0 == [hex length] % 2, @"Hex strings should have an even number of digits (%@)", hex);
+  unsigned char *bytes = malloc([hex length]/2);
+  unsigned char *bp = bytes;
+  for (CFIndex i = 0; i < [hex length]; i += 2) {
+      buf[0] = [hex characterAtIndex:i];
+      buf[1] = [hex characterAtIndex:i+1];
+      char *b2 = NULL;
+      *bp++ = strtol(buf, &b2, 16);
+      NSAssert(b2 == buf + 2, @"String should be all hex digits: %@ (bad digit around %d)", hex, i);
+  }
+
+  return [NSData dataWithBytesNoCopy:bytes length:[hex length]/2 freeWhenDone:YES];
+}
+
 
 @end
