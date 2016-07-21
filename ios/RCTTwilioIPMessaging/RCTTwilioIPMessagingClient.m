@@ -110,8 +110,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
     }
     else {
       reject(@"set-attributes-error", @"Error occured while attempting to set attributes for the user.", result.error);
-    }
-    reject(@[@FALSE]);
+    }  
   }];
 }
 
