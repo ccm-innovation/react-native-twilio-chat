@@ -2,7 +2,7 @@
 
 ## 0.2.0
 
-(Includes all features from `0.2.0-rc2`)
+(Includes all features from [`0.2.0-rc2`](020-rc2))
 
 #### Upgrading
 Update your `package.json` to use the `0.2.0` version.
