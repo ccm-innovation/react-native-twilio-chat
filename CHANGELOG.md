@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.2.0
+
+(Includes all features from `0.2.0-rc2`)
+
+#### Upgrading
+Update your `package.json` to use the `0.2.0` version.
+```
+npm install --save react-native-twilio-ip-messaging@0.2.0
+```
+
+###### iOS
+Modify your `Podfile` for the Twilio dependency as follows:
+```
+pod 'TwilioIPMessagingClient', '~> 0.14.2'
+```
+
+###### Android
+Indicate to Android Studio to refresh the gradle dependencies.
+
+Or, remove the cache and it will be auto-generated on the next build.
+
+```
+rm -rf $HOME/.gradle/caches/
+```
+
+#### iOS
+- #19 Fixed issue with NSString token not being converted into NSData (thanks @plonkus!)
+- #18 Fixed negated `isSuccessful` resolves in `setAttributes` and `setFriendlyName` in client (thanks @Baisang!)
+- #16 Updated Podspec to match Twilios requirement of only iOS 8.1 (thanks @Baisang!)
+- Fixed misspelling of `lastConsumptionTimestamp`
+- Fixed lib Channel `getMembers` was still calling `allObjects`
+
+#### Android
+- Fixed bug when `lastConsumedMessageIndex` is null
+
 ## 0.2.0-rc2
 
 #### Upgrading
