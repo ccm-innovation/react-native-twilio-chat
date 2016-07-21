@@ -2,7 +2,7 @@
 
 ## 0.2.0
 
-(Includes all features from [`0.2.0-rc2`](020-rc2))
+(Includes all features from [`0.2.0-rc2`](#020-rc2))
 
 #### Upgrading
 Update your `package.json` to use the `0.2.0` version.
@@ -26,9 +26,9 @@ rm -rf $HOME/.gradle/caches/
 ```
 
 #### iOS
-- #19 Fixed issue with NSString token not being converted into NSData (thanks @plonkus!)
-- #18 Fixed negated `isSuccessful` resolves in `setAttributes` and `setFriendlyName` in client (thanks @Baisang!)
-- #16 Updated Podspec to match Twilios requirement of only iOS 8.1 (thanks @Baisang!)
+- PR #19 Fixed issue with NSString token not being converted into NSData (thanks @plonkus!)
+- PR #18 Fixed negated `isSuccessful` resolves in `setAttributes` and `setFriendlyName` in client (thanks @Baisang!)
+- PR #16 Updated Podspec to match Twilios requirement of only iOS 8.1 (thanks @Baisang!)
 - Fixed misspelling of `lastConsumptionTimestamp`
 - Fixed lib Channel `getMembers` was still calling `allObjects`
 

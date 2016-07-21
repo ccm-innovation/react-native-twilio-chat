@@ -1,6 +1,6 @@
 {
   "name": "ReactNativeTwilioIPMessagingExample",
-  "version": "0.2.0-rc2",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
@@ -12,6 +12,6 @@
     "react-native-communications": "^1.0.1",
     "react-native-extra-dimensions-android": "^0.17.0",
     "react-native-gifted-messenger": "^0.1.4",
-    "react-native-twilio-ip-messaging": "0.2.0-rc2"
+    "react-native-twilio-ip-messaging": "0.2.0"
   }
 }
