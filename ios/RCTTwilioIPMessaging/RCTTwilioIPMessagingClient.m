@@ -62,14 +62,14 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback) {
   callback(@[client.version]);
 }
 
-RCT_EXPORT_METHOD(register:(NSData *)token) {
+RCT_EXPORT_METHOD(register:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
-  [[_client client] registerWithToken:token];
+  [[_client client] registerWithToken:[RCTConvert dataWithHexString:token]];
 }
 
-RCT_EXPORT_METHOD(unregister:(NSData *)token) {
+RCT_EXPORT_METHOD(unregister:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
-  [[_client client] deregisterWithToken:token];
+  [[_client client] deregisterWithToken:[RCTConvert dataWithHexString:token]];
 }
 
 RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)notification) {
@@ -111,6 +111,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
     else {
       reject(@"set-attributes-error", @"Error occured while attempting to set attributes for the user.", result.error);
     }
+    reject(@[@FALSE]);
   }];
 }
 
