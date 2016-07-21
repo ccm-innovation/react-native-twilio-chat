@@ -41,6 +41,7 @@ client.onClientSynchronized = () => {
 |*userInfo*|UserInfo|The current user properties
 |*version*|String|The version of the SDK
 |*synchronizationStatus*|Constants.TWMClientSynchronizationStatus|The current status of the client's initialization
+|*isReachabilityEnabled*|Boolean|Whether or not reacability has been enabled for the messaging instance
 
 ## Methods
 
@@ -50,7 +51,7 @@ Initialize the Client with the provided Access Manager and begin synchronization
 #### `getChannels()` : Promise
 Get all of the user's channels. Returns `Array<Channel>`.
 
-#### `getChannelBySid(sid)` : Promise
+#### `getChannel(sid)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
 |*sid*|String|Sid of the channel to return
@@ -157,6 +158,13 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |*channelSid*|String|The sid of the channel
 |*member*|Object|The left member
 
+#### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
+|Name |Type |Description |
+|--- |--- |--- |
+|*channelSid*|String|The Sid of the channel the member is part of
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*userInfo*|UserInfo|The new UserInfo instance
+
 #### `onMessageAdded({channelSid, message})`
 |Name |Type |Description |
 |--- |--- |--- |
@@ -195,13 +203,13 @@ Fired when the client has finished synchronizing and populated all of its attrib
 
 #### `onToastSubscribed()`
 
-#### `onToastReceived({channelSid, message})`
+#### `onToastReceived({channelSid, messageSid})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*channelSid*|String|The sid of the channel
-|*message*|Message|The instance of the Message in the toast
+|*messageSid*|String|The message sid (if applicable)
 
-#### `onToastRegistrationFailed({error, userId})`
+#### `onToastFailed({error, userId})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*error*|String|The error message from the SDK
@@ -210,5 +218,5 @@ Fired when the client has finished synchronizing and populated all of its attrib
 #### `onUserInfoUpdated({updated, userInfo})`
 |Name |Type |Description |
 |--- |--- |--- |
-|*updated*|Constants.TWMUserInfoUpdated|Whether the update was friendly name or attributes
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
 |*userInfo*|UserInfo|The new UserInfo instance

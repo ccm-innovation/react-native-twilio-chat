@@ -41,6 +41,8 @@ RCT_ENUM_CONVERTER(TWMChannelType,(@{
 RCT_ENUM_CONVERTER(TWMUserInfoUpdate,(@{
                                         @"FriendlyName" : @(TWMUserInfoUpdateFriendlyName),
                                         @"Attributes" : @(TWMUserInfoUpdateAttributes),
+                                        @"ReachabilityOnline": @(TWMUserInfoUpdateReachabilityOnline),
+                                        @"ReachabilityNotifiable": @(TWMUserInfoUpdateReachabilityNotifiable),
                                         }), TWMUserInfoUpdateFriendlyName, integerValue)
 
 RCT_ENUM_CONVERTER(TWMClientSynchronizationStrategy,(@{
@@ -76,7 +78,8 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
   return @{
            @"userInfo": [self TWMUserInfo:client.userInfo],
            @"synchronizationStatus": @(client.synchronizationStatus),
-           @"version": client.version
+           @"version": client.version,
+           @"isReachabilityEnabled": @(client.isReachabilityEnabled)
            };
 }
 
@@ -88,7 +91,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
   return @{
            @"identity": userInfo.identity,
            @"friendlyName": userInfo.friendlyName,
-           @"attributes": RCTNullIfNil(userInfo.attributes)
+           @"attributes": RCTNullIfNil(userInfo.attributes),
+           @"isOnline": @(userInfo.isOnline),
+           @"isNotifiable": @(userInfo.isNotifiable)
            };
 }
 
@@ -105,7 +110,8 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
            @"timestampAsDate": @(message.timestampAsDate.timeIntervalSince1970 * 1000),
            @"dateUpdated": message.dateUpdated,
            @"dateUpdatedDate": @(message.dateUpdatedAsDate.timeIntervalSince1970 * 1000),
-           @"lastUpdatedBy": message.lastUpdatedBy
+           @"lastUpdatedBy": message.lastUpdatedBy,
+           @"attributes": RCTNullIfNil(message.attributes)
            };
 }
 
@@ -114,7 +120,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
     return RCTNullIfNil(nil);
   }
   return @{
-           @"userInfo": [RCTConvert TWMUserInfo:member.userInfo]
+           @"userInfo": [RCTConvert TWMUserInfo:member.userInfo],
+           @"lastConsumedMessageIndex": RCTNullIfNil(member.lastConsumedMessageIndex),
+           @"lastConsumptionTimestamp": RCTNullIfNil(member.lastConsumptionTimestamp)
            };
 }
 
@@ -129,7 +137,9 @@ RCT_ENUM_CONVERTER(TWMLogLevel,(@{
            @"status": @(channel.status),
            @"type": @(channel.type),
            @"attributes": RCTNullIfNil(channel.attributes),
-           @"synchronizationStatus": @(channel.synchronizationStatus)
+           @"synchronizationStatus": @(channel.synchronizationStatus),
+           @"dateCreated": channel.dateCreated,
+           @"dateUpdated": channel.dateUpdated
            };
 }
 

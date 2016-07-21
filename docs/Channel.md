@@ -40,6 +40,8 @@ channel.setAllMessagesConsumed()
 |*status*|Constants.TWMChannelStatus|The user's association with the channel
 |*type*|Constants.TWMChannelType|Whether the channel is public or private
 |*attributes*|Object|Any custom attributes added to the channel
+|*dateCreated*|Date|When the channel was created
+|*dateUpdated*|Date|When the channel was last updated
 
 ## Methods
 
@@ -138,7 +140,7 @@ Returns an `Array<Message>` instances.
 |--- |--- |--- |
 |*index*|Number|The index of the message to get
 
-#### `getMessageForConsumption(index)` : Promise
+#### `getMessageForConsumption(index)` : Promise **(iOS Only)**
 |Name |Type |Description |
 |--- |--- |--- |
 |*index*|Number|The index of the last message reported as read (may refer to a deleted message)
@@ -174,17 +176,23 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onMemberJoined(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the new member
+|*member*|Member|The instance of the new member
 
 #### `onMemberChanged(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the changed member
+|*member*|Member|The changed member instance
 
 #### `onMemberLeft(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The object of the left member
+|*member*|Member|The member instance who left
+
+#### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
+|Name |Type |Description |
+|--- |--- |--- |
+|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*userInfo*|UserInfo|The new UserInfo instance
 
 #### `onMessageAdded(message)`
 |Name |Type |Description |
@@ -204,12 +212,12 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onTypingStarted(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The member object who started typing
+|*member*|Member|The member who started typing
 
 #### `onTypingEnded(member)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*member*|Object|The member object who ended typing
+|*member*|Member|The member who ended typing
 
 #### `onToastReceived(message)`
 |Name |Type |Description |

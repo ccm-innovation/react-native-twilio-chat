@@ -1,9 +1,11 @@
-package com.giftedmessengerexample;
+package com.reactnativetwilioipmessagingexample;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
+
+import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "GiftedMessengerExample";
+        return "ReactNativeTwilioIPMessagingExample";
     }
 
     /**
@@ -36,6 +38,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+                new RCTTwilioIPMessagingPackage(),
             new ExtraDimensionsPackage(this)
         );
     }

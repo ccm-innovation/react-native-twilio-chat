@@ -34,7 +34,7 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_REMAP_METHOD(ipMessagingClientWithAccessManager, properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+RCT_REMAP_METHOD(createClient, properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   TwilioAccessManager *accessManager = [[RCTTwilioAccessManager sharedManager] accessManager];
   // TODO add check to see if AccessManager has been initialized or not
   TwilioIPMessagingClientProperties *props = nil;
@@ -62,12 +62,12 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback) {
   callback(@[client.version]);
 }
 
-RCT_EXPORT_METHOD(registerWithToken:(NSString *)token) {
+RCT_EXPORT_METHOD(register:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[_client client] registerWithToken:[RCTConvert dataWithHexString:token]];
 }
 
-RCT_EXPORT_METHOD(deregisterWithToken:(NSString *)token) {
+RCT_EXPORT_METHOD(unregister:(NSString *)token) {
   RCTTwilioIPMessagingClient *_client = [RCTTwilioIPMessagingClient sharedManager];
   [[_client client] deregisterWithToken:[RCTConvert dataWithHexString:token]];
 }
@@ -96,8 +96,9 @@ RCT_REMAP_METHOD(setFriendlyName, friendlyName:(NSString *)friendlyName friendly
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
-    // Should replace this with a more descriptive error message
-    reject(@[@FALSE]);
+    else {
+      reject(@"set-friendly-name-error", @"Error occured while attempting to set friendly name for the user.", result.error);
+    }
   }];
 }
 
@@ -107,7 +108,9 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
-    reject(@[@FALSE]);
+    else {
+      reject(@"set-attributes-error", @"Error occured while attempting to set attributes for the user.", result.error);
+    }  
   }];
 }
 
@@ -225,15 +228,15 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 }
 
 - (void)ipMessagingClient:(TwilioIPMessagingClient *)client toastReceivedOnChannel:(TWMChannel *)channel message:(TWMMessage *)message {
-    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastReceivedOnChannel"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastReceived"
                                                body: @{
                                                        @"channelSid": channel.sid,
-                                                       @"message": [RCTConvert TWMMessage:message]
+                                                       @"messageSid": message.sid
                                                        }];
 }
 
 - (void)ipMessagingClient:(TwilioIPMessagingClient *)client toastRegistrationFailedWithError:(TWMError *)error {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastRegistrationFailedWithError"
+  [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:toastFailed"
                                                body:@{@"error": [error localizedDescription],
                                                       @"userInfo": [error userInfo]
                                                       }];
@@ -244,6 +247,15 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                body: @{@"updated": @(updated),
                                                        @"userInfo": [RCTConvert TWMUserInfo:userInfo]
                                                        }];
+}
+
+- (void)ipMessagingClient:(TwilioIPMessagingClient *)client channel:(TWMChannel *)channel member:(TWMMember *)member userInfo:(TWMUserInfo *)userInfo updated:(TWMUserInfoUpdate)updated {
+    [self.bridge.eventDispatcher sendAppEventWithName:@"ipMessagingClient:channel:member:userInfoUpdated"
+                                                 body: @{@"channelSid": channel.sid,
+                                                         @"updated": @(updated),
+                                                         @"userInfo": [RCTConvert TWMUserInfo:userInfo]
+                                                         }];
+
 }
 
 #pragma mark Enums
@@ -279,7 +291,9 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                     },
                 @"TWMUserInfoUpdate": @{
                     @"FriendlyName": @(TWMUserInfoUpdateFriendlyName),
-                    @"Attributes": @(TWMUserInfoUpdateAttributes)
+                    @"Attributes": @(TWMUserInfoUpdateAttributes),
+                    @"ReachabilityOnline": @(TWMUserInfoUpdateReachabilityOnline),
+                    @"ReachabilityNotifiable": @(TWMUserInfoUpdateReachabilityNotifiable)
                     },
                 @"TWMLogLevel": @{
                     @"Fatal" : @(TWMLogLevelFatal),

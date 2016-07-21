@@ -23,13 +23,13 @@ RCT_EXPORT_MODULE()
 
 #pragma mark Messages Methods
 
-RCT_REMAP_METHOD(lastConsumedMessageIndex, channelSid:(NSString *)channelSid last_consumed_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLastConsumedMessageIndex, channelSid:(NSString *)channelSid last_consumed_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   resolve(@[RCTNullIfNil(messages.lastConsumedMessageIndex)]);
 }
 
 
-RCT_REMAP_METHOD(sendMessageWithBody, channelSid:(NSString *)channelSid body:(NSString *)body send_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(sendMessage, channelSid:(NSString *)channelSid body:(NSString *)body send_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   [messages sendMessage:[messages createMessageWithBody:body] completion:^(TWMResult *result) {
     if (result.isSuccessful) {
@@ -53,7 +53,7 @@ RCT_REMAP_METHOD(removeMessage, channelSid:(NSString *)channelSid index:(NSNumbe
   }];
 }
 
-RCT_REMAP_METHOD(getLastMessagesWithCount, channelSid:(NSString *)channelSid count:(NSUInteger)count get_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getLastMessages, channelSid:(NSString *)channelSid count:(NSUInteger)count get_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   [messages getLastMessagesWithCount:count completion:^(TWMResult *result, NSArray<TWMMessage *> *messages) {
     if (result.isSuccessful) {
@@ -89,7 +89,7 @@ RCT_REMAP_METHOD(getMessagesAfter, channelSid:(NSString *)channelSid index:(NSUI
   }];
 }
 
-RCT_REMAP_METHOD(messageWithIndex, channelSid:(NSString *)channelSid index:(NSNumber *)index message_index_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getMessage, channelSid:(NSString *)channelSid index:(NSNumber *)index message_index_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
   resolve([RCTConvert TWMMessage:[messages messageWithIndex:index]]);
 }
@@ -126,6 +126,18 @@ RCT_REMAP_METHOD(updateBody, channelSid:(NSString *)channelSid index:(NSNumber *
       reject(@"update-message-error", @"Error occured while attempting to update the body of the message.", result.error);
     }
   }];
+}
+
+RCT_REMAP_METHOD(setAttributes, channelSid:(NSString *)channelSid index:(NSNumber *)index attributes:(NSDictionary *)attributes set_attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TWMMessages *messages = [self loadMessagesFromChannelSid:channelSid];
+    [[messages messageWithIndex:index] setAttributes:attributes completion:^(TWMResult *result) {
+        if (result.isSuccessful) {
+            resolve(@[@TRUE]);
+        }
+        else {
+            reject(@"set-attributes-error", @"Error occured while attempting to set attributes of the message.", result.error);
+        }
+    }];
 }
 
 @end

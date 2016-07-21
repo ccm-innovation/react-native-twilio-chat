@@ -1,2 +1,29 @@
-example/ios/Pods
+# ios
+Example/ios/Pods
 *.xcuserstate
+
+# android
+*.iml
+android/.gradle
+android/local.properties
+android/.idea
+android/.idea
+android/build
+android/app/build
+android/gradle
+android/captures
+
+# android example
+Example/android/.gradle
+Example/android/local.properties
+Example/android/.idea
+Example/android/.idea
+Example/android/build
+Example/android/app/build
+Example/android/gradle
+Example/android/captures
+
+Example/node_modules
+
+.DS_Store
+

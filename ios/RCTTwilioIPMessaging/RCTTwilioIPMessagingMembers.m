@@ -22,7 +22,7 @@ RCT_EXPORT_MODULE()
 
 #pragma mark Members Methods
 
-RCT_REMAP_METHOD(allObjects, channelSid:(NSString *)channelSid allObjects_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getMembers, channelSid:(NSString *)channelSid allObjects_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   NSArray<TWMMember *> *members = [[self loadMembersFromChannelSid:channelSid] allObjects];
   NSMutableArray *response = [NSMutableArray array];
   if (members) {
@@ -33,7 +33,7 @@ RCT_REMAP_METHOD(allObjects, channelSid:(NSString *)channelSid allObjects_resolv
   resolve(RCTNullIfNil(response));
 }
 
-RCT_REMAP_METHOD(addByIdentity, channelSid:(NSString *)channelSid identity:(NSString *)identity add_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(add, channelSid:(NSString *)channelSid identity:(NSString *)identity add_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   [[self loadMembersFromChannelSid:channelSid] addByIdentity:identity completion:^(TWMResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
@@ -44,7 +44,7 @@ RCT_REMAP_METHOD(addByIdentity, channelSid:(NSString *)channelSid identity:(NSSt
   }];
 }
 
-RCT_REMAP_METHOD(inviteByIdentity, channelSid:(NSString *)channelSid identity:(NSString *)identity invite_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(invite, channelSid:(NSString *)channelSid identity:(NSString *)identity invite_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   [[self loadMembersFromChannelSid:channelSid] inviteByIdentity:identity completion:^(TWMResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
@@ -55,7 +55,7 @@ RCT_REMAP_METHOD(inviteByIdentity, channelSid:(NSString *)channelSid identity:(N
   }];
 }
 
-RCT_REMAP_METHOD(removeByIdentity, channelSid:(NSString *)channelSid identity:(NSString *)identity remove_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(remove, channelSid:(NSString *)channelSid identity:(NSString *)identity remove_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TwilioIPMessagingClient *client = [[RCTTwilioIPMessagingClient sharedManager] client];
   TWMMember *member = [[[client channelsList] channelWithId:channelSid] memberWithIdentity:identity];
   [[self loadMembersFromChannelSid:channelSid] removeMember:member completion:^(TWMResult *result) {

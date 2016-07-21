@@ -1,6 +1,6 @@
 {
   "name": "react-native-twilio-ip-messaging",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "React Native wrapper for Twilio IP Messaging SDKs",
   "main": "lib/index.js",
   "repository": {
@@ -12,7 +12,8 @@
     "react",
     "ios",
     "twilio",
-    "messaging"
+    "messaging",
+    "android"
   ],
   "author": "Brad Bumbalough <bradley.bumbalough@gmail.com>",
   "license": "MIT",

@@ -52,7 +52,7 @@ client.createChannel({
 - All
 - ChannelsList
 
-### TWMLogLevel
+### TWMLogLevel - iOS Only
 [Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMLogLevel.html)
 - Fatal
 - Critical
@@ -60,8 +60,10 @@ client.createChannel({
 - Info
 - Debug
 
-### TWMUserInfoUpdate
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMUserInfoUpdate.html)
+### TWMUserInfoUpdate - iOS Only
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TWMUserInfoUpdate.html)
 - FriendlyName
 - Attributes
+- ReachabilityOnline
+- ReachabilityNotifiable
 
