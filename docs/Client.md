@@ -91,8 +91,8 @@ Register APNS token for push notifications. This can be obtained in `PushNotific
 |--- |--- |--- |
 |*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
 
-#### `deregister(token)`
-De-register from push notification updates.
+#### `unregister(token)`
+Unregister from push notification updates.
 
 |Name |Type |Description |
 |--- |--- |--- |
