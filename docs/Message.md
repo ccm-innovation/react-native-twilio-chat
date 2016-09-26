@@ -19,7 +19,7 @@
 |--- |--- |--- |
 |*body*|String|The new body of the message
 
-### `setAttributes(attribtes) : Promise`
+### `setAttributes(attributes) : Promise`
 |Name |Type |Description |
 |--- |--- |--- |
 |*attributes*|Object|The new attributes to set on the message

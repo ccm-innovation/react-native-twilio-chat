@@ -51,7 +51,7 @@ Synchronize the channel with the server. May not be needed depending on if you s
 #### `setAttributes(attributes)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
-|*attributes*|Object|Any propertites you want associated with the channel
+|*attributes*|Object|Any properties you want associated with the channel
 
 #### `setFriendlyName(friendlyName)` : Promise
 |Name |Type |Description |
@@ -72,7 +72,7 @@ Decline joining the channel, in reply to an invitation.
 #### `leave()` : Promise
 Leave a channel.
 
-#### `destory()` : Promise
+#### `destroy()` : Promise
 Delete a channel.
 
 #### `typing()`
@@ -102,7 +102,7 @@ Returns an `Array<Member>` instances.
 |--- |--- |--- |
 |*identity*|String|The identity of the user to remove
 
-#### `lastConsumedMessageIndex()` : Promise
+#### `getLastConsumedMessageIndex()` : Promise
 Returns `Number` index.
 
 #### `sendMessage(body)` : Promise
@@ -125,7 +125,7 @@ Returns an `Array<Message>` instances.
 |Name |Type |Description |
 |--- |--- |--- |
 |*index*|Number|The starting point index
-|*count*|Number|The number of preceeding messages to return
+|*count*|Number|The number of preceding messages to return
 Returns an `Array<Message>` instances.
 
 #### `getMessagesAfter(index, count)` : Promise
@@ -154,7 +154,7 @@ Returns a `Message` instance.
 #### `advanceLastConsumedMessageIndex(index)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*index*|Number|The index of the message consumed (should be greated than last consumed index)
+|*index*|Number|The index of the message consumed (should be greater than last consumed index)
 
 #### `setAllMessagesConsumed()`
 Update the last consumed index for this Member and Channel to the max message currently on this device.

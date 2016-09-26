@@ -1,5 +1,5 @@
 # Client
-The Client is the main interface for interacting with the Twilio SDKs. 
+The Client is the main interface for interacting with the Twilio SDKs.
 
 ## Usage
 ```JavaScript
@@ -16,7 +16,7 @@ client.initialize()
 client.onClientSynchronized = () => {
   client.getChannels()
   .then((channels) => console.log(channels))
-  
+
   // create a new channel
   client.createChannel({
     friendlyName: 'My Channel',
@@ -31,7 +31,7 @@ client.onClientSynchronized = () => {
 |Name |Type |Description |
 |--- |--- |--- |
 |*accessManager*|AccessManager|The instance of the AccessManager used to initialize the Client
-|*synchronizationStrategy*|Constants.TWMClientSynchronizationStrategy|Optional. The syncrhonization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
+|*synchronizationStrategy*|Constants.TWMClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
 |*initialMessageCount*|Number|Optional. The number of most recent messages to fetch automatically when synchronizing a channel. Default: 100
 
 ## Properties
@@ -41,7 +41,7 @@ client.onClientSynchronized = () => {
 |*userInfo*|UserInfo|The current user properties
 |*version*|String|The version of the SDK
 |*synchronizationStatus*|Constants.TWMClientSynchronizationStatus|The current status of the client's initialization
-|*isReachabilityEnabled*|Boolean|Whether or not reacability has been enabled for the messaging instance
+|*isReachabilityEnabled*|Boolean|Whether or not reachability has been enabled for the messaging instance
 
 ## Methods
 
@@ -74,7 +74,7 @@ Get a single instance of a Channel. Returns `Channel`.
 |--- |--- |--- |
 |*friendlyName*|String|Optional. Friendly name of channel
 |*uniqueName*|String|Optional. Unique name of channel
-|*type*|Constants.TWMChannelType|Optional. Whether the channel will be private or public (default) 
+|*type*|Constants.TWMChannelType|Optional. Whether the channel will be private or public (default)
 |*attributes*|Object|Optional. Attributes to attach to the channel
 
 Create a new channel. Returns `Channel`.
@@ -91,8 +91,8 @@ Register APNS token for push notifications. This can be obtained in `PushNotific
 |--- |--- |--- |
 |*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
 
-#### `deregister(token)`
-De-register from push notification updates.
+#### `unregister(token)`
+Unregister from push notification updates.
 
 |Name |Type |Description |
 |--- |--- |--- |
@@ -103,7 +103,7 @@ Queue the incoming notification with the messaging library for processing - for 
 
 |Name |Type |Description |
 |--- |--- |--- |
-|*notification*|Object|The incomming notification.
+|*notification*|Object|The incoming notification.
 
 #### `shutdown()`
 Terminate the instance of the client, and remove all the listeners. Note: this does not remove channel specific listeners.
