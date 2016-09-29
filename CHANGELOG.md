@@ -1,13 +1,9 @@
 # Changelog
 
-## 0.2.0
-
-(Includes all features from [`0.2.0-rc2`](#020-rc2))
-
 #### Upgrading
-Update your `package.json` to use the `0.2.0` version.
+Update your `package.json` to use the `x.x.x` version.
 ```
-npm install --save react-native-twilio-ip-messaging@0.2.0
+npm install --save react-native-twilio-ip-messaging@x.x.x
 ```
 
 ###### iOS
@@ -24,6 +20,15 @@ Or, remove the cache and it will be auto-generated on the next build.
 ```
 rm -rf $HOME/.gradle/caches/
 ```
+
+## 0.2.1
+ - PR #22 - Fixed typos and method names (@Baisang)
+ - PR #28 - Added MIT license (@jhabdas)
+ - PR #31 - Client + Channel bug fixes
+
+## 0.2.0
+
+(Includes all features from [`0.2.0-rc2`](#020-rc2))
 
 #### iOS
 - PR #19 Fixed issue with NSString token not being converted into NSData (thanks @plonkus!)
