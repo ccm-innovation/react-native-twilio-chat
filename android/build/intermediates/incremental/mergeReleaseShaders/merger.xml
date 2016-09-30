@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/jandersen/Code/Work/native/pray/node_modules/react-native-twilio-ip-messaging/android/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/jandersen/Code/Work/native/pray/node_modules/react-native-twilio-ip-messaging/android/src/release/shaders"/></dataSet></merger>
