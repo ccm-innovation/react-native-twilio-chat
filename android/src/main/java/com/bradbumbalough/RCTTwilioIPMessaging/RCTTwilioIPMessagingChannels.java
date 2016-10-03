@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import android.util.Log;
 
 public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
@@ -175,13 +174,8 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void createChannel(ReadableMap options, final Promise promise) {
-        Log.v("createChannel", "options = " + options.toString());
         HashMap<String, Object> map = RCTConvert.readableMapToHashMap(options);
 
-        map.put("Type", "PRIVATE");
-        map.put("type", "PRIVATE");
-        
-        Log.v("createChannel", "map created " + map.toString());
         Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -191,12 +185,10 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onCreated(Channel newChannel) {
-                Log.v("Success", "channel successfully created ");
                 promise.resolve(RCTConvert.Channel(newChannel));
             }
         };
 
-        // channels().createChannel("Michael John", Channel.ChannelType.CHANNEL_TYPE_PRIVATE, listener); // this creates a private channel
         channels().createChannel(map, listener);
     }
 

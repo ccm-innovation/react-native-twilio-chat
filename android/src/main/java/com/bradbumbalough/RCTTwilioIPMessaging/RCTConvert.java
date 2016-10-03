@@ -28,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
 
-import android.util.Log;
-
 public class RCTConvert {
 
     private static WritableMap mapToWritableMap(Map<String,String> map) {
@@ -64,9 +62,8 @@ public class RCTConvert {
                 default:
                     // do nothing
             }
+            // map.put(key, readableMap.getString(key));
         }
-        // map.put("Type", "CHANNEL_TYPE_PRIVATE");
-        // map.put("type", Channel.ChannelType.CHANNEL_TYPE_PRIVATE);
         return map;
     }
 
@@ -199,9 +196,12 @@ public class RCTConvert {
     public static WritableMap Channel(Channel channel) {
         WritableMap map = Arguments.createMap();
 
+<<<<<<< HEAD
         Log.v("ConvertChannel", "this is where the channel gets converted");
         Log.v("ConvertChannel", "new channel type = " + channel.toString());
 
+=======
+>>>>>>> 4407d7aa422f3945c2577279511f2db09dfa97d3
         map.putString("sid", channel.getSid());
         map.putString("friendlyName", channel.getFriendlyName());
         map.putString("uniqueName", channel.getUniqueName());
@@ -209,7 +209,11 @@ public class RCTConvert {
         map.putString("type", channel.getType().toString());
         map.putMap("attributes", jsonToWritableMap(channel.getAttributes()));
         map.putString("synchronizationStatus", channel.getSynchronizationStatus().toString());
+<<<<<<< HEAD
         // map.putString("dateCreated", channel.getDateCreated().toString());
+=======
+        map.putString("dateCreated", channel.getDateCreated().toString());
+>>>>>>> 4407d7aa422f3945c2577279511f2db09dfa97d3
         map.putString("dateUpdated", channel.getDateUpdated().toString());
         return map;
     }
