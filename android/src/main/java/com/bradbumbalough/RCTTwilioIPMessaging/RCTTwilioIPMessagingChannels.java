@@ -190,7 +190,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onCreated(Channel newChannel) {
-                Constants.StatusListener statusListener= new Constants.StatusListener(){
+                Constants.StatusListener statusListener = new Constants.StatusListener(){
                     @Override
                     public void onError(ErrorInfo errorInfo){
                         promise.reject("create-channel-error", "Error while setting uniqueName and attributes of new channel");

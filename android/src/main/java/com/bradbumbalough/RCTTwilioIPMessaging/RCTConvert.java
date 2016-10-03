@@ -52,12 +52,8 @@ public class RCTConvert {
             ReadableType type = readableMap.getType(key);
             switch(type) {
                 case String:
-                    // Log.v("ReadableMap", "key = " + key + " value = " + readableMap.getString(key));
                     map.put(key, readableMap.getString(key));
                     break;
-                // case Type:
-                //     map.put(key, Channel.ChannelType.CHANNEL_TYPE_PRIVATE);
-                //     break;
                 case Map:
                     HashMap<String, Object> attributes = new RCTConvert().readableMapToHashMap(readableMap.getMap(key));
                     map.put(key, attributes);
@@ -65,7 +61,6 @@ public class RCTConvert {
                 default:
                     // do nothing
             }
-            // map.put(key, readableMap.getString(key));
         }
         return map;
     }
