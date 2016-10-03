@@ -52,7 +52,7 @@ public class RCTConvert {
             ReadableType type = readableMap.getType(key);
             switch(type) {
                 case String:
-                    Log.v("ReadableMap", "key = " + key + " value = " + readableMap.getString(key));
+                    // Log.v("ReadableMap", "key = " + key + " value = " + readableMap.getString(key));
                     map.put(key, readableMap.getString(key));
                     break;
                 case Map:
@@ -196,12 +196,6 @@ public class RCTConvert {
     public static WritableMap Channel(Channel channel) {
         WritableMap map = Arguments.createMap();
 
-<<<<<<< HEAD
-        Log.v("ConvertChannel", "this is where the channel gets converted");
-        Log.v("ConvertChannel", "new channel type = " + channel.toString());
-
-=======
->>>>>>> 4407d7aa422f3945c2577279511f2db09dfa97d3
         map.putString("sid", channel.getSid());
         map.putString("friendlyName", channel.getFriendlyName());
         map.putString("uniqueName", channel.getUniqueName());
@@ -209,11 +203,7 @@ public class RCTConvert {
         map.putString("type", channel.getType().toString());
         map.putMap("attributes", jsonToWritableMap(channel.getAttributes()));
         map.putString("synchronizationStatus", channel.getSynchronizationStatus().toString());
-<<<<<<< HEAD
-        // map.putString("dateCreated", channel.getDateCreated().toString());
-=======
         map.putString("dateCreated", channel.getDateCreated().toString());
->>>>>>> 4407d7aa422f3945c2577279511f2db09dfa97d3
         map.putString("dateUpdated", channel.getDateUpdated().toString());
         return map;
     }
