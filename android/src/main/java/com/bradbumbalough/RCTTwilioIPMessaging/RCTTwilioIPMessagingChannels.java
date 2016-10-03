@@ -22,6 +22,7 @@ import com.twilio.ipmessaging.Message;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
 import org.json.JSONObject;
 
 
@@ -174,7 +175,11 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void createChannel(ReadableMap options, final Promise promise) {
-        HashMap<String, Object> map = RCTConvert.readableMapToHashMap(options);
+        final HashMap<String, Object> map = RCTConvert.readableMapToHashMap(options);
+        final JSONObject attributes = RCTConvert.readableMapToJson(options.getMap("attributes"));
+        final String uniqueName = options.getString("uniqueName");
+        String friendlyName = options.getString("friendlyName");
+        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") > 0) ? Channel.ChannelType.CHANNEL_TYPE_PRIVATE : Channel.ChannelType.CHANNEL_TYPE_PUBLIC;
 
         Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
             @Override
@@ -185,11 +190,23 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onCreated(Channel newChannel) {
+                Constants.StatusListener statusListener= new Constants.StatusListener(){
+                    @Override
+                    public void onError(ErrorInfo errorInfo){
+                        promise.reject("create-channel-error", "Error while setting uniqueName and attributes of new channel");
+                    }
+                    @Override
+                    public void onSuccess(){
+                        //nothing
+                    }
+                };
+                newChannel.setUniqueName(uniqueName, statusListener);
+                newChannel.setAttributes(attributes, statusListener);
                 promise.resolve(RCTConvert.Channel(newChannel));
             }
         };
 
-        channels().createChannel(map, listener);
+        channels().createChannel(friendlyName, Channel.ChannelType.CHANNEL_TYPE_PRIVATE, listener);
     }
 
     @ReactMethod
