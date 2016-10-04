@@ -22,7 +22,6 @@ import com.twilio.ipmessaging.Message;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
 import org.json.JSONObject;
 
 
