@@ -175,11 +175,10 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void createChannel(ReadableMap options, final Promise promise) {
-        final HashMap<String, Object> map = RCTConvert.readableMapToHashMap(options);
         final JSONObject attributes = RCTConvert.readableMapToJson(options.getMap("attributes"));
         final String uniqueName = options.getString("uniqueName");
         String friendlyName = options.getString("friendlyName");
-        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") > 0) ? Channel.ChannelType.CHANNEL_TYPE_PRIVATE : Channel.ChannelType.CHANNEL_TYPE_PUBLIC;
+        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.CHANNEL_TYPE_PRIVATE : Channel.ChannelType.CHANNEL_TYPE_PUBLIC;
 
         Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
             @Override
@@ -205,8 +204,7 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
                 promise.resolve(RCTConvert.Channel(newChannel));
             }
         };
-
-        channels().createChannel(friendlyName, Channel.ChannelType.CHANNEL_TYPE_PRIVATE, listener);
+        channels().createChannel(friendlyName, type, listener);
     }
 
     @ReactMethod
