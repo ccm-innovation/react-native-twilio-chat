@@ -33,7 +33,7 @@ public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getLastConsumedMessageIndex(String channelSid, Promise promise) {
-        promise.resolve(loadMessagesFromChannelSid(channelSid).getLastConsumedMessageIndex());
+        promise.resolve(Integer.valueOf(loadMessagesFromChannelSid(channelSid).getLastConsumedMessageIndex().intValue()));
     }
 
     @ReactMethod
