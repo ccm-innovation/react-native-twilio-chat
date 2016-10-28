@@ -211,7 +211,7 @@ public class RCTConvert {
         WritableMap map = Arguments.createMap();
 
         map.putString("sid", message.getSid());
-        map.putString("index", String.valueOf(message.getMessageIndex()));
+        map.putString("index", (int) message.getMessageIndex());
         map.putString("author", message.getAuthor());
         map.putString("body", message.getMessageBody());
         map.putString("timestamp", message.getTimeStamp());
