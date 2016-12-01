@@ -71,6 +71,13 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         clientSyncStrategy.put("ChannelsList",TwilioIPMessagingClient.SynchronizationStrategy.CHANNELS_LIST.toString());
         constants.put("TWMClientSynchronizationStrategy", clientSyncStrategy);
 
+        Map<String, String> channelOption = new HashMap<>();
+        channelOption.put("FriendlyName", "friendlyName");
+        channelOption.put("UniqueName", "uniqueName");
+        channelOption.put("Type", "type");
+        channelOption.put("Attributes", "attributes");
+        constants.put("TWMChannelOption", channelOption);
+        
         return constants;
     }
 

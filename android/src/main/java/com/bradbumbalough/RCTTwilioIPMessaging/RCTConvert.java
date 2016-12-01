@@ -49,7 +49,18 @@ public class RCTConvert {
         ReadableMapKeySetIterator keySetIterator = readableMap.keySetIterator();
         while (keySetIterator.hasNextKey()) {
             String key = keySetIterator.nextKey();
-            map.put(key, readableMap.getString(key));
+            ReadableType type = readableMap.getType(key);
+            switch(type) {
+                case String:
+                    map.put(key, readableMap.getString(key));
+                    break;
+                case Map:
+                    HashMap<String, Object> attributes = new RCTConvert().readableMapToHashMap(readableMap.getMap(key));
+                    map.put(key, attributes);
+                    break;
+                default:
+                    // do nothing
+            }
         }
         return map;
     }
