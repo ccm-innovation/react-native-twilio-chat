@@ -1,5 +1,6 @@
 # ios
 Example/ios/Pods
+ios/Pods
 *.xcuserstate
 
 # android

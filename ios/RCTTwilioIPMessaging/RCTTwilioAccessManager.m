@@ -8,7 +8,7 @@
 
 #import "RCTTwilioAccessManager.h"
 #import "RCTBridge.h"
-#import "RCTConvert+TwilioIPMessagingClient.h"
+#import "RCTConvert+TwilioChatClient.h"
 #import <RCTUtils.h>
 #import "RCTEventDispatcher.h"
 

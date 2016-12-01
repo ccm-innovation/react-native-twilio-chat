@@ -4,7 +4,7 @@ The Client is the main interface for interacting with the Twilio SDKs.
 ## Usage
 ```JavaScript
 // create the client
-var client = new Client(accessManager);
+var client = new Client(token);
 
 // specify any global events
 client.onError = ({error, userInfo}) => console.log(error)
@@ -27,10 +27,10 @@ client.onClientSynchronized = () => {
 }
 ```
 
-## `new Client(accessManager[, synchronizationStrategy[, initialMessageCount]])`
+## `new Client(token[, synchronizationStrategy[, initialMessageCount]])`
 |Name |Type |Description |
 |--- |--- |--- |
-|*accessManager*|AccessManager|The instance of the AccessManager used to initialize the Client
+|*token*|String|The Access Token provided by your server
 |*synchronizationStrategy*|Constants.TWMClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
 |*initialMessageCount*|Number|Optional. The number of most recent messages to fetch automatically when synchronizing a channel. Default: 100
 

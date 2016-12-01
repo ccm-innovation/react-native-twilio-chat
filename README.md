@@ -15,7 +15,8 @@ Install the Twilio IP Messaging SDK and this package via CocoaPods.
 pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioIPMessagingClient', '~> 0.14.2'
+pod 'TwilioChatClient', '~> 0.16.0'
+pod 'TwilioAccessManager', '~> 0.1.1'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 

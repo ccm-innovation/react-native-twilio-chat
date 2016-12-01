@@ -1,40 +1,40 @@
 //
-//  RCTTwilioIPMessagingMembers.m
+//  RCTTwilioChatMembers.m
 //  TwilioIPExample
 //
 //  Created by Brad Bumbalough on 6/7/16.
 //  Copyright © 2016 Facebook. All rights reserved.
 //
 
-#import "RCTTwilioIPMessagingMembers.h"
-#import "RCTConvert+TwilioIPMessagingClient.h"
-#import "RCTTwilioIPMessagingClient.h"
+#import "RCTTwilioChatMembers.h"
+#import "RCTConvert+TwilioChatClient.h"
+#import "RCTTwilioChatClient.h"
 #import <RCTUtils.h>
 
-@implementation RCTTwilioIPMessagingMembers
+@implementation RCTTwilioChatMembers
 
 RCT_EXPORT_MODULE()
 
-- (TWMMembers *)loadMembersFromChannelSid:(NSString *)sid {
-  TwilioIPMessagingClient *client = [[RCTTwilioIPMessagingClient sharedManager] client];
+- (TCHMembers *)loadMembersFromChannelSid:(NSString *)sid {
+  TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
   return [[[client channelsList] channelWithId:sid] members];
 }
 
 #pragma mark Members Methods
 
 RCT_REMAP_METHOD(getMembers, channelSid:(NSString *)channelSid allObjects_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  NSArray<TWMMember *> *members = [[self loadMembersFromChannelSid:channelSid] allObjects];
+  NSArray<TCHMember *> *members = [[self loadMembersFromChannelSid:channelSid] allObjects];
   NSMutableArray *response = [NSMutableArray array];
   if (members) {
-    for (TWMMember *member in members) {
-      [response addObject:[RCTConvert TWMMember:member]];
+    for (TCHMember *member in members) {
+      [response addObject:[RCTConvert TCHMember:member]];
     }
   }
   resolve(RCTNullIfNil(response));
 }
 
 RCT_REMAP_METHOD(add, channelSid:(NSString *)channelSid identity:(NSString *)identity add_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  [[self loadMembersFromChannelSid:channelSid] addByIdentity:identity completion:^(TWMResult *result) {
+  [[self loadMembersFromChannelSid:channelSid] addByIdentity:identity completion:^(TCHResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
@@ -45,7 +45,7 @@ RCT_REMAP_METHOD(add, channelSid:(NSString *)channelSid identity:(NSString *)ide
 }
 
 RCT_REMAP_METHOD(invite, channelSid:(NSString *)channelSid identity:(NSString *)identity invite_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  [[self loadMembersFromChannelSid:channelSid] inviteByIdentity:identity completion:^(TWMResult *result) {
+  [[self loadMembersFromChannelSid:channelSid] inviteByIdentity:identity completion:^(TCHResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
@@ -56,9 +56,9 @@ RCT_REMAP_METHOD(invite, channelSid:(NSString *)channelSid identity:(NSString *)
 }
 
 RCT_REMAP_METHOD(remove, channelSid:(NSString *)channelSid identity:(NSString *)identity remove_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  TwilioIPMessagingClient *client = [[RCTTwilioIPMessagingClient sharedManager] client];
-  TWMMember *member = [[[client channelsList] channelWithId:channelSid] memberWithIdentity:identity];
-  [[self loadMembersFromChannelSid:channelSid] removeMember:member completion:^(TWMResult *result) {
+  TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
+  TCHMember *member = [[[client channelsList] channelWithId:channelSid] memberWithIdentity:identity];
+  [[self loadMembersFromChannelSid:channelSid] removeMember:member completion:^(TCHResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1DAE2D1D1D086CD600D3FE06"
-               BuildableName = "libRCTTwilioIPMessaging.a"
-               BlueprintName = "RCTTwilioIPMessaging"
-               ReferencedContainer = "container:RCTTwilioIPMessaging.xcodeproj">
+               BuildableName = "libRCTTwilioChat.a"
+               BlueprintName = "RCTTwilioChat"
+               ReferencedContainer = "container:RCTTwilioChat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1DAE2D1D1D086CD600D3FE06"
-            BuildableName = "libRCTTwilioIPMessaging.a"
-            BlueprintName = "RCTTwilioIPMessaging"
-            ReferencedContainer = "container:RCTTwilioIPMessaging.xcodeproj">
+            BuildableName = "libRCTTwilioChat.a"
+            BlueprintName = "RCTTwilioChat"
+            ReferencedContainer = "container:RCTTwilioChat.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -64,9 +64,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1DAE2D1D1D086CD600D3FE06"
-            BuildableName = "libRCTTwilioIPMessaging.a"
-            BlueprintName = "RCTTwilioIPMessaging"
-            ReferencedContainer = "container:RCTTwilioIPMessaging.xcodeproj">
+            BuildableName = "libRCTTwilioChat.a"
+            BlueprintName = "RCTTwilioChat"
+            ReferencedContainer = "container:RCTTwilioChat.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
