@@ -139,7 +139,8 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
            @"attributes": RCTNullIfNil(channel.attributes),
            @"synchronizationStatus": @(channel.synchronizationStatus),
            @"dateCreated": channel.dateCreated,
-           @"dateUpdated": channel.dateUpdated
+           @"dateUpdated": channel.dateUpdated,
+           @"createdBy": channel.createdBy
            };
 }
 
