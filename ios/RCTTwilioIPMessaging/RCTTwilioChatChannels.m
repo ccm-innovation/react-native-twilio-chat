@@ -17,7 +17,11 @@ RCT_EXPORT_MODULE();
 
 - (TCHChannel *)loadChannelFromSid:(NSString *)sid {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-  return [[client channelsList] channelWithId:sid];
+    [[client channelsList] channelWithSidOrUniqueName:sid completion:^(TCHChannelCompletion) {
+        if (completion.result.isSucessful) {
+            return completion.channel;
+        }
+    }];
 }
 
 #pragma mark Channel Methods
@@ -46,28 +50,16 @@ RCT_REMAP_METHOD(createChannel, options:(NSDictionary *)options create_resolver:
   }];
 }
 
-RCT_REMAP_METHOD(getChannel, sid:(NSString *)sid sid_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(getChannel, sidOrUniqueName:(NSString *)sidOrUniqueName sid_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-  TCHChannel *channel = [[client channelsList] channelWithId:sid];
-  if (channel) {
-    resolve([RCTConvert TCHChannel:channel]);
-  }
-  else {
-      NSError *error = nil;
-      reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with sid: %@.", sid], error);
-  }
-}
-
-RCT_REMAP_METHOD(getChannelByUniqueName, uniqueName:(NSString *)uniqueName sid_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-  TCHChannel *channel = [[client channelsList] channelWithUniqueName:uniqueName];
-  if (channel) {
-    resolve([RCTConvert TCHChannel:channel]);
-  }
-  else {
-      NSError *error = nil;
-      reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with uniqueName: %@.", uniqueName], error);
-  }
+    [[client channelsList] channelWithSidOrUniqueName:sidOrUniqueName completion:^(TCHChannelCompletion) {
+        if (completion.result.isSuccessful) {
+            resolve([RCTConvert TCHChannel:completion.channel]);
+        }
+        else {
+            reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with sid/uniquieName: %@.", sidOrUniqueName], completion.result.error);
+        }
+    }];
 }
 
 #pragma mark Channel Instance Methods
@@ -167,6 +159,43 @@ RCT_REMAP_METHOD(destroy, sid:(NSString *)sid destroy_resolver:(RCTPromiseResolv
     }
   }];
 }
+
+RCT_REMAP_METHOD(getUnconsumedMessagesCount, sid:(NSString *)sid unconsumedCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TCHChannel *channel = [self loadChannelFromSid:sid];
+    [channel getUnconsumedMessagesCountWithCompletion:^(TCHCountCompletion *completion) {
+        if (completion.result.isSuccessful)
+            resolve(@[completion.count]);
+        }
+        else {
+            reject(@"get-unconsumed-messages-count-error", @"Error occured while attempting to getUnconsumedMessagesCount.", completion.result.error);
+        }
+    }];
+}
+
+RCT_REMAP_METHOD(getMessagesCount, sid:(NSString *)sid messagesCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TCHChannel *channel = [self loadChannelFromSid:sid];
+    [channel getMessagesCountWithCompletion:^(TCHCountCompletion *completion) {
+        if (completion.result.isSuccessful)
+            resolve(@[completion.count]);
+    }
+     else {
+         reject(@"get-messages-count-error", @"Error occured while attempting to getMessagesCountWithCompletion.", completion.result.error);
+     }
+     }];
+}
+
+RCT_REMAP_METHOD(getMembersCount, sid:(NSString *)sid membersCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TCHChannel *channel = [self loadChannelFromSid:sid];
+    [channel getMembersCountWithCompletion:^(TCHCountCompletion *completion) {
+        if (completion.result.isSuccessful)
+            resolve(@[completion.count]);
+    }
+     else {
+         reject(@"get-members-count-error", @"Error occured while attempting to getMembersCountWithCompletion.", completion.result.error);
+     }
+     }];
+}
+
 
 
 RCT_REMAP_METHOD(typing, sid:(NSString *)sid) {
