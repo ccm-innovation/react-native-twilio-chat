@@ -7,7 +7,8 @@
       "airbnb"
     ],
     "settings": {
-      "import/core-modules": ["react-native"]
+      "import/core-modules": ["react-native"],
+      "no-unused-vars": ["error", { "varsIgnorePattern": "React" }]
     },
     "rules": {
       "import/extensions": ["off", "never"],
