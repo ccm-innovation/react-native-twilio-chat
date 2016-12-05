@@ -6,7 +6,9 @@
     "extends": [
       "airbnb"
     ],
-    "settings": {},
+    "settings": {
+      "import/core-modules": ["react-native"]
+    },
     "rules": {
       "import/extensions": ["off", "never"],
       "no-underscore-dangle": 0
