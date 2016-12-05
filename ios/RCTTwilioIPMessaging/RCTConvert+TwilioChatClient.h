@@ -27,6 +27,10 @@
 + (NSDictionary *)TCHMember:(TCHMember *)member;
 + (NSDictionary *)TCHMessage:(TCHMessage *)message;
 
++ (NSDictionary *)TCHMemberPaginator:(TCHMemberPaginator *)paginator;
++ (NSDictionary *)TCHChannelPaginator:(TCHChannelPaginator *)paginator;
+
++ (NSArray *)TCHChannels:(NSArray<TCHChannel *>*)channels;
 + (NSArray *)TCHMembers:(NSArray<TCHMember *>*)members;
 + (NSArray *)TCHMessages:(NSArray<TCHMessage *> *)messages;
 

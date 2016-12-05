@@ -155,6 +155,18 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
   return response;
 }
 
++ (NSArray *)TCHChannels:(NSArray<TCHChannel *>*)channels {
+    if (!channels) {
+        return RCTNullIfNil(nil);
+    }
+    NSMutableArray *response = [NSMutableArray array];
+    for (TCHChannel *channel in channels) {
+        [response addObject:[self TCHChannel:channel]];
+    }
+    return response;
+}
+
+
 + (NSArray *)TCHMessages:(NSArray<TCHMessage *> *)messages {
   if (!messages) {
     return RCTNullIfNil(nil);
@@ -164,6 +176,28 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
     [response addObject:[self TCHMessage:message]];
   }
   return response;
+}
+
++ (NSDictionary *)TCHMemberPaginator:(TCHMemberPaginator *)paginator {
+    if (!paginator) {
+        return RCTNullIfNil(nil);
+    }
+    return @{
+             @"sid": paginator.sid,
+             @"hasNextPage": paginator.hasNextPage,
+             @"items": [self TCHMembers:paginator.items]
+             };
+}
+
++ (NSDictionary *)TCHChannelPaginator:(TCHChannelPaginator *)paginator {
+    if (!paginator) {
+        return RCTNullIfNil(nil);
+    }
+    return @{
+             @"sid": paginator.sid,
+             @"hasNextPage": paginator.hasNextPage,
+             @"items": [self TCHChannels:paginator.items]
+             };
 }
 
 + (NSData *)dataWithHexString:(NSString *)hex {

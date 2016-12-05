@@ -23,14 +23,20 @@ RCT_EXPORT_MODULE()
 #pragma mark Members Methods
 
 RCT_REMAP_METHOD(getMembers, channelSid:(NSString *)channelSid allObjects_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  NSArray<TCHMember *> *members = [[self loadMembersFromChannelSid:channelSid] allObjects];
-  NSMutableArray *response = [NSMutableArray array];
-  if (members) {
-    for (TCHMember *member in members) {
-      [response addObject:[RCTConvert TCHMember:member]];
-    }
-  }
-  resolve(RCTNullIfNil(response));
+    TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
+    [[client members] membersWithCompletion:^(TCHResult *result, TCHMemberPaginator *paginator) {
+        if (result.isSuccessful) {
+            NSString *uuid = [RCTTwilioChapPaginator setPaginator:paginator];
+            resolve(@{
+                      @"sid":uuid,
+                      @"paginator": [RCTConvert TCHMemberPaginator:paginator]
+                      }]);
+            
+        }
+        else {
+            reject(@"get-members-error", @"Error occured while attempting to get the members.", result.error);
+        }
+    }];
 }
 
 RCT_REMAP_METHOD(add, channelSid:(NSString *)channelSid identity:(NSString *)identity add_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

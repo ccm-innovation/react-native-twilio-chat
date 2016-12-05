@@ -17,25 +17,47 @@ RCT_EXPORT_MODULE();
 
 - (TCHChannel *)loadChannelFromSid:(NSString *)sid {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] channelWithSidOrUniqueName:sid completion:^(TCHChannelCompletion) {
-        if (completion.result.isSucessful) {
-            return completion.channel;
+    [[client channelsList] channelWithSidOrUniqueName:sid completion:^(TCHResult *result, TCHChannel *channel) {
+        if (result.isSucessful) {
+            return channel;
         }
     }];
 }
 
 #pragma mark Channel Methods
 
-RCT_REMAP_METHOD(getChannels, allObjects_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-  NSArray<TCHChannel *> *channels = [[client channelsList] allObjects];
-  NSMutableArray *response = [NSMutableArray array];
-  if (channels) {
-    for (TCHChannel *channel in channels) {
-      [response addObject:[RCTConvert TCHChannel:channel]];
-    }
-  }
-  resolve(RCTNullIfNil(response));
+RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
+    [[client channelsList] userChannelsWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+        if (result.isSuccessful) {
+            NSString *uuid = [RCTTwilioChapPaginator setPaginator:paginator];
+            resolve(@{
+                      @"sid":uuid,
+                      @"paginator": [RCTConvert TCHChannelPaginator:paginator]
+                      }]);
+            
+        }
+        else {
+            reject(@"get-user-channels-error", @"Error occured while attempting to get the user channels.", result.error);
+        }
+    }];
+}
+
+RCT_REMAP_METHOD(getPublicChannels, publicChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
+    [[client channelsList] publicChannelsWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+        if (result.isSuccessful) {
+            NSString *uuid = [RCTTwilioChapPaginator setPaginator:paginator];
+            resolve(@{
+                      @"sid":uuid,
+                      @"paginator": [RCTConvert TCHChannelPaginator:paginator]
+                      }]);
+            
+        }
+        else {
+            reject(@"get-public-channels-error", @"Error occured while attempting to get the public channels.", result.error);
+        }
+    }];
 }
 
 RCT_REMAP_METHOD(createChannel, options:(NSDictionary *)options create_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
@@ -52,12 +74,12 @@ RCT_REMAP_METHOD(createChannel, options:(NSDictionary *)options create_resolver:
 
 RCT_REMAP_METHOD(getChannel, sidOrUniqueName:(NSString *)sidOrUniqueName sid_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] channelWithSidOrUniqueName:sidOrUniqueName completion:^(TCHChannelCompletion) {
-        if (completion.result.isSuccessful) {
-            resolve([RCTConvert TCHChannel:completion.channel]);
+    [[client channelsList] channelWithSidOrUniqueName:sidOrUniqueName completion:^(TCHResult *result, TCHChannel *channel) {
+        if (result.isSuccessful) {
+            resolve([RCTConvert TCHChannel:channel]);
         }
         else {
-            reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with sid/uniquieName: %@.", sidOrUniqueName], completion.result.error);
+            reject(@"not-found", [NSString stringWithFormat:@"Channel could not be found with sid/uniquieName: %@.", sidOrUniqueName], result.error);
         }
     }];
 }
@@ -162,36 +184,36 @@ RCT_REMAP_METHOD(destroy, sid:(NSString *)sid destroy_resolver:(RCTPromiseResolv
 
 RCT_REMAP_METHOD(getUnconsumedMessagesCount, sid:(NSString *)sid unconsumedCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TCHChannel *channel = [self loadChannelFromSid:sid];
-    [channel getUnconsumedMessagesCountWithCompletion:^(TCHCountCompletion *completion) {
-        if (completion.result.isSuccessful)
-            resolve(@[completion.count]);
+    [channel getUnconsumedMessagesCountWithCompletion:^(TCHResult *result, NSUInteger *count) {
+        if (result.isSuccessful)
+            resolve(@[count]);
         }
         else {
-            reject(@"get-unconsumed-messages-count-error", @"Error occured while attempting to getUnconsumedMessagesCount.", completion.result.error);
+            reject(@"get-unconsumed-messages-count-error", @"Error occured while attempting to get unconsumed messages count.", result.error);
         }
     }];
 }
 
 RCT_REMAP_METHOD(getMessagesCount, sid:(NSString *)sid messagesCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TCHChannel *channel = [self loadChannelFromSid:sid];
-    [channel getMessagesCountWithCompletion:^(TCHCountCompletion *completion) {
-        if (completion.result.isSuccessful)
-            resolve(@[completion.count]);
+    [channel getMessagesCountWithCompletion:^(TCHResult *result, NSUInteger *count) {
+        if (result.isSuccessful)
+            resolve(@[count]);
     }
      else {
-         reject(@"get-messages-count-error", @"Error occured while attempting to getMessagesCountWithCompletion.", completion.result.error);
+         reject(@"get-messages-count-error", @"Error occured while attempting to get message count.", result.error);
      }
      }];
 }
 
 RCT_REMAP_METHOD(getMembersCount, sid:(NSString *)sid membersCount_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TCHChannel *channel = [self loadChannelFromSid:sid];
-    [channel getMembersCountWithCompletion:^(TCHCountCompletion *completion) {
-        if (completion.result.isSuccessful)
-            resolve(@[completion.count]);
+    [channel getMembersCountWithCompletion:^(TCHResult *result, NSUInteger *count) {
+        if (result.isSuccessful)
+            resolve(@[count]);
     }
      else {
-         reject(@"get-members-count-error", @"Error occured while attempting to getMembersCountWithCompletion.", completion.result.error);
+         reject(@"get-members-count-error", @"Error occured while attempting to get members count.", result.error);
      }
      }];
 }
