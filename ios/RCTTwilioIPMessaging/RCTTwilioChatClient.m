@@ -35,9 +35,9 @@
 RCT_EXPORT_MODULE()
 
 RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
-    TwilioIPMessagingClientProperties *props = nil;
+    TwilioChatClientProperties *props = nil;
     if (properties.count > 0) {
-        props = [[TwilioIPMessagingClientProperties alloc] init];
+        props = [[TwilioChatClientProperties alloc] init];
         props.synchronizationStrategy = [RCTConvert TWMClientSynchronizationStrategy:properties[@"synchronizationStrategy"]];
         props.initialMessageCount = [RCTConvert NSUInteger:properties[@"initialMessageCount"]];
     }

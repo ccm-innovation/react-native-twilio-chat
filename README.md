@@ -12,7 +12,7 @@
 Install the Twilio IP Messaging SDK and this package via CocoaPods.
 
 ```
-pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
+pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
 pod 'TwilioChatClient', '~> 0.16.0'
