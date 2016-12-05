@@ -1,0 +1,14 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "allowImportExportEverywhere": true
+    },
+    "extends": [
+      "airbnb"
+    ],
+    "settings": {},
+    "rules": {
+      "import/extensions": ["off", "never"],
+      "no-underscore-dangle": 0
+    }
+}

@@ -3,6 +3,9 @@
   "version": "0.2.1",
   "description": "React Native wrapper for Twilio IP Messaging SDKs",
   "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ccm-innovation/react-native-twilio-ip-messaging.git"
@@ -20,5 +23,13 @@
   "bugs": {
     "url": "https://github.com/ccm-innovation/react-native-twilio-ip-messaging/issues"
   },
-  "homepage": "https://github.com/ccm-innovation/react-native-twilio-ip-messaging#readme"
+  "homepage": "https://github.com/ccm-innovation/react-native-twilio-ip-messaging#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0"
+  }
 }
