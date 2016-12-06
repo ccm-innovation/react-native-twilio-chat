@@ -64,10 +64,8 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
     return RCTNullIfNil(nil);
   }
   return @{
-           @"identity": accessManager.identity,
-           @"token": accessManager.token,
-           @"isExpired": @(accessManager.isExpired),
-           @"expirationDate": @(accessManager.expirationDate.timeIntervalSince1970 * 1000)
+           @"token": accessManager.currentToken,
+           @"expirationDate": @(accessManager.expiryTime.timeIntervalSince1970 * 1000)
            };
 }
 

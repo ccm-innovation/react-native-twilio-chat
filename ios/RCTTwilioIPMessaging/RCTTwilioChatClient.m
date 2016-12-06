@@ -46,6 +46,11 @@ RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *
     resolve([RCTConvert RCTTwilioChatClient:_client.client]);
 }
 
+RCT_EXPORT_METHOD(updateToken:(NSString *)token) {
+    RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
+    [[_client client] updateToken:token];
+}
+
 RCT_REMAP_METHOD(userInfo, userInfo_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
   resolve([RCTConvert TCHUserInfo:_client.client.userInfo]);
