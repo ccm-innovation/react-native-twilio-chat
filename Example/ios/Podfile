@@ -9,11 +9,10 @@ target 'ReactNativeTwilioIPMessagingExample' do
   inherit! :search_paths
   source 'https://github.com/CocoaPods/Specs.git'
   pod 'React', :subspecs => ['Core', 'RCTActionSheet', 'RCTGeolocation', 'RCTImage', 'RCTLinkingIOS', 'RCTNetwork', 'RCTText', 'RCTSettings', 'RCTVibration', 'RCTWebSocket'], :path => '../node_modules/react-native'
-  
+
+  pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
   source 'https://github.com/twilio/cocoapod-specs'
-  pod 'TwilioIPMessagingClient', '~> 0.14.2'
-
-  pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
-
+  pod 'TwilioChatClient', '~> 0.16.0'
+  pod 'TwilioAccessManager', '~> 0.1.1'
 
 end

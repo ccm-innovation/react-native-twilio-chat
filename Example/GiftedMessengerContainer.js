@@ -1,23 +1,22 @@
-'use strict';
-
 import React, {
-  Component
+  Component,
 } from 'react';
+
 import {
   Linking,
   Platform,
-  ActionSheetIOS,
   Dimensions,
-  View,
-  Text,
   Navigator,
-  NativeModules,
-  NativeAppEventEmitter
 } from 'react-native';
 
 
-var GiftedMessenger = require('react-native-gifted-messenger');
-var Communications = require('react-native-communications');
+import GiftedMessenger from 'react-native-gifted-messenger';
+
+import {
+  Client,
+  Constants,
+  AccessManager,
+} from 'react-native-twilio-ip-messaging';
 
 const BOT_GREETINGS = [
   "Hello!",
@@ -27,8 +26,8 @@ const BOT_GREETINGS = [
   "Bonjour",
   "I'm booting up...",
   "Hiya!",
-  "Heellllooooooooooooooo"
-]
+  "Heellllooooooooooooooo",
+];
 
 const BOT_QUESTIONS = [
   "Let's be friends! What can I call you?",
@@ -36,8 +35,8 @@ const BOT_QUESTIONS = [
   "I am here to serve, how shall I address you?",
   "You're my new friend! What is your preferred name?",
   "Let me update my records... what is your name?",
-  "I'll help you get things started. What is your name?"
-]
+  "I'll help you get things started. What is your name?",
+];
 
 const BOT_CONFIRMATIONS = [
   "You are now cleared to chat!",
@@ -46,22 +45,15 @@ const BOT_CONFIRMATIONS = [
   "Chat away!",
   "Feel free to start chatting",
   "The group awaits your input",
-  "Go for the gold!"
-]
+  "Go for the gold!",
+];
 
-let {
-  Client,
-  Constants,
-  AccessManager
-} = require('react-native-twilio-ip-messaging')
+let STATUS_BAR_HEIGHT = Navigator.NavigationBar.Styles.General.StatusBarHeight;
 
-
-var STATUS_BAR_HEIGHT = Navigator.NavigationBar.Styles.General.StatusBarHeight;
 if (Platform.OS === 'android') {
-  var ExtraDimensions = require('react-native-extra-dimensions-android');
-  var STATUS_BAR_HEIGHT = ExtraDimensions.get('STATUS_BAR_HEIGHT');
+  const ExtraDimensions = require('react-native-extra-dimensions-android');
+  STATUS_BAR_HEIGHT = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 }
-
 
 class GiftedMessengerContainer extends Component {
 
@@ -77,16 +69,13 @@ class GiftedMessengerContainer extends Component {
       typingMessage: '',
       allLoaded: false,
     };
-
   }
 
   getToken(identity) {
-    return fetch('http://localhost:3000/token?device=' + Platform.OS + '&identity=' + identity, {
-      method: 'get'
-    })
-    .then((res) => {
-      return res.json()
-    })
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmLTE0ODExMjAwNzciLCJpc3MiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmIiwic3ViIjoiQUNmZmRmOTcyMjdmMjUyMDUwZTQ5MzkzMjAwNWEzOTRmNiIsImV4cCI6MTQ4MTEyMzY3NywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiYnJhZCIsInJ0YyI6eyJjb25maWd1cmF0aW9uX3Byb2ZpbGVfc2lkIjoiSVNmOWQ3ODNjOTVlYWI0YjdkYjUwZmQ2YjQ5MzU0MGZlNSJ9fX0.GcuXcYIB3HZYvwTcV00ApEyov0NJYuGAJbhFIb07bo4';
+    return new Promise((resolve) => {
+      resolve({token});
+    });
   }
 
   parseMessage(message) {
@@ -94,84 +83,99 @@ class GiftedMessengerContainer extends Component {
       uniqueId: message.sid,
       text: message.body,
       name: message.author,
-      position: message.author == this.state.client.userInfo.identity ? 'right' : 'left',
-      date: message.timestamp
-    }
+      position: message.author === this.state.client.userInfo.identity ? 'right' : 'left',
+      date: message.timestamp,
+    };
   }
 
   initializeMessenging(identity) {
+    console.log('starting init');
     this.getToken(identity)
-    .then(({token}) => {
-      var accessManager = new AccessManager(token)
-      accessManager.onTokenExpired = () => {
+    .then(({ token }) => {
+      // initaite new Access Manager
+      const accessManager = new AccessManager(token);
+
+      accessManager.onTokenWillExpire = () => {
         this.getToken(identity)
-        .then(({token}) => accessManager.updateToken(token))
-      }
-      accessManager.onError = ({error}) => {
-        console.log(error)
-      }
+        .then(newToken => accessManager.updateToken(newToken));
+      };
 
-      var client = new Client(accessManager)
+      accessManager.onTokenInvalid = () => {
+        console.error('Token is invalid');
+      };
 
-      client.onError = ({error, userInfo}) => console.log(error)
+      accessManager.onTokenExpired = () => {
+        console.error('Token is expired');
+      };
+
+      // initiate the client with the token, not accessManager
+      let client = new Client(token);
+
+      client.onError = ({ error, userInfo }) => console.log(error);
 
       client.onClientSynchronized = () => {
+        console.log('client synced');
+        client.getPublicChannels()
+        .then(res => console.log(res));
 
-        client.getChannelByUniqueName('general')
+        client.getChannel('general')
         .then((channel) => {
           channel.initialize()
           .then(() => {
-            if (channel.status != Constants.TWMChannelStatus.Joined) {
-              channel.join()
+            console.log(channel);
+            if (channel.status !== Constants.TWMChannelStatus.Joined) {
+              channel.join();
             }
           })
           .catch((error) => {
-            console.log(error)
-          })
+            console.log(error);
+          });
 
           channel.onTypingStarted = (member) => {
-            this.setState({typingMessage: member.userInfo.identity + ' is typing...'})
-          }
+            this.setState({ typingMessage: member.userInfo.identity + ' is typing...' });
+          };
 
-          channel.onTypingEnded = (member) => {
-            this.setState({typingMessage: ''})
-          }
+          channel.onTypingEnded = () => {
+            this.setState({ typingMessage: '' });
+          };
 
-          channel.onMessageAdded = (message) => this.handleReceive(this.parseMessage(message))
+          channel.onMessageAdded = message => this.handleReceive(this.parseMessage(message));
 
-          this.setState({client, channel})
-        })
-      }
-
-      console.log(Constants)
+          this.setState({ client, channel });
+        });
+      };
 
       client.initialize()
-    })
+      .then(() => {
+        // register the client with the accessManager
+        accessManager.registerClient();
+      });
+    });
   }
 
   botMessage(message, time = 1000) {
-    this.setState({typingMessage: 'MessagingBot is typing...'})
-    return new Promise((resolve, reject) => {
+    this.setState({ typingMessage: 'MessagingBot is typing...' });
+    return new Promise((resolve) => {
       setTimeout(() => {
-        this.setState({typingMessage: ''})
+        this.setState({ typingMessage: '' });
         this.handleReceive({
           text: message,
           uniqueId: Math.round(Math.random() * 10000),
           name: 'MessagingBot',
           position: 'left',
           internal: true
-        })
-        resolve()
-      },time)
-    })
+        });
+        resolve();
+      }, time);
+    });
   }
 
   componentDidMount() {
-      setTimeout(() => {
-        this.botMessage(BOT_GREETINGS[Math.floor(Math.random()*BOT_GREETINGS.length)])
-        .then(() => this.botMessage(BOT_QUESTIONS[Math.floor(Math.random()*BOT_QUESTIONS.length)], 2000))
-      },500)
-      var test = NativeAppEventEmitter.addListener("bradtest", (test) => console.log(test));
+    // setTimeout(() => {
+    //   this.botMessage(BOT_GREETINGS[Math.floor(Math.random() * BOT_GREETINGS.length)])
+    //   .then(() => this.botMessage(BOT_QUESTIONS[Math.floor(Math.random() * BOT_QUESTIONS.length)], 2000));
+    // }, 500);
+    this.initializeMessenging(null);
   }
 
   componentWillUnmount() {
@@ -179,16 +183,16 @@ class GiftedMessengerContainer extends Component {
   }
 
   getInitialMessages() {
-    return []
+    return [];
   }
 
   setMessageStatus(uniqueId, status) {
-    let messages = [];
+    const messages = [];
     let found = false;
 
     for (let i = 0; i < this._messages.length; i++) {
       if (this._messages[i].uniqueId === uniqueId) {
-        let clone = Object.assign({}, this._messages[i]);
+        const clone = Object.assign({}, this._messages[i]);
         clone.status = status;
         messages.push(clone);
         found = true;
@@ -207,75 +211,21 @@ class GiftedMessengerContainer extends Component {
 
     // append the message
     this.setState({
-      messages: messages,
+      messages,
     });
   }
 
   handleSend(message = {}) {
-    // Your logic here
-    // Send message.text to your server
-
     if (this.state.client) {
       this.state.channel.sendMessage(message.text)
-      .catch((error) => console.error(error))
+      .catch(error => console.error(error));
     } else {
-      this.initializeMessenging(message.text)
+      this.initializeMessenging(message.text);
       message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
       this.setMessages(this._messages.concat(message));
-      this.botMessage("Hello " + message.text + "!", 1000)
-      .then(() => this.botMessage(BOT_CONFIRMATIONS[Math.floor(Math.random()*BOT_CONFIRMATIONS.length)], 2000))
+      this.botMessage(`Hello ${message.text}!`, 1000)
+      .then(() => this.botMessage(BOT_CONFIRMATIONS[Math.floor(Math.random() * BOT_CONFIRMATIONS.length)], 2000));
     }
-
-    // message.uniqueId = Math.round(Math.random() * 10000); // simulating server-side unique id generation
-    // this.setMessages(this._messages.concat(message));
-
-    // mark the sent message as Seen
-    // setTimeout(() => {
-    //   this.setMessageStatus(message.uniqueId, 'Seen'); // here you can replace 'Seen' by any string you want
-    // }, 1000);
-
-    // if you couldn't send the message to your server :
-    // this.setMessageStatus(message.uniqueId, 'ErrorButton');
-  }
-
-  onLoadEarlierMessages() {
-
-    // display a loader until you retrieve the messages from your server
-    this.setState({
-      isLoadingEarlierMessages: true,
-    });
-
-    // Your logic here
-    // Eg: Retrieve old messages from your server
-
-    // IMPORTANT
-    // Oldest messages have to be at the begining of the array
-    var earlierMessages = [
-      {
-        text: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
-        name: 'React-Bot',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'left',
-        date: new Date(2016, 0, 1, 20, 0),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      }, {
-        text: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
-        name: 'Awesome Developer',
-        image: null,
-        position: 'right',
-        date: new Date(2016, 0, 2, 12, 0),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      },
-    ];
-
-    setTimeout(() => {
-      this.setMessages(earlierMessages.concat(this._messages)); // prepend the earlier messages to your list
-      this.setState({
-        isLoadingEarlierMessages: false, // hide the loader
-        allLoaded: true, // hide the `Load earlier messages` button
-      });
-    }, 1000); // simulating network
-
   }
 
   handleReceive(message = {}) {
@@ -292,16 +242,10 @@ class GiftedMessengerContainer extends Component {
     this.setMessageStatus(message.uniqueId, '');
   }
 
-  // will be triggered when the Image of a row is touched
-  onImagePress(message = {}) {
-    // Your logic here
-    // Eg: Navigate to the user profile
-  }
-
   render() {
     return (
       <GiftedMessenger
-        ref={(c) => this._GiftedMessenger = c}
+        ref={c => this._GiftedMessenger = c}
 
         styles={{
           bubbleRight: {
@@ -317,7 +261,6 @@ class GiftedMessengerContainer extends Component {
         maxHeight={Dimensions.get('window').height - Navigator.NavigationBar.Styles.General.NavBarHeight - STATUS_BAR_HEIGHT}
 
         loadEarlierMessagesButton={false}
-        onLoadEarlierMessages={this.onLoadEarlierMessages.bind(this)}
 
         senderName='Awesome Developer'
         senderImage={null}
@@ -340,38 +283,6 @@ class GiftedMessengerContainer extends Component {
 
   handleUrlPress(url) {
     Linking.openURL(url);
-  }
-
-  // TODO
-  // make this compatible with Android
-  handlePhonePress(phone) {
-    if (Platform.OS !== 'android') {
-      var BUTTONS = [
-        'Text message',
-        'Call',
-        'Cancel',
-      ];
-      var CANCEL_INDEX = 2;
-
-      ActionSheetIOS.showActionSheetWithOptions({
-        options: BUTTONS,
-        cancelButtonIndex: CANCEL_INDEX
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            Communications.phonecall(phone, true);
-            break;
-          case 1:
-            Communications.text(phone);
-            break;
-        }
-      });
-    }
-  }
-
-  handleEmailPress(email) {
-    Communications.email(email, null, null, null, null);
   }
 
 }
