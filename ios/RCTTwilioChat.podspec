@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "RCTTwilioChat"
-  s.version      = "0.2.1"
+  s.version      = "1.0.0"
   s.summary      = "React Native wrapper for Twilio Programable Chat SDKs"
 
   s.homepage     = "https://github.com/ccm-innovation/react-native-twilio-ip-messaging"
