@@ -7,7 +7,7 @@
 //
 #import <TwilioChatClient/TwilioChatClient.h>
 #import <TwilioChatClient/TCHUserInfo.h>
-#import <RCTConvert.h>
+#import "RCTConvert.h"
 
 @interface RCTConvert (TwilioChatClient)
 

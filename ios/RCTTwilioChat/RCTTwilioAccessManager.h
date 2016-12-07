@@ -5,7 +5,7 @@
 //  Created by Brad Bumbalough on 5/31/16.
 //  Copyright © 2016 Facebook. All rights reserved.
 //
-#import <TwilioCommon/TwilioAccessManager.h>
+#import <TwilioAccessManager/TwilioAccessManager.h>
 #import "RCTBridgeModule.h"
 
 @interface RCTTwilioAccessManager : NSObject <RCTBridgeModule> {
