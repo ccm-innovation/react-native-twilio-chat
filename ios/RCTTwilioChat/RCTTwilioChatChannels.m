@@ -15,13 +15,9 @@
 
 RCT_EXPORT_MODULE();
 
-- (TCHChannel *)loadChannelFromSid:(NSString *)sid {
++ (void)loadChannelFromSid:(NSString *)sid :(void (^)(TCHResult *result, TCHChannel *channel))completion {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] channelWithSidOrUniqueName:sid completion:^(TCHResult *result, TCHChannel *channel) {
-        if (result.isSucessful) {
-            return channel;
-        }
-    }];
+    [[client channelsList] channelWithSidOrUniqueName:sid completion:completion];
 }
 
 #pragma mark Channel Methods

@@ -12,4 +12,6 @@
 
 @interface RCTTwilioChatChannels : NSObject <RCTBridgeModule>
 
++ (void)loadChannelFromSid:(NSString *)sid :(void (^)(TCHResult *result, TCHChannel *channel))completion;
+
 @end
