@@ -9,7 +9,8 @@
 #import "RCTTwilioAccessManager.h"
 #import "RCTBridge.h"
 #import "RCTConvert+TwilioChatClient.h"
-#import <RCTUtils.h>
+#import "RCTUtils.h"
+#import "RCTTwilioChatClient.h"
 #import "RCTEventDispatcher.h"
 
 
@@ -41,7 +42,6 @@ RCT_EXPORT_MODULE()
 RCT_REMAP_METHOD(accessManagerWithToken, token:(NSString *)token token_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioAccessManager *_accessManager = [RCTTwilioAccessManager sharedManager];
   _accessManager.accessManager = [TwilioAccessManager accessManagerWithToken:token delegate:self];
-    _accessManager.accessManager registerClient
   resolve([RCTConvert TwilioAccessManager:_accessManager.accessManager]);
 }
 
@@ -51,7 +51,7 @@ RCT_REMAP_METHOD(updateToken, token:(NSString *)token update_token_resolver:(RCT
     resolve([RCTConvert TwilioAccessManager:accessManager]);
 }
 
-RCT_REMAP_METHOD(registerClient){
+RCT_EXPORT_METHOD(registerClient){
     RCTTwilioAccessManager *_accessManager = [RCTTwilioAccessManager sharedManager];
     __weak RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
     [_accessManager.accessManager registerClient:_client.client forUpdates:^(NSString * _Nonnull updatedToken) {
@@ -74,7 +74,7 @@ RCT_REMAP_METHOD(registerClient){
                                                  body:nil];
 }
 
-(void)accessManagerTokenInvalid:(nonnull TwilioAccessManager *)accessManager {
+- (void)accessManagerTokenInvalid:(nonnull TwilioAccessManager *)accessManager {
     NSLog(@"Token is invalid.");
     [self.bridge.eventDispatcher sendAppEventWithName:@"accessManager:tokenInvalid"
                                                body:nil];
