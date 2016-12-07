@@ -16,8 +16,6 @@
 @property (nonatomic, retain) NSMutableDictionary *paginators;
 
 + (id)sharedManager;
-+ (NSInteger)addPaginator:(TCHMemberPaginator);
-+ (NSInteger)addPaginator:(TCHChannelPaginator);
++ (NSString*)setPaginator:(id)paginator;
 
-@end
 @end

@@ -29,17 +29,10 @@
     return sharedMyManager;
 }
 
-+ (NSString*)setPaginator:(TCHMemberPaginator)paginator {
-    NSMutableDictionary *paginators = [RCTTwilioChatPaginator paginators];
++ (NSString*)setPaginator:(id)paginator {
+    RCTTwilioChatPaginator *_paginator = [RCTTwilioChatPaginator sharedManager];
     NSString *uuid = [[NSUUID UUID] UUIDString];
-    [paginators setValue:paginator forKey:uuid];
-    return uuid;
-}
-
-+ (NSString*)setPaginator:(TCHChannelPaginator)paginator {
-    NSMutableDictionary *paginators = [RCTTwilioChatPaginator paginators];
-    NSString *uuid = [[NSUUID UUID] UUIDString];
-    [paginators setValue:paginator forKey:uuid];
+    [_paginator.paginators setValue:paginator forKey:uuid];
     return uuid;
 }
 
@@ -47,35 +40,34 @@ RCT_EXPORT_MODULE()
 
 RCT_REMAP_METHOD(requestNextPageChannels, sid:(NSString*)sid requestNextPageChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
     NSMutableDictionary *_paginators = [[RCTTwilioChatPaginator sharedManager] paginators];
-    [[_paginators[sid]] requestNextPageWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+    [[_paginators objectForKey:sid] requestNextPageWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
         if (result.isSuccessful) {
             NSString* uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
                       @"paginator": [RCTConvert TCHChannelPaginator:paginator]
-                      }]);
+                      });
         }
         else {
             reject(@"request-next-page", @"Error occured while attempting to request the next page.", result.error);
         }
-    }]
+    }];
 }
 
 RCT_REMAP_METHOD(requestNextPageMembers, sid:(NSString*)sid requestNextPageMembers_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
     NSMutableDictionary *_paginators = [[RCTTwilioChatPaginator sharedManager] paginators];
-    [[_paginators[sid]] requestNextPageWithCompletion:^(TCHResult *result, TCHMemberPaginator *paginator) {
+    [[_paginators objectForKey:sid] requestNextPageWithCompletion:^(TCHResult *result, TCHMemberPaginator *paginator) {
         if (result.isSuccessful) {
             NSString* uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
                       @"paginator": [RCTConvert TCHMemberPaginator:paginator]
-                      }]);
+                      });
         }
         else {
             reject(@"request-next-page", @"Error occured while attempting to request the next page.", result.error);
         }
-    }]
+    }];
 }
-
 
 @end
