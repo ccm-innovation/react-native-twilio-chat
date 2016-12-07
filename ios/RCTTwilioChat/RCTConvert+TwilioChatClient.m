@@ -181,8 +181,7 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
         return RCTNullIfNil(nil);
     }
     return @{
-             @"sid": paginator.sid,
-             @"hasNextPage": paginator.hasNextPage,
+             @"hasNextPage": @(paginator.hasNextPage),
              @"items": [self TCHMembers:paginator.items]
              };
 }
@@ -192,8 +191,7 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
         return RCTNullIfNil(nil);
     }
     return @{
-             @"sid": paginator.sid,
-             @"hasNextPage": paginator.hasNextPage,
+             @"hasNextPage": @(paginator.hasNextPage),
              @"items": [self TCHChannels:paginator.items]
              };
 }
