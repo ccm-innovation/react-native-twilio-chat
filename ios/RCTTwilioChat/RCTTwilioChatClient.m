@@ -11,7 +11,7 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "RCTConvert+TwilioChatClient.h"
-#import <RCTUtils.h>
+#import "RCTUtils.h"
 
 @interface RCTTwilioChatClient() <TwilioChatClientDelegate>
 @end
@@ -38,12 +38,12 @@ RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *
     TwilioChatClientProperties *props = nil;
     if (properties.count > 0) {
         props = [[TwilioChatClientProperties alloc] init];
-        props.synchronizationStrategy = [RCTConvert TWMClientSynchronizationStrategy:properties[@"synchronizationStrategy"]];
+        props.synchronizationStrategy = [RCTConvert TCHClientSynchronizationStrategy:properties[@"synchronizationStrategy"]];
         props.initialMessageCount = [RCTConvert NSUInteger:properties[@"initialMessageCount"]];
     }
     RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
     _client.client = [TwilioChatClient chatClientWithToken:token properties:props delegate:self];
-    resolve([RCTConvert RCTTwilioChatClient:_client.client]);
+    resolve([RCTConvert TwilioChatClient:_client.client]);
 }
 
 RCT_EXPORT_METHOD(updateToken:(NSString *)token) {
