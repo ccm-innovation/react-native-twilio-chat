@@ -19,6 +19,7 @@
 + (TCHUserInfoUpdate)TCHUserInfoUpdate:(id)json;
 + (TCHClientSynchronizationStrategy)TCHClientSynchronizationStrategy:(id)json;
 + (TCHLogLevel)TCHLogLevel:(id)json;
++ (TCHClientConnectionState)TCHClientConnectionState:(id)json;
 
 + (NSDictionary *)TwilioAccessManager:(TwilioAccessManager *)accessManager;
 + (NSDictionary *)TwilioChatClient:(TwilioChatClient *)client;

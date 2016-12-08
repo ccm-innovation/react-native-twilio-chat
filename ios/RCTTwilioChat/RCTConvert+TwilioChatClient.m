@@ -58,6 +58,15 @@ RCT_ENUM_CONVERTER(TCHLogLevel,(@{
                                   @"Debug" : @(TCHLogLevelDebug),
                                 }), TCHLogLevelFatal, integerValue)
 
+RCT_ENUM_CONVERTER(TCHClientConnectionState,(@{
+                                  @"Unknown" : @(TCHClientConnectionStateUnknown),
+                                  @"Disconnected" : @(TCHClientConnectionStateDisconnected),
+                                  @"Connected" : @(TCHClientConnectionStateConnected),
+                                  @"Connecting" : @(TCHClientConnectionStateConnecting),
+                                  @"Denied" : @(TCHClientConnectionStateDenied),
+                                  @"Error" : @(TCHClientConnectionStateError)
+                                  }), TCHClientConnectionStateUnknown, integerValue)
+
 
 + (NSDictionary *)TwilioAccessManager:(TwilioAccessManager *)accessManager {
   if (!accessManager) {

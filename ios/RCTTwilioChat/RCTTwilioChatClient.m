@@ -42,7 +42,7 @@ RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *
         props.initialMessageCount = [RCTConvert NSUInteger:properties[@"initialMessageCount"]];
     }
     RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-    _client.client = [TwilioChatClient chatClientWithToken:token properties:props delegate:self];
+    _client.client = [TwilioChatClient chatClientWithToken:token properties:props delegate:nil];
     resolve([RCTConvert TwilioChatClient:_client.client]);
 }
 
@@ -119,6 +119,11 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 
 #pragma mark Twilio IP Messaging Client Delegates
 
+- (void)chatClient:(TwilioChatClient *)client connectionStateChanged:(TCHClientConnectionState)state {
+    [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:connectionStateChanged"
+                                                 body:@(state)];
+}
+
 - (void)chatClient:(TwilioChatClient *)client synchronizationStatusChanged:(TCHClientSynchronizationStatus)status {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:synchronizationStatusChanged"
                                                body:@(status)];
@@ -138,6 +143,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channelRemoved"
                                                body: [RCTConvert TCHChannel:channel]];
 }
+
 
 - (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel synchronizationStatusChanged:(TCHChannelSynchronizationStatus)status {
   NSString *channelSid;
@@ -310,6 +316,14 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                         @"UniqueName" : TCHChannelOptionUniqueName,
                         @"Type" : TCHChannelOptionType,
                         @"Attributes" : TCHChannelOptionAttributes
+                        },
+                @"TCHClientConnectionState": @{
+                        @"Unknown" : @(TCHClientConnectionStateUnknown),
+                        @"Disconnected" : @(TCHClientConnectionStateDisconnected),
+                        @"Connected" : @(TCHClientConnectionStateConnected),
+                        @"Connecting" : @(TCHClientConnectionStateConnecting),
+                        @"Denied" : @(TCHClientConnectionStateDenied),
+                        @"Error" : @(TCHClientConnectionStateError)
                         }
                 }
             };

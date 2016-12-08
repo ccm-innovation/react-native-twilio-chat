@@ -72,7 +72,7 @@ class GiftedMessengerContainer extends Component {
   }
 
   getToken(identity) {
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmLTE0ODExMjAwNzciLCJpc3MiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmIiwic3ViIjoiQUNmZmRmOTcyMjdmMjUyMDUwZTQ5MzkzMjAwNWEzOTRmNiIsImV4cCI6MTQ4MTEyMzY3NywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiYnJhZCIsInJ0YyI6eyJjb25maWd1cmF0aW9uX3Byb2ZpbGVfc2lkIjoiSVNmOWQ3ODNjOTVlYWI0YjdkYjUwZmQ2YjQ5MzU0MGZlNSJ9fX0.GcuXcYIB3HZYvwTcV00ApEyov0NJYuGAJbhFIb07bo4';
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmLTE0ODEyMTI4MjAiLCJpc3MiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmIiwic3ViIjoiQUNmZmRmOTcyMjdmMjUyMDUwZTQ5MzkzMjAwNWEzOTRmNiIsImV4cCI6MTQ4MTIxNjQyMCwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiYnJhZCIsInJ0YyI6eyJjb25maWd1cmF0aW9uX3Byb2ZpbGVfc2lkIjoiSVMxODViMTBlNjQyYmY0NmQ5OTI5ZDBmNDdiMWEwMjE3YiJ9fX0.KTeegfzRQx3gxQd1NQie6-64wKlECGs7-iG7XyboaV4';
     return new Promise((resolve) => {
       resolve({token});
     });
@@ -97,7 +97,7 @@ class GiftedMessengerContainer extends Component {
 
       accessManager.onTokenWillExpire = () => {
         this.getToken(identity)
-        .then(newToken => accessManager.updateToken(newToken));
+        .then(newToken => accessManager.updateToken(newToken.token));
       };
 
       accessManager.onTokenInvalid = () => {
@@ -112,6 +112,10 @@ class GiftedMessengerContainer extends Component {
       let client = new Client(token);
 
       client.onError = ({ error, userInfo }) => console.log(error);
+
+      client.onSynchronizationStatusChanged = (status) => {
+        console.log(status);
+      };
 
       client.onClientSynchronized = () => {
         console.log('client synced');
@@ -147,6 +151,8 @@ class GiftedMessengerContainer extends Component {
 
       client.initialize()
       .then(() => {
+        console.log(client);
+        console.log('client initilized');
         // register the client with the accessManager
         accessManager.registerClient();
       });
