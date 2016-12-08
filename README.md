@@ -1,4 +1,4 @@
-# React Native Twilio IP Messaging
+# React Native Twilio Chat
 [![npm version](https://badge.fury.io/js/react-native-twilio-ip-messaging.svg)](https://badge.fury.io/js/react-native-twilio-ip-messaging)
 
 >React Native wrapper for the Twilio IP Messaging SDKs
@@ -9,7 +9,7 @@
 ```npm install --save react-native-twilio-ip-messaging```
 
 ### iOS
-Install the Twilio IP Messaging SDK and this package via CocoaPods.
+Install the Twilio Programable Chat SDK and this package via CocoaPods.
 
 ```
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
@@ -77,40 +77,40 @@ android {
 ```JavaScript
 /* Initialization */
 
-let {
+import {
     AccessManager,
     Client,
     Constants
-} = require('react-native-twilio-ip-messaging')
+} from 'react-native-twilio-ip-messaging';
 
 // create the access manager
-var accessManager = new AccessManager(token);
+const accessManager = new AccessManager(token);
 
 // specify any handlers for events
-accessManager.onTokenExpired = () => {
+accessManager.onTokenWillExpire = () => {
     getNewTokenFromServer()
-    .then(accessManager.updateToken)
+    .then(accessManager.updateToken);
 }
 
 // create the client
-var client = new Client(accessManager);
+const client = new Client(token);
 
 // specify any global events
 client.onError = ({error, userInfo}) => console.log(error)
 
 // initialize the client
-client.initialize()
+client.initialize();
 
 // wait for sync to finish
 client.onClientSynchronized = () => {
     client.getChannels()
-    .then((channels) => console.log(channels))
+    .then((channelPaginator) => console.log(channelPaginator.items));
 }
 
 /* Individual Channel */
 
-// somehow an instance of Channel is passed down in the app
-var channel = this.props.channel
+// an instance of Channel is passed down in the app via props
+let channel = this.props.channel
 
 // specify channel specific events
 channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body)

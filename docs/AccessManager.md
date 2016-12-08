@@ -1,5 +1,5 @@
 # AccessManager
-The AccessManager is Twilio's separation of authenticating your instance of Twilio from the functionality of IP Messaging.
+The AccessManager is Twilio's separation of authenticating your instance of Twilio from the functionality of Programable Chat. It is optional in the lastest release of the SDKs.
 
 ## `new AccessManager(token)`
 |Name |Type |Description |
