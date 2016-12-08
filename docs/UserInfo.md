@@ -29,4 +29,4 @@ Remove the listeners on this instance. Call in `componentWillUnmount()`.
 #### `onUpdated(type)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*type*|Constants.TWMUserInfoUpdate|The type of update **iOS Only**
+|*type*|Constants.TCHUserInfoUpdate|The type of update **iOS Only**

@@ -36,9 +36,9 @@ channel.setAllMessagesConsumed()
 |*sid*|String|The sid of the channel (shouldn't need this in an instance, all methods are pre-bound)
 |*friendlyName*|String|Friendly name of the channel
 |*uniqueName*|String|Unique name of the channel
-|*synchronizationStatus*|Constants.TWMChannelSynchronizationStatus|Current synchronization status of the channel
-|*status*|Constants.TWMChannelStatus|The user's association with the channel
-|*type*|Constants.TWMChannelType|Whether the channel is public or private
+|*synchronizationStatus*|Constants.TCHChannelSynchronizationStatus|Current synchronization status of the channel
+|*status*|Constants.TCHChannelStatus|The user's association with the channel
+|*type*|Constants.TCHChannelType|Whether the channel is public or private
 |*attributes*|Object|Any custom attributes added to the channel
 |*dateCreated*|Date|When the channel was created
 |*dateUpdated*|Date|When the channel was last updated
@@ -167,7 +167,7 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onSynchronizationStatusChanged(status)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*status*|Constants.TWMChannelSynchronizationStatus|The new synchronization status of the channel
+|*status*|Constants.TCHChannelSynchronizationStatus|The new synchronization status of the channel
 
 #### `onChanged()`
 
@@ -191,7 +191,7 @@ Close the channel and remove all listeners (call in `componentWillUnmount`).
 #### `onMemberUserInfoUpdated({updated, userInfo})` **iOS Only**
 |Name |Type |Description |
 |--- |--- |--- |
-|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*updated*|Constants.TCHUserInfoUpdated|The type of userInfo update (**iOS Only**)
 |*userInfo*|UserInfo|The new UserInfo instance
 
 #### `onMessageAdded(message)`

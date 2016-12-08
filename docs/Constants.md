@@ -7,61 +7,61 @@ let {
 } = require('react-native-twilio-ip-messaging')
 
 client.onSynchronizationStatusChanged = (status) => {
-  if (status == Constants.TWMSynchronizationStatus.Completed) {
+  if (status == Constants.TCHSynchronizationStatus.Completed) {
     console.log('Sync complete!')
   }
 }
 
-if (channel.status == Constants.TWMChannelStatus.Joined) {
+if (channel.status == Constants.TCHChannelStatus.Joined) {
   console.log('I can post!')
 }
 
 client.createChannel({
-  type: Constants.TWMChannelType.Private
+  type: Constants.TCHChannelType.Private
 }
 ```
 
-### TWMChannelStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelStatus.html)
+### TCHChannelStatus
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelStatus.html)
 - Invited
 - Joined
 - NotParticipating
 
-### TWMChannelSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelSynchronizationStatus.html)
+### TCHChannelSynchronizationStatus
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelSynchronizationStatus.html)
 - None
 - Identifier
 - Metadata
 - All
 - Failed
 
-### TWMChannelType
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelType.html)
+### TCHChannelType
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelType.html)
 - Public
 - Private
 
-### TWMClientSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStatus.html)
+### TCHClientSynchronizationStatus
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStatus.html)
 - Started
 - ChannelListCompleted
 - Completed
 - Failed
 
-### TWMClientSynchronizationStrategy
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
+### TCHClientSynchronizationStrategy
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStrategy.html)
 - All
 - ChannelsList
 
-### TWMLogLevel - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMLogLevel.html)
+### TCHLogLevel - iOS Only
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHLogLevel.html)
 - Fatal
 - Critical
 - Warning
 - Info
 - Debug
 
-### TWMUserInfoUpdate - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TWMUserInfoUpdate.html)
+### TCHUserInfoUpdate - iOS Only
+[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TCHUserInfoUpdate.html)
 - FriendlyName
 - Attributes
 - ReachabilityOnline
