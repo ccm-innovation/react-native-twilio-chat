@@ -42,7 +42,7 @@ RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *
         props.initialMessageCount = [RCTConvert NSUInteger:properties[@"initialMessageCount"]];
     }
     RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-    _client.client = [TwilioChatClient chatClientWithToken:token properties:props delegate:nil];
+    _client.client = [TwilioChatClient chatClientWithToken:token properties:nil delegate:self];
     resolve([RCTConvert TwilioChatClient:_client.client]);
 }
 

@@ -151,6 +151,23 @@ RCT_ENUM_CONVERTER(TCHClientConnectionState,(@{
            };
 }
 
++ (NSDictionary *)TCHChannelDescriptor:(TCHChannelDescriptor *)channel {
+    if (!channel) {
+        return RCTNullIfNil(nil);
+    }
+    return @{
+             @"sid": channel.sid,
+             @"friendlyName": channel.friendlyName,
+             @"uniqueName": channel.uniqueName,
+             @"attributes": RCTNullIfNil(channel.attributes),
+             @"messageCount": @(channel.messagesCount),
+             @"membersCount": @(channel.membersCount),
+             @"dateCreated": @(channel.dateCreated.timeIntervalSince1970 * 1000),
+             @"dateUpdated": @(channel.dateUpdated.timeIntervalSince1970 * 1000),
+             @"createdBy": channel.createdBy
+             };
+}
+
 + (NSArray *)TCHMembers:(NSArray<TCHMember *>*)members {
   if (!members) {
     return RCTNullIfNil(nil);
@@ -173,6 +190,16 @@ RCT_ENUM_CONVERTER(TCHClientConnectionState,(@{
     return response;
 }
 
++ (NSArray *)TCHChannelDescriptors:(NSArray<TCHChannelDescriptor *>*)channels {
+    if (!channels) {
+        return RCTNullIfNil(nil);
+    }
+    NSMutableArray *response = [NSMutableArray array];
+    for (TCHChannelDescriptor *channel in channels) {
+        [response addObject:[self TCHChannelDescriptor:channel]];
+    }
+    return response;
+}
 
 + (NSArray *)TCHMessages:(NSArray<TCHMessage *> *)messages {
   if (!messages) {
@@ -202,6 +229,16 @@ RCT_ENUM_CONVERTER(TCHClientConnectionState,(@{
     return @{
              @"hasNextPage": @(paginator.hasNextPage),
              @"items": [self TCHChannels:paginator.items]
+             };
+}
+
++ (NSDictionary *)TCHChannelDescriptorPaginator:(TCHChannelDescriptorPaginator *)paginator {
+    if (!paginator) {
+        return RCTNullIfNil(nil);
+    }
+    return @{
+             @"hasNextPage": @(paginator.hasNextPage),
+             @"items": [self TCHChannelDescriptors:paginator.items]
              };
 }
 

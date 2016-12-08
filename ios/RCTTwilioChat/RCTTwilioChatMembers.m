@@ -33,6 +33,7 @@ RCT_REMAP_METHOD(getMembers, channelSid:(NSString *)channelSid allObjects_resolv
                     NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
                     resolve(@{
                               @"sid":uuid,
+                              @"type": @"Member",
                               @"paginator": [RCTConvert TCHMemberPaginator:paginator]
                               });
                 }

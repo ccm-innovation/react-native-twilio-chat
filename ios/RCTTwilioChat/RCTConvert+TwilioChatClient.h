@@ -25,14 +25,17 @@
 + (NSDictionary *)TwilioChatClient:(TwilioChatClient *)client;
 
 + (NSDictionary *)TCHChannel:(TCHChannel *)channel;
++ (NSDictionary *)TCHChannelDescriptor:(TCHChannelDescriptor *)channel;
 + (NSDictionary *)TCHUserInfo:(TCHUserInfo *)userInfo;
 + (NSDictionary *)TCHMember:(TCHMember *)member;
 + (NSDictionary *)TCHMessage:(TCHMessage *)message;
 
 + (NSDictionary *)TCHMemberPaginator:(TCHMemberPaginator *)paginator;
 + (NSDictionary *)TCHChannelPaginator:(TCHChannelPaginator *)paginator;
++ (NSDictionary *)TCHChannelDescriptorPaginator:(TCHChannelDescriptorPaginator *)paginator;
 
 + (NSArray *)TCHChannels:(NSArray<TCHChannel *>*)channels;
++ (NSArray *)TCHChannelDescriptors:(NSArray<TCHChannelDescriptor *>*)channels;
 + (NSArray *)TCHMembers:(NSArray<TCHMember *>*)members;
 + (NSArray *)TCHMessages:(NSArray<TCHMessage *> *)messages;
 

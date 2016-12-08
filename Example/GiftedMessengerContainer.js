@@ -72,10 +72,10 @@ class GiftedMessengerContainer extends Component {
   }
 
   getToken(identity) {
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmLTE0ODEyMTI4MjAiLCJpc3MiOiJTSzE3MjQxOWQyMDI1ZWE0YjNlNTQxOGUyODBiMThiYWRmIiwic3ViIjoiQUNmZmRmOTcyMjdmMjUyMDUwZTQ5MzkzMjAwNWEzOTRmNiIsImV4cCI6MTQ4MTIxNjQyMCwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiYnJhZCIsInJ0YyI6eyJjb25maWd1cmF0aW9uX3Byb2ZpbGVfc2lkIjoiSVMxODViMTBlNjQyYmY0NmQ5OTI5ZDBmNDdiMWEwMjE3YiJ9fX0.KTeegfzRQx3gxQd1NQie6-64wKlECGs7-iG7XyboaV4';
-    return new Promise((resolve) => {
-      resolve({token});
-    });
+    return fetch('http://localhost:3000/token?device=' + Platform.OS + '&identity=' + identity, {
+      method: 'get',
+    })
+    .then((res) => res.json());
   }
 
   parseMessage(message) {
@@ -101,20 +101,27 @@ class GiftedMessengerContainer extends Component {
       };
 
       accessManager.onTokenInvalid = () => {
-        console.error('Token is invalid');
+        console.log('Token is invalid');
       };
 
       accessManager.onTokenExpired = () => {
-        console.error('Token is expired');
+        console.log('Token is expired');
       };
 
       // initiate the client with the token, not accessManager
-      let client = new Client(token);
+      const client = new Client(token);
 
-      client.onError = ({ error, userInfo }) => console.log(error);
+      client.onError = ({ error, userInfo }) => {
+        console.log(error);
+        console.log(userInfo);
+      };
 
       client.onSynchronizationStatusChanged = (status) => {
         console.log(status);
+      };
+
+      client.onClientConnectionStateChanged = (state) => {
+        console.log(state);
       };
 
       client.onClientSynchronized = () => {
@@ -145,7 +152,7 @@ class GiftedMessengerContainer extends Component {
 
           channel.onMessageAdded = message => this.handleReceive(this.parseMessage(message));
 
-          this.setState({ client, channel });
+          this.setState({ client, channel, accessManager });
         });
       };
 
@@ -181,7 +188,7 @@ class GiftedMessengerContainer extends Component {
     //   this.botMessage(BOT_GREETINGS[Math.floor(Math.random() * BOT_GREETINGS.length)])
     //   .then(() => this.botMessage(BOT_QUESTIONS[Math.floor(Math.random() * BOT_QUESTIONS.length)], 2000));
     // }, 500);
-    this.initializeMessenging(null);
+    this.initializeMessenging('Brad');
   }
 
   componentWillUnmount() {
