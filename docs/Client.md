@@ -4,18 +4,18 @@ The Client is the main interface for interacting with the Twilio SDKs.
 ## Usage
 ```JavaScript
 // create the client
-var client = new Client(token);
+const client = new Client(token);
 
 // specify any global events
-client.onError = ({error, userInfo}) => console.log(error)
+client.onError = ({error, userInfo}) => console.log(error);
 
 // initialize the client
-client.initialize()
+client.initialize();
 
 // wait for sync to finish
 client.onClientSynchronized = () => {
-  client.getChannels()
-  .then((channels) => console.log(channels))
+  client.getUserChannels()
+  .then((channelPaginator) => console.log(channelPaginator));
 
   // create a new channel
   client.createChannel({
@@ -23,7 +23,7 @@ client.onClientSynchronized = () => {
     uniqueName: 'my_channel',
     type: Constants.TCHChannelType.Private
   })
-  .then((channel) => console.log(channel))
+  .then((channel) => console.log(channel));
 }
 ```
 
@@ -37,7 +37,6 @@ client.onClientSynchronized = () => {
 ## Properties
 |Name |Type |Description |
 |--- |--- |--- |
-|*accessManager*|AccessManager|Reference to the AccessManager used to initialize the client
 |*userInfo*|UserInfo|The current user properties
 |*version*|String|The version of the SDK
 |*synchronizationStatus*|Constants.TCHClientSynchronizationStatus|The current status of the client's initialization
@@ -48,19 +47,16 @@ client.onClientSynchronized = () => {
 #### `initialize()`
 Initialize the Client with the provided Access Manager and begin synchronization.
 
-#### `getChannels()` : Promise
-Get all of the user's channels. Returns `Array<Channel>`.
+#### `getUserChannels()` : Promise
+Get all of the user's channels. Returns an instance of `Paginator`.
+
+#### `getPublicChannels()` : Promise
+Get all of the public channels. Returns an instance of `Paginator`.
 
 #### `getChannel(sid)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
 |*sid*|String|Sid of the channel to return
-Get a single instance of a Channel. Returns `Channel`.
-
-#### `getChannelByUniqueName(uniqueName)` : Promise
-|Name |Type |Description |
-|--- |--- |--- |
-|*uniqueName*|String|Unique name of the channel to return
 Get a single instance of a Channel. Returns `Channel`.
 
 #### `createChannel(options)` : Promise
@@ -113,6 +109,11 @@ Instead of having to worry about creating native listeners, simply specify handl
 
 #### `onClientSynchronized()`
 Fired when the client has finished synchronizing and populated all of its attributes.
+
+#### `onClientConnectionStateChanged(state)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*status*|Constants.TCHClientConnectionState|The client's connection state
 
 #### `onSynchronizationStatusChanged(status)`
 |Name |Type |Description |
