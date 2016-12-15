@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
@@ -10,12 +10,13 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
 import com.twilio.common.TwilioAccessManager;
-import com.twilio.ipmessaging.Channel;
-import com.twilio.ipmessaging.Channels;
-import com.twilio.ipmessaging.TwilioIPMessagingClient;
-import com.twilio.ipmessaging.UserInfo;
-import com.twilio.ipmessaging.Message;
-import com.twilio.ipmessaging.Member;
+import com.twilio.chat.Channel;
+import com.twilio.chat.Channels;
+import com.twilio.chat.ChatClient;
+import com.twilio.chat.UserInfo;
+import com.twilio.chat.Message;
+import com.twilio.chat.Member;
+import com.twilio.chat.Paginator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -206,6 +207,20 @@ public class RCTConvert {
         return map;
     }
 
+    public static WritableMap ChannelDescriptor(ChannelDescriptor channel) {
+        WritableMap map = Arguments.createMap();
+
+        map.putString("sid", channel.getSid());
+        map.putString("friendlyName", channel.getFriendlyName());
+        map.putString("uniqueName", channel.getUniqueName());
+        map.putMap("attributes", jsonToWritableMap(channel.getAttributes()));
+        map.putString("dateCreated", channel.getDateCreated().toString());
+        map.putString("dateUpdated", channel.getDateUpdated().toString());
+        map.putInt("membersCount", (int) channel.getMembersCount());
+        map.putInt("messagesCount", (int) channel.getMessagesCount());
+        return map;
+    }
+
     public static WritableMap UserInfo(UserInfo userInfo) {
         WritableMap map = Arguments.createMap();
 
@@ -250,7 +265,7 @@ public class RCTConvert {
         return map;
     }
 
-    public static WritableMap TwilioIPMessagingClient(TwilioIPMessagingClient client) {
+    public static WritableMap ChatClient(ChatClient client) {
         WritableMap map = Arguments.createMap();
 
         map.putMap("userInfo", UserInfo(client.getMyUserInfo()));
@@ -280,6 +295,16 @@ public class RCTConvert {
         return array;
     }
 
+    public static WritableArray ChannelDescriptors(ChannelDescriptor[] channels) {
+        WritableArray array = Arguments.createArray();
+
+        for (ChannelDescriptor c : channels) {
+            array.pushMap(ChannelDescriptor(c));
+        }
+
+        return array;
+    }
+
     public static WritableArray Members(Member[] members) {
         WritableArray array = Arguments.createArray();
 
@@ -298,5 +323,26 @@ public class RCTConvert {
         }
 
         return array;
+    }
+
+    public static WritableMap paginator(Paginator paginator, String sid, String type) {
+        WritableMap map = Arguments.createMap();
+        WritableMap _paginator = Arguments.createMap();
+        _paginator.putBoolean("hasNextPage", paginator.hasNextPage());
+        switch (type) {
+            case 'Channel':
+                _paginator.putArray("items", Channels(paginator.getItems()));
+                break;
+            case 'ChannelDescriptor':
+                _paginator.putArray("items", ChannelDescriptors(paginator.getItems()));
+                break;
+            case "Member":
+                _paginator.putArray("items", Members(paginator.getItems()));
+                break;
+        }
+        map.putString("sid", sid);
+        map.putString("type", type);
+        map.putMap("paginator", _paginator);
+        return map;
     }
 }

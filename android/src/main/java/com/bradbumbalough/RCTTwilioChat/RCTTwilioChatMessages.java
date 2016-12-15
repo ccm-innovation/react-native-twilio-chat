@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -6,29 +6,29 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
-import com.twilio.ipmessaging.Messages;
-import com.twilio.ipmessaging.Constants;
-import com.twilio.ipmessaging.ErrorInfo;
-import com.twilio.ipmessaging.Message;
+import com.twilio.chat.Messages;
+import com.twilio.chat.Constants;
+import com.twilio.chat.ErrorInfo;
+import com.twilio.chat.Message;
 
 import java.util.List;
 
 import org.json.JSONObject;
 
-public class RCTTwilioIPMessagingMessages extends ReactContextBaseJavaModule {
+public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "TwilioIPMessagingMessages";
+        return "TwilioChatMessages";
     }
 
 
-    public RCTTwilioIPMessagingMessages(ReactApplicationContext reactContext) {
+    public RCTTwilioChatMessages(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     private Messages loadMessagesFromChannelSid(String sid) {
-        return RCTTwilioIPMessagingClient.getInstance().client.getChannels().getChannel(sid).getMessages();
+        return RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid).getMessages();
     }
 
     @ReactMethod

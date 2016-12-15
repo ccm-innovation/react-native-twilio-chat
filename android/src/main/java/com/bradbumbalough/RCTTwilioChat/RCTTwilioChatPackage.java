@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class RCTTwilioIPMessagingPackage implements ReactPackage {
+public class RCTTwilioChatPackage implements ReactPackage {
     @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
@@ -28,10 +28,10 @@ public class RCTTwilioIPMessagingPackage implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
 
         modules.add(new RCTTwilioAccessManager(reactContext));
-        modules.add(new RCTTwilioIPMessagingClient(reactContext));
-        modules.add(new RCTTwilioIPMessagingChannels(reactContext));
-        modules.add(new RCTTwilioIPMessagingMembers(reactContext));
-        modules.add(new RCTTwilioIPMessagingMessages(reactContext));
+        modules.add(new RCTTwilioChatClient(reactContext));
+        modules.add(new RCTTwilioChatChannels(reactContext));
+        modules.add(new RCTTwilioChatMembers(reactContext));
+        modules.add(new RCTTwilioChatMessages(reactContext));
 
         return modules;
     }

@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import android.support.annotation.Nullable;
 
@@ -11,13 +11,14 @@ import com.facebook.react.bridge.ReadableMap;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.twilio.ipmessaging.Channel;
-import com.twilio.ipmessaging.ChannelListener;
-import com.twilio.ipmessaging.Constants;
-import com.twilio.ipmessaging.ErrorInfo;
-import com.twilio.ipmessaging.Channels;
-import com.twilio.ipmessaging.Member;
-import com.twilio.ipmessaging.Message;
+import com.twilio.chat.Channel;
+import com.twilio.chat.ChannelListener;
+import com.twilio.chat.Constants;
+import com.twilio.chat.ErrorInfo;
+import com.twilio.chat.Channels;
+import com.twilio.chat.Member;
+import com.twilio.chat.Message;
+import com.twilio.chat.CallbackListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +26,11 @@ import java.util.Map;
 import org.json.JSONObject;
 
 
-public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
+public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "TwilioIPMessagingChannels";
+        return "TwilioChatChannels";
     }
 
     private ReactApplicationContext reactContext;
@@ -141,35 +142,57 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
     }
 
     private Channels channels() {
-        return RCTTwilioIPMessagingClient.getInstance().client.getChannels();
+        return RCTTwilioChatClient.getInstance().client.getChannels();
     }
 
-    private Channel loadChannelFromSid(String sid) {
-        Channel channel = channels().getChannel(sid);
-        if (!channelListeners.containsKey(sid)) {
-            ChannelListener listener = generateListener(channel);
-            channel.setListener(listener);
-            channelListeners.put(channel.getSid(),listener);
-        }
-        return channel;
+    public static void loadChannelFromSid(String sid, CallbackListener<Channel> callback) {
+        channels().getChannel(sid, new CallbackListener<Channel>() {
+            public void onSuccess(final Channel channel) {
+                if (!channelListeners.containsKey(sid)) {
+                    ChannelListener listener = generateListener(channel);
+                    channel.setListener(listener);
+                    channelListeners.put(channel.getSid(), listener);
+                }
+                callback.onSucess(channel);
+            };
+
+            public void onError(final ErrorInfo errorInfo){
+                callback.onError(errorInfo);
+            }
+
+        });
     }
 
     @ReactMethod
-    public void getChannels(final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+    public void getUserChannels(final Promise promise) {
+        channels().getUserChannels(new CallbackListener<Channel>() {
             @Override
-            public void onError(ErrorInfo errorInfo) {
+            public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("get-channels-error", "Error occurred while attempting to getChannels.");
+                promise.reject("get-user-channels-error", "Error occurred while attempting to getUserChannels.");
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(RCTConvert.Channels(channels().getChannels()));
+            public void onSuccess(final Channel[] _channels) {
+                promise.resolve(RCTConvert.Channels(_channels));
             }
-        };
-        channels().loadChannelsWithListener(listener);
+        });
+    }
+
+    @ReactMethod
+    public void getPublicChannels(final Promise promise) {
+        channels().getPublicChannels(new CallbackListener<ChannelDescriptor>() {
+            @Override
+            public void onError(final ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-public-channels-error", "Error occurred while attempting to getPublicChannels.");
+            }
+
+            @Override
+            public void onSuccess(final ChannelDescriptor[] _channels) {
+                promise.resolve(RCTConvert.ChannelDescriptors(_channels));
+            }
+        });
     }
 
     @ReactMethod
@@ -179,41 +202,39 @@ public class RCTTwilioIPMessagingChannels extends ReactContextBaseJavaModule {
         String friendlyName = options.getString("friendlyName");
         Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.CHANNEL_TYPE_PRIVATE : Channel.ChannelType.CHANNEL_TYPE_PUBLIC;
 
-        Constants.CreateChannelListener listener = new Constants.CreateChannelListener() {
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                super.onError(errorInfo);
-                promise.reject("create-channel-error", "Error occurred while attempting to createChannel.");
-            }
+        channels().channelBuilder()
+                .withUniqueName(uniqueName)
+                .withFriendlyName(friendlyName)
+                .withType(type)
+                .withAttributes(attributes)
+                .build(new CallbackListener<Channel>() {
+                    @Override
+                    public void onError(final ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("create-channel-error", "Error occurred while attempting to createChannel.");
+                    }
 
-            @Override
-            public void onCreated(Channel newChannel) {
-                Constants.StatusListener statusListener = new Constants.StatusListener(){
                     @Override
-                    public void onError(ErrorInfo errorInfo){
-                        promise.reject("create-channel-error", "Error while setting uniqueName and attributes of new channel");
+                    public void onCreated(final Channel newChannel) {
+                        promise.resolve(RCTConvert.Channel(newChannel));
                     }
-                    @Override
-                    public void onSuccess(){
-                        //nothing
-                    }
-                };
-                newChannel.setUniqueName(uniqueName, statusListener);
-                newChannel.setAttributes(attributes, statusListener);
-                promise.resolve(RCTConvert.Channel(newChannel));
-            }
-        };
-        channels().createChannel(friendlyName, type, listener);
+                });
     }
 
     @ReactMethod
     public void getChannel(String sid, Promise promise) {
-        promise.resolve(RCTConvert.Channel(channels().getChannel(sid)));
-    }
+        RCTTwilioChatChannels.loadChannelFromSid(sid, new ChannelListener<Channel>() {
+            @Override
+            public void onError(final ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-channel-error", "Error occurred while attempting to getChannel.");
+            }
 
-    @ReactMethod
-    public void getChannelByUniqueName(String uniqueName, Promise promise) {
-        promise.resolve(RCTConvert.Channel(channels().getChannelByUniqueName(uniqueName)));
+            @Override
+            public void onCreated(final Channel channel) {
+                promise.resolve(RCTConvert.Channel(channel));
+            }
+        });
     }
 
     // Channel Instance Methods

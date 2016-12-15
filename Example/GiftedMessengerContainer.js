@@ -72,10 +72,13 @@ class GiftedMessengerContainer extends Component {
   }
 
   getToken(identity) {
-    return fetch('http://localhost:3000/token?device=' + Platform.OS + '&identity=' + identity, {
-      method: 'get',
-    })
-    .then((res) => res.json());
+    // return fetch('http://htf-api-staging.herokuapp.com/token?device=' + Platform.OS + '&identity=' + identity, {
+    //   method: 'get',
+    // })
+    // .then((res) => res.json());
+    return new Promise((resolve, reject) => {
+      resolve({ token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzlmNGZjYjdjNDg0ODVhYjJlN2I4Y2VmOTg5YTgxZjQ5LTE0ODE3NDk5MTQiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJKb2huIEpvbmVzIiwiaXBfbWVzc2FnaW5nIjp7InNlcnZpY2Vfc2lkIjoiSVNmOWQ3ODNjOTVlYWI0YjdkYjUwZmQ2YjQ5MzU0MGZlNSIsImVuZHBvaW50X2lkIjoiSFRGOkpvaG4gSm9uZXM6OTgzQzJGRTktRUY1Qy00QjUyLUEzNjctNDdCRTkwQjI2NERCIiwicHVzaF9jcmVkZW50aWFsX3NpZCI6Ik5PVEhJTkcifX0sImlhdCI6MTQ4MTc0OTkxNCwiZXhwIjoxNDgxNzUzNTE0LCJpc3MiOiJTSzlmNGZjYjdjNDg0ODVhYjJlN2I4Y2VmOTg5YTgxZjQ5Iiwic3ViIjoiQUNmZmRmOTcyMjdmMjUyMDUwZTQ5MzkzMjAwNWEzOTRmNiJ9.RSVkKLo6QOSlFoLhE8cS0dgrVVDPwVIchonYpfhhvhw' });
+    });
   }
 
   parseMessage(message) {

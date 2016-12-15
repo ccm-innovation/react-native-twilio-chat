@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import android.support.annotation.Nullable;
 
@@ -13,13 +13,13 @@ import com.facebook.react.bridge.ReadableMap;
 
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.twilio.common.TwilioAccessManager;
-import com.twilio.ipmessaging.Channel;
-import com.twilio.ipmessaging.Constants;
-import com.twilio.ipmessaging.ErrorInfo;
-import com.twilio.ipmessaging.IPMessagingClientListener;
-import com.twilio.ipmessaging.TwilioIPMessagingClient;
-import com.twilio.ipmessaging.TwilioIPMessagingSDK;
-import com.twilio.ipmessaging.UserInfo;
+import com.twilio.chat.Channel;
+import com.twilio.chat.Constants;
+import com.twilio.chat.ErrorInfo;
+import com.twilio.chat.ChatClientListener;
+import com.twilio.chat.ChatClient;
+import com.twilio.chat.TwilioChatSDK;
+import com.twilio.chat.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +27,11 @@ import java.util.Map;
 import org.json.JSONObject;
 
 
-public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule implements IPMessagingClientListener {
+public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements ChatClientListener {
 
     @Override
     public String getName() {
-        return "TwilioIPMessagingClient";
+        return "TwilioChatClient";
     }
 
     // Constants
@@ -60,15 +60,15 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         constants.put("TCHChannelType", channelType);
 
         Map<String, String> clientSyncStatus = new HashMap<>();
-        clientSyncStatus.put("Started",TwilioIPMessagingClient.SynchronizationStatus.STARTED.toString());
-        clientSyncStatus.put("ChannelListCompleted",TwilioIPMessagingClient.SynchronizationStatus.CHANNELS_COMPLETED.toString());
-        clientSyncStatus.put("Completed",TwilioIPMessagingClient.SynchronizationStatus.COMPLETED.toString());
-        clientSyncStatus.put("Failed",TwilioIPMessagingClient.SynchronizationStatus.FAILED.toString());
+        clientSyncStatus.put("Started",ChatClient.SynchronizationStatus.STARTED.toString());
+        clientSyncStatus.put("ChannelListCompleted",ChatClient.SynchronizationStatus.CHANNELS_COMPLETED.toString());
+        clientSyncStatus.put("Completed",ChatClient.SynchronizationStatus.COMPLETED.toString());
+        clientSyncStatus.put("Failed",ChatClient.SynchronizationStatus.FAILED.toString());
         constants.put("TCHClientSynchronizationStatus", clientSyncStatus);
 
         Map<String, String> clientSyncStrategy = new HashMap<>();
-        clientSyncStrategy.put("All",TwilioIPMessagingClient.SynchronizationStrategy.ALL.toString());
-        clientSyncStrategy.put("ChannelsList",TwilioIPMessagingClient.SynchronizationStrategy.CHANNELS_LIST.toString());
+        clientSyncStrategy.put("All",ChatClient.SynchronizationStrategy.ALL.toString());
+        clientSyncStrategy.put("ChannelsList",ChatClient.SynchronizationStrategy.CHANNELS_LIST.toString());
         constants.put("TCHClientSynchronizationStrategy", clientSyncStrategy);
 
         Map<String, String> channelOption = new HashMap<>();
@@ -81,30 +81,30 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         return constants;
     }
 
-    public TwilioIPMessagingClient client = null;
+    public ChatClient client = null;
     private ReactApplicationContext reactContext;
 
-    private static RCTTwilioIPMessagingClient rctTwilioIPMessagingClient;
+    private static RCTTwilioChatClient rctTwilioChatClient;
 
-    public static RCTTwilioIPMessagingClient getInstance() {
-        return rctTwilioIPMessagingClient;
+    public static RCTTwilioChatClient getInstance() {
+        return rctTwilioChatClient;
     }
 
-    public RCTTwilioIPMessagingClient(ReactApplicationContext reactContext) {
+    public RCTTwilioChatClient(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        rctTwilioIPMessagingClient = this;
+        rctTwilioChatClient = this;
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
 
     private void sendEvent(String eventName, @Nullable String body) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, body);
@@ -129,21 +129,21 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void createClient(ReadableMap props, final Promise promise) {
-        final RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        final RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         TwilioAccessManager accessManager = RCTTwilioAccessManager.getInstance().accessManager;
 
-        TwilioIPMessagingClient.Properties.Builder builder = new TwilioIPMessagingClient.Properties.Builder();
+        ChatClient.Properties.Builder builder = new ChatClient.Properties.Builder();
 
         if (props != null) {
             if (props.hasKey("initialMessageCount")) {
                 builder.setInitialMessageCount(props.getInt("initialMessageCount"));
             }
             if (props.hasKey("synchronizationStrategy")) {
-                builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
+                builder.setSynchronizationStrategy(ChatClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
             }
         }
 
-        Constants.CallbackListener<TwilioIPMessagingClient> listener = new Constants.CallbackListener<TwilioIPMessagingClient>() {
+        Constants.CallbackListener<ChatClient> listener = new Constants.CallbackListener<ChatClient>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -151,24 +151,24 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             }
 
             @Override
-            public void onSuccess(TwilioIPMessagingClient twilioIPMessagingClient) {
-                tmp.client = twilioIPMessagingClient;
-                promise.resolve(RCTConvert.TwilioIPMessagingClient(tmp.client));
+            public void onSuccess(ChatClient twilioChatClient) {
+                tmp.client = twilioChatClient;
+                promise.resolve(RCTConvert.ChatClient(tmp.client));
             }
         };
-        tmp.client = TwilioIPMessagingSDK.createClient(accessManager, builder.createProperties(), listener);
+        tmp.client = TwilioChatSDK.createClient(accessManager, builder.createProperties(), listener);
         tmp.client.setListener(this);
     }
 
     @ReactMethod
     public void userInfo(Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         promise.resolve(RCTConvert.UserInfo(tmp.client.getMyUserInfo()));
     }
 
     @ReactMethod
     public void register(String token) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
@@ -186,7 +186,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void unregister(String token) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
@@ -204,14 +204,14 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void handleNotification(ReadableMap notification) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         HashMap map = RCTConvert.readableMapToHashMap(notification);
         tmp.client.handleNotification(map);
     }
 
     @ReactMethod
     public void shutdown() {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.client.shutdown();
     }
 
@@ -219,7 +219,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void setFriendlyName(String friendlyName, final Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
         Constants.StatusListener listener = new Constants.StatusListener() {
             @Override
@@ -239,7 +239,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void setAttributes(ReadableMap attributes, final Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         JSONObject json = RCTConvert.readableMapToJson(attributes);
 
         Constants.StatusListener listener = new Constants.StatusListener() {
@@ -285,7 +285,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     }
 
     @Override
-    public void onClientSynchronization(TwilioIPMessagingClient.SynchronizationStatus synchronizationStatus) {
+    public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
         sendEvent("ipMessagingClient:synchronizationStatusChanged", synchronizationStatus.toString());
     }
 
