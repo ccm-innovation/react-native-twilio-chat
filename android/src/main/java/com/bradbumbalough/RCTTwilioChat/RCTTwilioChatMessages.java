@@ -27,25 +27,44 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
-    private Messages loadMessagesFromChannelSid(String sid) {
-        return RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid).getMessages();
+    private void loadMessagesFromChannelSid(String sid, CallbackListener<Messages> callbackListener) {
+        RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onSuccess(final Channel channel) {
+                callbackListener.onSuccess(channel.getMessages());
+            }
+
+            @Override
+            public void onError(final ErrorInfo errorInfo) {
+                callback.onError(errorInfo);
+            }
+        });
     }
 
     @ReactMethod
     public void getLastConsumedMessageIndex(String channelSid, Promise promise) {
-        Long lastConsumedMessageIndex = loadMessagesFromChannelSid(channelSid).getLastConsumedMessageIndex();
-        if (lastConsumedMessageIndex != null) {
-            promise.resolve(Integer.valueOf(lastConsumedMessageIndex.intValue()));
-        } else {
-            promise.resolve(null);
-        }
+        loadMessagesFromChannelSid(channelSid new CallbackListener<Messages>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-last-consumped-message-index","Error occurred while attempting to getLastConsumedMessageIndex.");
+            }
+
+            @Override
+            public void onSuccess(Messages messages) {
+                Long lastConsumedMessageIndex = messages.getLastConsumedMessageIndex();
+                if (lastConsumedMessageIndex != null) {
+                    promise.resolve(Integer.valueOf(lastConsumedMessageIndex.intValue()));
+                } else {
+                    promise.resolve(null);
+                }
+            }
+        });
     }
 
     @ReactMethod
     public void sendMessage(String channelSid, String body, final Promise promise) {
-        Messages messages = loadMessagesFromChannelSid(channelSid);
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -53,13 +72,24 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.sendMessage(body, new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("send-message-error","Error occurred while attempting to sendMessage.");
+                    }
 
-        messages.sendMessage(body, listener);
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
+            }
+        });
     }
+
+    // here
 
     @ReactMethod
     public void removeMessage(String channelSid, Integer index, final Promise promise) {

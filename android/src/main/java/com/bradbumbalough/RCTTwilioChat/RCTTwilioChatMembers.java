@@ -22,11 +22,11 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
-    private void loadMembersFromChannelSid(String sid, final CallbackListener<Messages> callbackListener) {
+    private void loadMembersFromChannelSid(String sid, final CallbackListener<Members> callbackListener) {
         RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid, new CallbackListener<Channel>() {
             @Override
             public void onSuccess(final Channel channel) {
-                callbackListener.onSuccess(channel.getMessages());
+                callbackListener.onSuccess(channel.getMembers());
             };
 
             @Override
