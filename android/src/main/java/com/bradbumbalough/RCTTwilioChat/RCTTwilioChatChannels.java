@@ -22,6 +22,7 @@ import com.twilio.chat.CallbackListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.Integer;
 
 import org.json.JSONObject;
 
@@ -241,8 +242,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void synchronize(String sid, final Promise promise) {
-
-        Constants.CallbackListener<Channel> listener = new Constants.CallbackListener<Channel>() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -251,18 +251,27 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                promise.resolve(true);
-            }
-        };
+                channel.synchronize(new CallbackListener<Channel>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("synchronize-error", "Error occurred while attempting to synchronize channel.");
+                    }
 
-        loadChannelFromSid(sid).synchronize(listener);
+                    @Override
+                    public void onSuccess(Channel channel) {
+                        resolve(true);
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void setAttributes(String sid, ReadableMap attributes, final Promise promise) {
         JSONObject json = RCTConvert.readableMapToJson(attributes);
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -270,18 +279,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.setAttributes(json, new CallbackListener<Channel>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on channel.");
+                    }
 
-        loadChannelFromSid(sid).setAttributes(json, listener);
+                    @Override
+                    public void onSuccess(Channel channel) {
+                        resolve(true);
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
-    public void setFriendlyName(String sid, String friendlyName, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+    public void setFriendlyName(String sid, final String friendlyName, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -289,18 +306,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.setFriendlyName(friendlyName, new CallbackListener<Channel>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("set-friendly-name-error", "Error occurred while attempting to setFriendlyName on channel.");
+                    }
 
-        loadChannelFromSid(sid).setFriendlyName(friendlyName, listener);
+                    @Override
+                    public void onSuccess(Channel channel) {
+                        resolve(true);
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
-    public void setUniqueName(String sid, String uniqueName, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+    public void setUniqueName(String sid, final String uniqueName, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -308,18 +333,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.setUniqueName(uniqueName, new CallbackListener<Channel>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("set-unique-name-error", "Error occurred while attempting to setUniqueName on channel.");
+                    }
 
-        loadChannelFromSid(sid).setUniqueName(uniqueName, listener);
+                    @Override
+                    public void onSuccess(Channel channel) {
+                        resolve(true);
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void join(String sid, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -327,18 +360,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.join(new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("join-error", "Error occurred while attempting to join channel.");
+                    }
 
-        loadChannelFromSid(sid).join(listener);
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void declineInvitation(String sid, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -346,18 +387,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.declineInvitation(new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("decline-error", "Error occurred while attempting to decline channel.");
+                    }
 
-        loadChannelFromSid(sid).declineInvitation(listener);
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void leave(String sid, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -365,18 +414,26 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.leave(new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("leave-error", "Error occurred while attempting to leave channel.");
+                    }
 
-        loadChannelFromSid(sid).leave(listener);
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void destroy(String sid, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -384,19 +441,116 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Channel channel) {
+                channel.destroy(new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("delete-error", "Error occurred while attempting to delete channel.");
+                    }
 
-        loadChannelFromSid(sid).destroy(listener);
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void typing(String sid) {
-        loadChannelFromSid(sid).typing();
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onSuccess(Channel channel) {
+                channel.typing();
+            }
+        });
     }
 
+    @ReactMethod
+    public void getUnconsumedMessagesCount(String sid, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-unconsumed-messages-count-error", "Error occurred while attempting to getUnconsumedMessagesCount.");
+            }
+
+            @Override
+            public void onSuccess(Channel channel) {
+                channel.getUnconsumedMessagesCount(new CallbackListener<Integer>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-unconsumed-messages-count-error", "Error occurred while attempting to getUnconsumedMessagesCount.");
+                    }
+
+                    @Override
+                    public void onSuccess(Integer count) {
+                        promise.resolve(count);
+                    }
+                })
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getMessagesCount(String sid, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-messages-count-error", "Error occurred while attempting to getMessagesCount.");
+            }
+
+            @Override
+            public void onSuccess(Channel channel) {
+                channel.getMessagesCount(new CallbackListener<Integer>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-messages-count-error", "Error occurred while attempting to getMessagesCount.");
+                    }
+
+                    @Override
+                    public void onSuccess(Integer count) {
+                        promise.resolve(count);
+                    }
+                })
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getMembersCount(String sid, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-members-count-error", "Error occurred while attempting to getMembersCount.");
+            }
+
+            @Override
+            public void onSuccess(Channel channel) {
+                channel.getMembersCount(new CallbackListener<Integer>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-members-count-error", "Error occurred while attempting to getMembersCount.");
+                    }
+
+                    @Override
+                    public void onSuccess(Integer count) {
+                        promise.resolve(count);
+                    }
+                })
+            }
+        });
+    }
+
+
+    /*
     @ReactMethod
     public void getMember(String channelSid, String identity, final Promise promise) {
         Member[] members = loadChannelFromSid(channelSid).getMembers().getMembers();
@@ -409,8 +563,9 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
         }
         catch (Exception e) {
-            promise.reject("get-members-error","Error occurred while attempting to getMembers.");
+            promise.reject("get-member-error","Error occurred while attempting to getMember.");
         }
     }
+    */
 
 }
