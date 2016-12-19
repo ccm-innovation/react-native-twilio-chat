@@ -148,6 +148,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     public static void loadChannelFromSid(String sid, CallbackListener<Channel> callback) {
         channels().getChannel(sid, new CallbackListener<Channel>() {
+            @Override
             public void onSuccess(final Channel channel) {
                 if (!channelListeners.containsKey(sid)) {
                     ChannelListener listener = generateListener(channel);
@@ -157,6 +158,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 callback.onSucess(channel);
             };
 
+            @Override
             public void onError(final ErrorInfo errorInfo){
                 callback.onError(errorInfo);
             }
@@ -166,7 +168,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getUserChannels(final Promise promise) {
-        channels().getUserChannels(new CallbackListener<Channel>() {
+        channels().getUserChannels(new CallbackListener<Paginator<Channel>>() {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -174,15 +176,16 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess(final Channel[] _channels) {
-                promise.resolve(RCTConvert.Channels(_channels));
+            public void onSuccess(final Paginator<Channel> channelPaginator) {
+                String uuid = RCTTwilioChatPaginator.setPaginator(channelPaginator);
+                promise.resolve(RCTConvert.Paginator(channelPaginator, uuid, "Channel"));
             }
         });
     }
 
     @ReactMethod
     public void getPublicChannels(final Promise promise) {
-        channels().getPublicChannels(new CallbackListener<ChannelDescriptor>() {
+        channels().getPublicChannels(new CallbackListener<Paginator<ChannelDescriptor>>() {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -190,8 +193,9 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess(final ChannelDescriptor[] _channels) {
-                promise.resolve(RCTConvert.ChannelDescriptors(_channels));
+            public void onSuccess(final Paginator<ChannelDescriptor> channelDescriptorPaginator) {
+                String uuid = RCTTwilioChatPaginator.setPaginator(channelDescriptorPaginator);
+                promise.resolve(RCTConvert.Paginator(channelDescriptorPaginator, uuid, "Channel"));
             }
         });
     }
