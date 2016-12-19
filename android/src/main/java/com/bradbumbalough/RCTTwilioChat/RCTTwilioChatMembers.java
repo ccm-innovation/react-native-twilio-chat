@@ -22,19 +22,52 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
-    private Members loadMembersFromChannelSid(String sid) {
+    private void loadMembersFromChannelSid(String sid, final CallbackListener<Messages> callbackListener) {
+        RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid, new CallbackListener<Channel>() {
+            @Override
+            public void onSuccess(final Channel channel) {
+                callbackListener.onSuccess(channel.getMessages());
+            };
+
+            @Override
+            public void onError(final ErrorInfo errorInfo){
+                callback.onError(errorInfo);
+            }
+        })
         return RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid).getMembers();
     }
 
     @ReactMethod
     public void getMembers(String channelSid, Promise promise) {
-        promise.resolve(RCTConvert.Members(loadMembersFromChannelSid(channelSid).getMembers()));
+        loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                super.onError(errorInfo);
+                promise.reject("get-members-error","Error occurred while attempting to get members on channel.");
+            }
+
+            @Override
+            public void onSuccess(Members members) {
+                members.getMembers(new CallbackListener<Paginator<Member>>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-members-error","Error occurred while attempting to get members on channel.");
+                    }
+
+                    @Override
+                    public void onSuccess(Paginator<Member> memberPaginator) {
+                        String uuid = RCTTwilioChatPaginator.setPaginator(memberPaginator);
+                        promise.resolve(RCTConvert.Paginator(memberPaginator, uuid, "Member"));
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void add(String channelSid, String identity, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -42,17 +75,26 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
+            public void onSuccess(Members members) {
+                members.addByIdentity(identity, new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("add-error","Error occurred while attempting to add user to channel.");
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
             }
-        };
-        loadMembersFromChannelSid(channelSid).addByIdentity(identity, listener);
+        });
     }
 
     @ReactMethod
     public void invite(String channelSid, String identity, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -60,17 +102,26 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
+            public void onSuccess(Members members) {
+                members.inviteByIdentity(identity, new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("invite-error","Error occurred while attempting to invite user to channel.");
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
             }
-        };
-        loadMembersFromChannelSid(channelSid).inviteByIdentity(identity, listener);
+        });
     }
 
     @ReactMethod
     public void remove(String channelSid, String identity, final Promise promise) {
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -78,20 +129,23 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
-        Member[] members = loadMembersFromChannelSid(channelSid).getMembers();
-        Member memberToDelete = null;
+            public void onSuccess(Members members) {
+                Member memberToDelete = new Member();
+                memberToDelete.identity = identity;
+                members.removeMember(memberToDelete, new Constants.StatusListener() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("remove-error","Error occurred while attempting to remove user from channel.");
+                    }
 
-        for (Member m : members) {
-            if (m.getUserInfo().getIdentity() == identity) {
-                memberToDelete = m;
-                break;
+                    @Override
+                    public void onSuccess() {
+                        promise.resolve(true);
+                    }
+                })
             }
-        }
-        loadMembersFromChannelSid(channelSid).removeMember(memberToDelete, listener);
+        });
     }
 
 }
