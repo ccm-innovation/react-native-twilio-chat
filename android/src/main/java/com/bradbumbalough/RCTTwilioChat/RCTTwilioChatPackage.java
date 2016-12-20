@@ -32,6 +32,7 @@ public class RCTTwilioChatPackage implements ReactPackage {
         modules.add(new RCTTwilioChatChannels(reactContext));
         modules.add(new RCTTwilioChatMembers(reactContext));
         modules.add(new RCTTwilioChatMessages(reactContext));
+        modules.add(new RCTTwilioChatPaginator(reactContext));
 
         return modules;
     }

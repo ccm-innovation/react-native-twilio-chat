@@ -288,7 +288,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
                                 super.onError(errorInfo);
                                 promise.reject("update-body-error","Error occurred while attempting to updateBody.");
                             }
-                            
+
                             @Override
                             public void onSuccess() {
                                 promise.resolve(true);

@@ -77,6 +77,14 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         channelOption.put("Type", "type");
         channelOption.put("Attributes", "attributes");
         constants.put("TCHChannelOption", channelOption);
+
+        Map<String, String> connectionState = new HashMap<>();
+        connectionState.put("Connecting", ChatClient.ConnectionState.CONNECTING.toString());
+        connectionState.put("Connected", ChatClient.ConnectionState.CONNECTED.toString());
+        connectionState.put("Disconnected", ChatClient.ConnectionState.DISCONNECTED.toString());
+        connectionState.put("Denied", ChatClient.ConnectionState.DENIED.toString());
+        connectionState.put("Fatal_Error", ChatClient.ConnectionState.FATAL_ERROR.toString());
+        constants.put("TCHClientConnectionState", connectionState);
         
         return constants;
     }
@@ -261,18 +269,23 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     // Listeners
 
     @Override
+    public void onConnectionStateChange(ChatClient.ConnectionState state) {
+        sendEvent("chatClient:connectionStateChanged", state.toString());
+    }
+
+    @Override
     public void onChannelAdd(Channel channel) {
-        sendEvent("ipMessagingClient:channelAdded", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelAdded", RCTConvert.Channel(channel));
     }
 
     @Override
     public void onChannelChange(Channel channel) {
-        sendEvent("ipMessagingClient:channelChanged", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelChanged", RCTConvert.Channel(channel));
     }
 
     @Override
     public void onChannelDelete(Channel channel){
-        sendEvent("ipMessagingClient:channelRemoved", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelRemoved", RCTConvert.Channel(channel));
     }
 
     @Override
@@ -281,12 +294,12 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("channelSid",channel.getSid());
         map.putString("status", channel.getSynchronizationStatus().toString());
 
-        sendEvent("ipMessagingClient:channel:synchronizationStatusChanged", map);
+        sendEvent("chatClient:channel:synchronizationStatusChanged", map);
     }
 
     @Override
     public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
-        sendEvent("ipMessagingClient:synchronizationStatusChanged", synchronizationStatus.toString());
+        sendEvent("chatClient:synchronizationStatusChanged", synchronizationStatus.toString());
     }
 
     @Override
@@ -295,7 +308,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("error",errorInfo.getErrorText());
         map.putString("userInfo", errorInfo.toString());
 
-        sendEvent("ipMessagingClient:errorReceived", map);
+        sendEvent("chatClient:errorReceived", map);
     }
 
     @Override
@@ -304,7 +317,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putMap("userInfo",RCTConvert.UserInfo(userInfo));
         map.putNull("updated");
 
-        sendEvent("ipMessagingClient:userInfoUpdated", map);
+        sendEvent("chatClient:userInfoUpdated", map);
     }
 
     @Override
@@ -313,12 +326,12 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("error",errorInfo.getErrorText());
         map.putString("userInfo", errorInfo.toString());
 
-        sendEvent("ipMessagingClient:toastFailed", map);
+        sendEvent("chatClient:toastFailed", map);
     }
 
     @Override
     public void onToastSubscribed() {
-        sendEvent("ipMessagingClient:toastSubscribed", "");
+        sendEvent("chatClient:toastSubscribed", "");
     }
 
     @Override
@@ -327,6 +340,6 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("channelSid", channelSid);
         map.putString("messageSid", messageSid);
 
-        sendEvent("ipMessagingClient:toastReceived", map);
+        sendEvent("chatClient:toastReceived", map);
     }
 }
