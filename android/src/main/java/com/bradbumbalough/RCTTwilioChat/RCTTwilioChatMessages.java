@@ -89,26 +89,9 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
         });
     }
 
-    // here
-
     @ReactMethod
     public void removeMessage(String channelSid, Integer index, final Promise promise) {
-        Messages messages = loadMessagesFromChannelSid(channelSid);
-
-        Message messageToRemove = null;
-        try {
-            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
-                if (m.getMessageIndex() == index) {
-                    messageToRemove = m;
-                    break;
-                }
-            }
-        }
-        catch (Exception e) {
-            promise.reject("remove-message-error","Error occurred while attempting to remove message.");
-        }
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -116,158 +99,242 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessageByIndex(index, new CallbackListener<Message>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("remove-message-error","Error occurred while attempting to remove message.");
+                    }
 
-        loadMessagesFromChannelSid(channelSid).removeMessage(messageToRemove, listener);
+                    @Override
+                    public void onSuccess(Message message) {
+                        messages.removeMessage(message, new Constants.StatusListener() {
+                            @Override
+                            public void onError(ErrorInfo errorInfo) {
+                                super.onError(errorInfo);
+                                promise.reject("remove-message-error","Error occurred while attempting to remove message.");
+                            }
+
+                            @Override
+                            public void onSuccess() {
+                                promise.resolve(true);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void getLastMessages(String channelSid, Integer count, final Promise promise) {
-
-        Constants.CallbackListener<List<Message>> listener = new Constants.CallbackListener<List<Message>>() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("get-last-message-error","Error occurred while attempting to getLastMessage.");
+                promise.reject("get-last-messages-error","Error occurred while attempting to getLastMessages.");
             }
 
-            public void onSuccess(List<Message> messages) {
-                promise.resolve(RCTConvert.Messages(messages));
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getLastMessages(count, new CallbackListener<List<Message>>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-last-messages-error","Error occurred while attempting to getLastMessages.");
+                    }
 
-        loadMessagesFromChannelSid(channelSid).getLastMessages(count, listener);
+                    @Override
+                    public void onSuccess(List<Message> _messages) {
+                        promise.resolve(RCTConvert.Messages(_messages));
+                    }
+                })
+            }
+        });
     }
 
     @ReactMethod
     public void getMessagesAfter(String channelSid, Integer index, Integer count, final Promise promise) {
-
-        Constants.CallbackListener<List<Message>> listener = new Constants.CallbackListener<List<Message>>() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
                 promise.reject("get-messages-after-error","Error occurred while attempting to getMessagesAfter.");
             }
 
-            public void onSuccess(List<Message> messages) {
-                promise.resolve(RCTConvert.Messages(messages));
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessagesAfter(index, count, new CallbackListener<List<Message>>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-messages-after-error","Error occurred while attempting to getMessagesAfter.");
+                    }
 
-        loadMessagesFromChannelSid(channelSid).getMessagesAfter(index, count, listener);
+                    @Override
+                    public void onSuccess(List<Message> _messages) {
+                        promise.resolve(RCTConvert.Messages(_messages));
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void getMessagesBefore(String channelSid, Integer index, Integer count, final Promise promise) {
-
-        Constants.CallbackListener<List<Message>> listener = new Constants.CallbackListener<List<Message>>() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
                 promise.reject("get-messages-before-error","Error occurred while attempting to getMessagesBefore.");
             }
 
-            public void onSuccess(List<Message> messages) {
-                promise.resolve(RCTConvert.Messages(messages));
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessagesBefore(index, count, new CallbackListener<List<Message>>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-messages-before-error","Error occurred while attempting to getMessagesBefore.");
+                    }
 
-        loadMessagesFromChannelSid(channelSid).getMessagesBefore(index, count, listener);
+                    @Override
+                    public void onSuccess(List<Message> _messages) {
+                        promise.resolve(RCTConvert.Messages(_messages));
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void getMessage(String channelSid, Integer index, final Promise promise) {
-        Constants.CallbackListener<List<Message>> listener = new Constants.CallbackListener<List<Message>>() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
                 promise.reject("get-message-error","Error occurred while attempting to getMessage.");
             }
 
-            public void onSuccess(List<Message> messages) {
-                promise.resolve(RCTConvert.Message(messages.get(0)));
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessageByIndex(index, new CallbackListener<Message>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("get-message-error","Error occurred while attempting to getMessage.");
+                    }
 
-        loadMessagesFromChannelSid(channelSid).getMessagesAfter(index, 1, listener);
+                    @Override
+                    public void onSuccess(Message message) {
+                        promise.resolve(RCTConvert.Message(message));
+                    }
+                });
+            }
+        });
     }
 
     @ReactMethod
     public void setLastConsumedMessageIndex(String channelSid, Integer index) {
-        loadMessagesFromChannelSid(channelSid).setLastConsumedMessageIndex(index);
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
+            @Override
+            public void onSuccess(Messages messages) {
+                messages.setLastConsumedMessageIndex(index);
+            }
+        });
     }
 
     @ReactMethod
     public void advanceLastConsumedMessageIndex(String channelSid, Integer index) {
-        loadMessagesFromChannelSid(channelSid).advanceLastConsumedMessageIndex(index);
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
+            @Override
+            public void onSuccess(Messages messages) {
+                messages.advanceLastConsumedMessageIndex(index);
+            }
+        });
     }
 
     @ReactMethod
     public void setAllMessagesConsumed(String channelSid) {
-        loadMessagesFromChannelSid(channelSid).setAllMessagesConsumed();
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
+            @Override
+            public void onSuccess(Messages messages) {
+                messages.setAllMessagesConsumed(index);
+            }
+        });
     }
 
     // Message instance method
 
     @ReactMethod
     public void updateBody(String channelSid, Integer index, String body, final Promise promise) {;
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
                 promise.reject("update-body-error","Error occurred while attempting to updateBody.");
             }
 
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessageByIndex(index, new CallbackListener<Message>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("update-body-error","Error occurred while attempting to updateBody.");
+                    }
 
-        try {
-            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
-                if (m.getMessageIndex() == index) {
-                    m.updateMessageBody(body, listener);
-                    break;
-                }
+                    @Override
+                    public void onSuccess(Message message) {
+                        message.updateMessageBody(body, new Constants.StatusListener() {
+                            @Override
+                            public void onError(ErrorInfo errorInfo) {
+                                super.onError(errorInfo);
+                                promise.reject("update-body-error","Error occurred while attempting to updateBody.");
+                            }
+                            
+                            @Override
+                            public void onSuccess() {
+                                promise.resolve(true);
+                            }
+                        });
+                    }
+                });
             }
-        }
-        catch (Exception e) {
-            promise.reject("update-body-error","Error occurred while attempting to updateBody.");
-        }
+        });
     }
 
     @ReactMethod
     public void setAttributes(String channelSid, Integer index, ReadableMap attributes, final Promise promise) {
-        JSONObject json = RCTConvert.readableMapToJson(attributes);
-
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
                 promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
             }
 
-            @Override
-            public void onSuccess() {
-                promise.resolve(true);
-            }
-        };
+            public void onSuccess(Messages messages) {
+                messages.getMessageByIndex(index, new CallbackListener<Message>() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
+                    }
 
-        try {
-            for (Message m : loadMessagesFromChannelSid(channelSid).getMessages()) {
-                if (m.getMessageIndex() == index) {
-                    m.setAttributes(json, listener);
-                    break;
-                }
+                    @Override
+                    public void onSuccess(Message message) {
+                        message.setAttributes(json, new Constants.StatusListener() {
+                            @Override
+                            public void onError(ErrorInfo errorInfo) {
+                                super.onError(errorInfo);
+                                promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
+                            }
+
+                            @Override
+                            public void onSuccess() {
+                                promise.resolve(true);
+                            }
+                        });
+                    }
+                });
             }
-        }
-        catch (Exception e) {
-            promise.reject("set-attributes-error", "Error occurred while attempting to setAttributes on Message.");
-        }
+        });
     }
 
 }
