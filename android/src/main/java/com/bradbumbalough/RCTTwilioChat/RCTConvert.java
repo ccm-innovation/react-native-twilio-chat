@@ -9,22 +9,27 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
-import com.twilio.common.TwilioAccessManager;
 import com.twilio.chat.Channel;
+import com.twilio.chat.ChannelDescriptor;
 import com.twilio.chat.Channels;
 import com.twilio.chat.ChatClient;
 import com.twilio.chat.UserInfo;
 import com.twilio.chat.Message;
 import com.twilio.chat.Member;
 import com.twilio.chat.Paginator;
+import com.twilio.accessmanager.AccessManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import java.sql.Array;
 import java.sql.Wrapper;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
@@ -126,12 +131,11 @@ public class RCTConvert {
             return null;
         }
 
-        while (iterator.hasNext()) {
-            String key = iterator.next();
 
-            try {
+        try {
+            while (iterator.hasNext()) {
+                String key = iterator.next();
                 Object value = jsonObject.get(key);
-
                 if (value == null) {
                     writableMap.putNull(key);
                 } else if (value instanceof Boolean) {
@@ -147,9 +151,9 @@ public class RCTConvert {
                 } else if (value instanceof JSONArray) {
                     writableMap.putArray(key, jsonArrayToWritableArray((JSONArray) value));
                 }
-            } catch (JSONException ex) {
-                // Do nothing and fail silently
             }
+        } catch (JSONException ex){
+                // Do nothing and fail silently
         }
 
         return writableMap;
@@ -158,16 +162,16 @@ public class RCTConvert {
     public static WritableArray jsonArrayToWritableArray(JSONArray jsonArray) {
         WritableArray writableArray = new WritableNativeArray();
 
-        if (jsonArray == null) {
-            return null;
-        }
+        try {
+            if (jsonArray == null) {
+                return null;
+            }
 
-        if (jsonArray.length() <= 0) {
-            return null;
-        }
+            if (jsonArray.length() <= 0) {
+                return null;
+            }
 
-        for (int i = 0 ; i < jsonArray.length(); i++) {
-            try {
+            for (int i = 0 ; i < jsonArray.length(); i++) {
                 Object value = jsonArray.get(i);
                 if (value == null) {
                     writableArray.pushNull();
@@ -184,9 +188,9 @@ public class RCTConvert {
                 } else if (value instanceof JSONArray) {
                     writableArray.pushArray(jsonArrayToWritableArray((JSONArray) value));
                 }
-            } catch (JSONException e) {
-                // Do nothing and fail silently
             }
+        } catch (JSONException e) {
+            // Do nothing and fail silently
         }
 
         return writableArray;
@@ -200,10 +204,15 @@ public class RCTConvert {
         map.putString("uniqueName", channel.getUniqueName());
         map.putString("status", channel.getStatus().toString());
         map.putString("type", channel.getType().toString());
-        map.putMap("attributes", jsonToWritableMap(channel.getAttributes()));
         map.putString("synchronizationStatus", channel.getSynchronizationStatus().toString());
         map.putString("dateCreated", channel.getDateCreated().toString());
         map.putString("dateUpdated", channel.getDateUpdated().toString());
+        WritableMap attributes = Arguments.createMap();
+        try {
+            attributes = jsonToWritableMap(channel.getAttributes());
+        }
+        catch (JSONException e) {}
+        map.putMap("attributes", attributes);
         return map;
     }
 
@@ -241,7 +250,13 @@ public class RCTConvert {
         map.putString("author", message.getAuthor());
         map.putString("body", message.getMessageBody());
         map.putString("timestamp", message.getTimeStamp());
-        map.putMap("attributes", jsonToWritableMap(message.getAttributes()));
+
+        WritableMap attributes = Arguments.createMap();
+        try {
+            attributes = jsonToWritableMap(message.getAttributes());
+        }
+        catch (JSONException e) {}
+        map.putMap("attributes", attributes);
         return map;
     }
 
@@ -274,18 +289,17 @@ public class RCTConvert {
         return map;
     }
 
-    public static WritableMap TwilioAccessManager(TwilioAccessManager accessManager) {
+    public static WritableMap AccessManager(AccessManager accessManager) {
         WritableMap map = Arguments.createMap();
 
-        map.putString("identity", accessManager.getIdentity());
         map.putString("token", accessManager.getToken());
-        map.putBoolean("isExpired", accessManager.isExpired());
-        map.putString("expirationDate", accessManager.getExpirationDate().toString());
+        map.putBoolean("isExpired", accessManager.isTokenExpired());
+        map.putString("expirationDate", accessManager.getTokenExpirationDate().toString());
 
         return map;
     }
 
-    public static WritableArray Channels(Channel[] channels) {
+    public static WritableArray Channels(ArrayList<Channel> channels) {
         WritableArray array = Arguments.createArray();
 
         for (Channel c : channels) {
@@ -295,7 +309,7 @@ public class RCTConvert {
         return array;
     }
 
-    public static WritableArray ChannelDescriptors(ChannelDescriptor[] channels) {
+    public static WritableArray ChannelDescriptors(ArrayList<ChannelDescriptor> channels) {
         WritableArray array = Arguments.createArray();
 
         for (ChannelDescriptor c : channels) {
@@ -305,7 +319,7 @@ public class RCTConvert {
         return array;
     }
 
-    public static WritableArray Members(Member[] members) {
+    public static WritableArray Members(ArrayList<Member> members) {
         WritableArray array = Arguments.createArray();
 
         for (Member m : members) {
@@ -325,19 +339,21 @@ public class RCTConvert {
         return array;
     }
 
-    public static WritableMap paginator(Paginator paginator, String sid, String type) {
+    public static WritableMap Paginator(Object paginator, String sid, String type) {
         WritableMap map = Arguments.createMap();
         WritableMap _paginator = Arguments.createMap();
-        _paginator.putBoolean("hasNextPage", paginator.hasNextPage());
         switch (type) {
-            case 'Channel':
-                _paginator.putArray("items", Channels(paginator.getItems()));
+            case "Channel":
+                _paginator.putArray("items", Channels(((Paginator<Channel>)paginator).getItems()));
+                _paginator.putBoolean("hasNextPage", ((Paginator<Channel>)paginator).hasNextPage());
                 break;
-            case 'ChannelDescriptor':
-                _paginator.putArray("items", ChannelDescriptors(paginator.getItems()));
+            case "ChannelDescriptor":
+                _paginator.putArray("items", ChannelDescriptors(((Paginator<ChannelDescriptor>)paginator).getItems()));
+                _paginator.putBoolean("hasNextPage", ((Paginator<ChannelDescriptor>)paginator).hasNextPage());
                 break;
             case "Member":
-                _paginator.putArray("items", Members(paginator.getItems()));
+                _paginator.putArray("items", Members(((Paginator<Member>)paginator).getItems()));
+                _paginator.putBoolean("hasNextPage", ((Paginator<Member>)paginator).hasNextPage());
                 break;
         }
         map.putString("sid", sid);

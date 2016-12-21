@@ -13,12 +13,14 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelListener;
-import com.twilio.chat.Constants;
+import com.twilio.chat.ChannelDescriptor;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.Channels;
 import com.twilio.chat.Member;
+import com.twilio.chat.StatusListener;
 import com.twilio.chat.Message;
 import com.twilio.chat.CallbackListener;
+import com.twilio.chat.Paginator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
     private ReactApplicationContext reactContext;
     private HashMap<String,ChannelListener> channelListeners = new HashMap<String, ChannelListener>();
 
-    public RCTTwilioIPMessagingChannels(ReactApplicationContext reactContext) {
+    public RCTTwilioChatChannels(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
@@ -105,12 +107,6 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 sendEvent("ipMessagingClient:channel:memberLeft", map);
             }
 
-            // TODO
-            @Override
-            public void onAttributesChange(Map<String, String> map) {
-
-            }
-
             @Override
             public void onTypingStarted(Member member) {
                 WritableMap map = Arguments.createMap();
@@ -146,16 +142,16 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
         return RCTTwilioChatClient.getInstance().client.getChannels();
     }
 
-    public static void loadChannelFromSid(String sid, CallbackListener<Channel> callback) {
+    public void loadChannelFromSid(final String sid, final CallbackListener<Channel> callback) {
         channels().getChannel(sid, new CallbackListener<Channel>() {
             @Override
             public void onSuccess(final Channel channel) {
                 if (!channelListeners.containsKey(sid)) {
                     ChannelListener listener = generateListener(channel);
-                    channel.setListener(listener);
+                    channel.addListener(listener);
                     channelListeners.put(channel.getSid(), listener);
                 }
-                callback.onSucess(channel);
+                callback.onSuccess(channel);
             };
 
             @Override
@@ -205,7 +201,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
         final JSONObject attributes = RCTConvert.readableMapToJson(options.getMap("attributes"));
         final String uniqueName = options.getString("uniqueName");
         String friendlyName = options.getString("friendlyName");
-        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.CHANNEL_TYPE_PRIVATE : Channel.ChannelType.CHANNEL_TYPE_PUBLIC;
+        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.PRIVATE : Channel.ChannelType.PUBLIC;
 
         channels().channelBuilder()
                 .withUniqueName(uniqueName)
@@ -220,15 +216,15 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     }
 
                     @Override
-                    public void onCreated(final Channel newChannel) {
+                    public void onSuccess(final Channel newChannel) {
                         promise.resolve(RCTConvert.Channel(newChannel));
                     }
                 });
     }
 
     @ReactMethod
-    public void getChannel(String sid, Promise promise) {
-        RCTTwilioChatChannels.loadChannelFromSid(sid, new ChannelListener<Channel>() {
+    public void getChannel(String sid, final Promise promise) {
+        loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -236,7 +232,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onCreated(final Channel channel) {
+            public void onSuccess(final Channel channel) {
                 promise.resolve(RCTConvert.Channel(channel));
             }
         });
@@ -264,7 +260,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onSuccess(Channel channel) {
-                        resolve(true);
+                        promise.resolve(true);
                     }
                 });
             }
@@ -272,9 +268,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAttributes(String sid, ReadableMap attributes, final Promise promise) {
-        JSONObject json = RCTConvert.readableMapToJson(attributes);
-
+    public void setAttributes(String sid, final ReadableMap attributes, final Promise promise) {
         loadChannelFromSid(sid, new CallbackListener<Channel>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -284,7 +278,8 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.setAttributes(json, new CallbackListener<Channel>() {
+                JSONObject json = RCTConvert.readableMapToJson(attributes);
+                channel.setAttributes(json, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -292,8 +287,8 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     }
 
                     @Override
-                    public void onSuccess(Channel channel) {
-                        resolve(true);
+                    public void onSuccess() {
+                        promise.resolve(true);
                     }
                 });
             }
@@ -311,7 +306,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.setFriendlyName(friendlyName, new CallbackListener<Channel>() {
+                channel.setFriendlyName(friendlyName, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -319,8 +314,8 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     }
 
                     @Override
-                    public void onSuccess(Channel channel) {
-                        resolve(true);
+                    public void onSuccess() {
+                        promise.resolve(true);
                     }
                 });
             }
@@ -338,7 +333,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.setUniqueName(uniqueName, new CallbackListener<Channel>() {
+                channel.setUniqueName(uniqueName, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -346,8 +341,8 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     }
 
                     @Override
-                    public void onSuccess(Channel channel) {
-                        resolve(true);
+                    public void onSuccess() {
+                        promise.resolve(true);
                     }
                 });
             }
@@ -365,7 +360,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.join(new Constants.StatusListener() {
+                channel.join(new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -376,7 +371,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
@@ -392,7 +387,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.declineInvitation(new Constants.StatusListener() {
+                channel.declineInvitation(new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -403,7 +398,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
@@ -419,7 +414,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.leave(new Constants.StatusListener() {
+                channel.leave(new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -430,7 +425,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
@@ -446,7 +441,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.destroy(new Constants.StatusListener() {
+                channel.destroy(new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -457,7 +452,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
@@ -494,7 +489,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess(Integer count) {
                         promise.resolve(count);
                     }
-                })
+                });
             }
         });
     }
@@ -521,7 +516,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess(Integer count) {
                         promise.resolve(count);
                     }
-                })
+                });
             }
         });
     }
@@ -548,7 +543,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     public void onSuccess(Integer count) {
                         promise.resolve(count);
                     }
-                })
+                });
             }
         });
     }

@@ -6,9 +6,16 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 
 import com.twilio.chat.Member;
-import com.twilio.chat.Constants;
+import com.twilio.chat.StatusListener;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.Members;
+import com.twilio.chat.CallbackListener;
+import com.twilio.chat.Channel;
+import com.twilio.chat.Paginator;
+
+import java.sql.Array;
+import java.util.ArrayList;
+
 
 public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
@@ -31,14 +38,13 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
             @Override
             public void onError(final ErrorInfo errorInfo){
-                callback.onError(errorInfo);
+                callbackListener.onError(errorInfo);
             }
-        })
-        return RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid).getMembers();
+        });
     }
 
     @ReactMethod
-    public void getMembers(String channelSid, Promise promise) {
+    public void getMembers(String channelSid, final Promise promise) {
         loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -60,13 +66,13 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
                         String uuid = RCTTwilioChatPaginator.setPaginator(memberPaginator);
                         promise.resolve(RCTConvert.Paginator(memberPaginator, uuid, "Member"));
                     }
-                })
+                });
             }
         });
     }
 
     @ReactMethod
-    public void add(String channelSid, String identity, final Promise promise) {
+    public void add(String channelSid, final String identity, final Promise promise) {
         loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -76,7 +82,7 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Members members) {
-                members.addByIdentity(identity, new Constants.StatusListener() {
+                members.addByIdentity(identity, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -87,13 +93,13 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
 
     @ReactMethod
-    public void invite(String channelSid, String identity, final Promise promise) {
+    public void invite(String channelSid, final String identity, final Promise promise) {
         loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -103,7 +109,7 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Members members) {
-                members.inviteByIdentity(identity, new Constants.StatusListener() {
+                members.inviteByIdentity(identity, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -114,13 +120,13 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
 
     @ReactMethod
-    public void remove(String channelSid, String identity, final Promise promise) {
+    public void remove(String channelSid, final String identity, final String paginatorSid, final Promise promise) {
         loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -130,9 +136,15 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Members members) {
-                Member memberToDelete = new Member();
-                memberToDelete.identity = identity;
-                members.removeMember(memberToDelete, new Constants.StatusListener() {
+                RCTTwilioChatPaginator _paginator = RCTTwilioChatPaginator.getInstance();
+                ArrayList<Member> memberList = ((Paginator<Member>)_paginator.paginators.get(paginatorSid)).getItems();
+                Member memberToDelete = null;
+                for (Member m : memberList) {
+                    if (m.getUserInfo().getIdentity() == identity) {
+                        memberToDelete = m;
+                    }
+                }
+                members.removeMember(memberToDelete, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -143,7 +155,7 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }

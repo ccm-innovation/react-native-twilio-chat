@@ -8,7 +8,14 @@ import com.facebook.react.bridge.Promise;
 import com.twilio.chat.Paginator;
 import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelDescriptor;
+import com.twilio.chat.StatusListener;
 import com.twilio.chat.Member;
+import com.twilio.chat.CallbackListener;
+import com.twilio.chat.ErrorInfo;
+
+
+import java.util.UUID;
+import java.util.HashMap;
 
 public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
 
@@ -17,12 +24,14 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
         return "TwilioChatPaginator";
     }
 
-    public Map<String, Object> paginators = null;
+    public static HashMap<String, Object> paginators = new HashMap<String, Object>();
+//    public static Map<String, Paginator<ChannelDescriptor>> channelDescriptorPaginators = new Map<String, Paginator<ChannelDescriptor>>();
+//    public static Map<String, Paginator<Member>> memberPaginators = new Map<String, Paginator<Member>>();
 
     private static RCTTwilioChatPaginator rctTwilioChatPaginator;
 
     public static RCTTwilioChatPaginator getInstance() {
-        return rctTwilioChatClient;
+        return rctTwilioChatPaginator;
     }
 
     public RCTTwilioChatPaginator(ReactApplicationContext reactContext) {
@@ -30,9 +39,9 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
         rctTwilioChatPaginator = this;
     }
 
-    public static setPaginator(Object paginator) {
+    public static String setPaginator(Object paginator) {
         RCTTwilioChatPaginator _paginator = RCTTwilioChatPaginator.getInstance();
-        String uuid = UUID.randomUUID();
+        String uuid = UUID.randomUUID().toString();
         _paginator.paginators.put(uuid, paginator);
         return uuid;
     }
@@ -40,9 +49,9 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
     @ReactMethod
     public void requestNextPageChannelDescriptors(String sid, final Promise promise) {
         final RCTTwilioChatPaginator tmp = RCTTwilioChatPaginator.getInstance();
-        Paginator _paginator = tmp.paginators.get(sid);
+        Paginator<ChannelDescriptor> _paginator = (Paginator<ChannelDescriptor>)tmp.paginators.get(sid);
 
-        Constants.CallbackListener<Paginator<ChannelDescriptor>> listener = new Constants.CallbackListener<Paginator<ChannelDescriptor>>() {
+        _paginator.requestNextPage(new CallbackListener<Paginator<ChannelDescriptor>>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -54,15 +63,14 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
                 String uuid = RCTTwilioChatPaginator.setPaginator(paginator);
                 promise.resolve(RCTConvert.Paginator(paginator, uuid, "ChannelDescriptor"));
             }
-        };
-        _paginator.requestNextPage(listener);
+        });
     }
 
     public void requestNextPageChannels(String sid, final Promise promise) {
         final RCTTwilioChatPaginator tmp = RCTTwilioChatPaginator.getInstance();
-        Paginator _paginator = tmp.paginators.get(sid);
+        Paginator<Channel> _paginator = (Paginator<Channel>)tmp.paginators.get(sid);
 
-        Constants.CallbackListener<Paginator<Channel>> listener = new Constants.CallbackListener<Paginator<Channel>>() {
+        _paginator.requestNextPage(new CallbackListener<Paginator<Channel>>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -74,15 +82,14 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
                 String uuid = RCTTwilioChatPaginator.setPaginator(paginator);
                 promise.resolve(RCTConvert.Paginator(paginator, uuid, "Channel"));
             }
-        };
-        _paginator.requestNextPage(listener);
+        });
     }
 
     public void requestNextPageMembers(String sid, final Promise promise) {
         final RCTTwilioChatPaginator tmp = RCTTwilioChatPaginator.getInstance();
-        Paginator _paginator = tmp.paginators.get(sid);
+        Paginator<Member> _paginator = (Paginator<Member>)tmp.paginators.get(sid);
 
-        Constants.CallbackListener<Paginator<Channel>> listener = new Constants.CallbackListener<Paginator<Member>>() {
+        _paginator.requestNextPage(new CallbackListener<Paginator<Member>>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -94,8 +101,7 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
                 String uuid = RCTTwilioChatPaginator.setPaginator(paginator);
                 promise.resolve(RCTConvert.Paginator(paginator, uuid, "Member"));
             }
-        };
-        _paginator.requestNextPage(listener);
+        });
     }
 
 }

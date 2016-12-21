@@ -12,13 +12,13 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.twilio.common.TwilioAccessManager;
+import com.twilio.accessmanager.AccessManager;
 import com.twilio.chat.Channel;
-import com.twilio.chat.Constants;
+import com.twilio.chat.StatusListener;
+import com.twilio.chat.CallbackListener;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.ChatClientListener;
 import com.twilio.chat.ChatClient;
-import com.twilio.chat.TwilioChatSDK;
 import com.twilio.chat.UserInfo;
 
 import java.util.HashMap;
@@ -55,8 +55,8 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         constants.put("TCHChannelSynchronizationStatus", channelSyncStatus);
 
         Map<String, String> channelType = new HashMap<>();
-        channelType.put("Public",Channel.ChannelType.CHANNEL_TYPE_PUBLIC.toString());
-        channelType.put("Private",Channel.ChannelType.CHANNEL_TYPE_PRIVATE.toString());
+        channelType.put("Public",Channel.ChannelType.PUBLIC.toString());
+        channelType.put("Private",Channel.ChannelType.PRIVATE.toString());
         constants.put("TCHChannelType", channelType);
 
         Map<String, String> clientSyncStatus = new HashMap<>();
@@ -118,8 +118,8 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
                 .emit(eventName, body);
     }
 
-    private Constants.StatusListener generateStatusListener(final Promise promise, final String errorCode, final String errorMessage) {
-        return new Constants.StatusListener() {
+    private StatusListener generateStatusListener(final Promise promise, final String errorCode, final String errorMessage) {
+        return new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -136,10 +136,8 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     // Methods
 
     @ReactMethod
-    public void createClient(ReadableMap props, final Promise promise) {
+    public void createClient(String token, ReadableMap props, final Promise promise) {
         final RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
-        TwilioAccessManager accessManager = RCTTwilioAccessManager.getInstance().accessManager;
-
         ChatClient.Properties.Builder builder = new ChatClient.Properties.Builder();
 
         if (props != null) {
@@ -151,7 +149,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
             }
         }
 
-        Constants.CallbackListener<ChatClient> listener = new Constants.CallbackListener<ChatClient>() {
+        ChatClient.create(reactContext, token, builder.createProperties(), new CallbackListener<ChatClient>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -161,11 +159,10 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
             @Override
             public void onSuccess(ChatClient twilioChatClient) {
                 tmp.client = twilioChatClient;
+                tmp.client.setListener(tmp);
                 promise.resolve(RCTConvert.ChatClient(tmp.client));
             }
-        };
-        tmp.client = TwilioChatSDK.createClient(accessManager, builder.createProperties(), listener);
-        tmp.client.setListener(this);
+        });
     }
 
     @ReactMethod
@@ -178,7 +175,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     public void register(String token) {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -196,7 +193,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     public void unregister(String token) {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -214,7 +211,8 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     public void handleNotification(ReadableMap notification) {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         HashMap map = RCTConvert.readableMapToHashMap(notification);
-        tmp.client.handleNotification(map);
+//        TODO
+//        tmp.client.handleNotification(map);
     }
 
     @ReactMethod
@@ -229,7 +227,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     public void setFriendlyName(String friendlyName, final Promise promise) {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -250,7 +248,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         JSONObject json = RCTConvert.readableMapToJson(attributes);
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -284,6 +282,11 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     }
 
     @Override
+    public void onChannelInvite(Channel channel) {
+        sendEvent("chatClient:channelInvited", RCTConvert.Channel(channel));
+    }
+
+    @Override
     public void onChannelDelete(Channel channel){
         sendEvent("chatClient:channelRemoved", RCTConvert.Channel(channel));
     }
@@ -312,15 +315,6 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     }
 
     @Override
-    public void onUserInfoChange(UserInfo userInfo) {
-        WritableMap map = Arguments.createMap();
-        map.putMap("userInfo",RCTConvert.UserInfo(userInfo));
-        map.putNull("updated");
-
-        sendEvent("chatClient:userInfoUpdated", map);
-    }
-
-    @Override
     public void onToastFailed(ErrorInfo errorInfo) {
         WritableMap map = Arguments.createMap();
         map.putString("error",errorInfo.getErrorText());
@@ -341,5 +335,11 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("messageSid", messageSid);
 
         sendEvent("chatClient:toastReceived", map);
+    }
+
+    @Override
+    public void onUserInfoChange(UserInfo userInfo, UserInfo.UpdateReason updateReason) {
+        WritableMap map = Arguments.createMap();
+        sendEvent("chatClient:toastReceived", updateReason.toString());
     }
 }

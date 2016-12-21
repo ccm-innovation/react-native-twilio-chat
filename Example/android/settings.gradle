@@ -3,5 +3,5 @@ rootProject.name = 'ReactNativeTwilioIPMessagingExample'
 include ':app'
 include ':ExtraDimensions', ':app'
 project(':ExtraDimensions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-extra-dimensions-android/android')
-include ':RCTTwilioIPMessaging', ':app'
-project(':RCTTwilioIPMessaging').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-ip-messaging/android')
+include ':RCTTwilioChat', ':app'
+project(':RCTTwilioChat').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-ip-messaging/android')

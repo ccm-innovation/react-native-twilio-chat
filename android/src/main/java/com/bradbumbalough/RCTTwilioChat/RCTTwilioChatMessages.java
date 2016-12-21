@@ -7,9 +7,11 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.twilio.chat.Messages;
-import com.twilio.chat.Constants;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.Message;
+import com.twilio.chat.Channel;
+import com.twilio.chat.StatusListener;
+import com.twilio.chat.CallbackListener;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
-    private void loadMessagesFromChannelSid(String sid, CallbackListener<Messages> callbackListener) {
+    private void loadMessagesFromChannelSid(String sid, final CallbackListener<Messages> callbackListener) {
         RCTTwilioChatClient.getInstance().client.getChannels().getChannel(sid, new CallbackListener<Channel>() {
             @Override
             public void onSuccess(final Channel channel) {
@@ -36,14 +38,14 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
             @Override
             public void onError(final ErrorInfo errorInfo) {
-                callback.onError(errorInfo);
+                callbackListener.onError(errorInfo);
             }
         });
     }
 
     @ReactMethod
-    public void getLastConsumedMessageIndex(String channelSid, Promise promise) {
-        loadMessagesFromChannelSid(channelSid new CallbackListener<Messages>() {
+    public void getLastConsumedMessageIndex(String channelSid, final Promise promise) {
+        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -63,7 +65,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendMessage(String channelSid, String body, final Promise promise) {
+    public void sendMessage(String channelSid, final String body, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -73,7 +75,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Messages messages) {
-                messages.sendMessage(body, new Constants.StatusListener() {
+                messages.sendMessage(body, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -84,13 +86,13 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
                     public void onSuccess() {
                         promise.resolve(true);
                     }
-                })
+                });
             }
         });
     }
 
     @ReactMethod
-    public void removeMessage(String channelSid, Integer index, final Promise promise) {
+    public void removeMessage(String channelSid, final Integer index, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -99,7 +101,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess(Messages messages) {
+            public void onSuccess(final Messages messages) {
                 messages.getMessageByIndex(index, new CallbackListener<Message>() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
@@ -109,7 +111,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onSuccess(Message message) {
-                        messages.removeMessage(message, new Constants.StatusListener() {
+                        messages.removeMessage(message, new StatusListener() {
                             @Override
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
@@ -128,7 +130,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getLastMessages(String channelSid, Integer count, final Promise promise) {
+    public void getLastMessages(String channelSid, final Integer count, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -148,13 +150,13 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
                     public void onSuccess(List<Message> _messages) {
                         promise.resolve(RCTConvert.Messages(_messages));
                     }
-                })
+                });
             }
         });
     }
 
     @ReactMethod
-    public void getMessagesAfter(String channelSid, Integer index, Integer count, final Promise promise) {
+    public void getMessagesAfter(String channelSid, final Integer index, final Integer count, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -180,7 +182,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getMessagesBefore(String channelSid, Integer index, Integer count, final Promise promise) {
+    public void getMessagesBefore(String channelSid, final Integer index, final Integer count, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -206,7 +208,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getMessage(String channelSid, Integer index, final Promise promise) {
+    public void getMessage(String channelSid, final Integer index, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -232,7 +234,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setLastConsumedMessageIndex(String channelSid, Integer index) {
+    public void setLastConsumedMessageIndex(String channelSid, final Integer index) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onSuccess(Messages messages) {
@@ -242,7 +244,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void advanceLastConsumedMessageIndex(String channelSid, Integer index) {
+    public void advanceLastConsumedMessageIndex(String channelSid, final Integer index) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onSuccess(Messages messages) {
@@ -256,7 +258,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onSuccess(Messages messages) {
-                messages.setAllMessagesConsumed(index);
+                messages.setAllMessagesConsumed();
             }
         });
     }
@@ -264,7 +266,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     // Message instance method
 
     @ReactMethod
-    public void updateBody(String channelSid, Integer index, String body, final Promise promise) {;
+    public void updateBody(String channelSid, final Integer index, final String body, final Promise promise) {;
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -282,7 +284,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onSuccess(Message message) {
-                        message.updateMessageBody(body, new Constants.StatusListener() {
+                        message.updateMessageBody(body, new StatusListener() {
                             @Override
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
@@ -301,7 +303,8 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAttributes(String channelSid, Integer index, ReadableMap attributes, final Promise promise) {
+    public void setAttributes(String channelSid, final Integer index, ReadableMap attributes, final Promise promise) {
+        final JSONObject json = RCTConvert.readableMapToJson(attributes);
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -319,7 +322,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onSuccess(Message message) {
-                        message.setAttributes(json, new Constants.StatusListener() {
+                        message.setAttributes(json, new StatusListener() {
                             @Override
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
