@@ -9,18 +9,19 @@
 ```npm install --save react-native-twilio-ip-messaging```
 
 ### iOS
-Install the Twilio IP Messaging SDK and this package via CocoaPods.
+Install the Twilio IP Messaging SDK and this package via CocoaPods.  
+See the [full Podfile example](./Example/ios/Podfile) for more details.
 
 ```
 pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
-  
+
 source 'https://github.com/twilio/cocoapod-specs'
 pod 'TwilioIPMessagingClient', '~> 0.14.2'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
-            
+
 ### Android
 In `android/settings.gradle`:
 
@@ -57,14 +58,14 @@ protected List<ReactPackage> getPackages() {
 }
 ```
 
-**Note:** You might have to enable multidex in your `build.gradle` file and increase the heap size if you're getting errors while buliding. The minSdkVersion must also be at least 19, per the Twilio SDKs. 
+**Note:** You might have to enable multidex in your `build.gradle` file and increase the heap size if you're getting errors while buliding. The minSdkVersion must also be at least 19, per the Twilio SDKs.
 ```
 android {
     ....
     dexOptions {
         javaMaxHeapSize "2048M"
     }
-    
+
     defaultConfig {
         ...
         minSdkVersion 19
