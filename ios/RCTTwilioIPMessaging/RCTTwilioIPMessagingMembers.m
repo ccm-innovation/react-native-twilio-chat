@@ -9,7 +9,7 @@
 #import "RCTTwilioIPMessagingMembers.h"
 #import "RCTConvert+TwilioIPMessagingClient.h"
 #import "RCTTwilioIPMessagingClient.h"
-#import <RCTUtils.h>
+#import "RCTUtils.h"
 
 @implementation RCTTwilioIPMessagingMembers
 
