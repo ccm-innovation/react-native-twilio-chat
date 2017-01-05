@@ -11,7 +11,7 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "RCTConvert+TwilioIPMessagingClient.h"
-#import <RCTUtils.h>
+#import "RCTUtils.h"
 
 @interface RCTTwilioIPMessagingClient() <TwilioIPMessagingClientDelegate>
 @end

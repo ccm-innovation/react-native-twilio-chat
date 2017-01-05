@@ -7,7 +7,7 @@
 //
 
 #import "RCTConvert+TwilioIPMessagingClient.h"
-#import <RCTUtils.h>
+#import "RCTUtils.h"
 
 @implementation RCTConvert (TwilioIPMessagingClient)
 
