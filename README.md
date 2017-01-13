@@ -3,6 +3,8 @@
 
 >React Native wrapper for the Twilio IP Messaging SDKs
 
+**Updated to new SDKs for Twilio Chat -- this has breaking changes if you were on the prior IPM versions**
+
 ####[Changelog](CHANGELOG.md)
 
 ## Installation
@@ -26,8 +28,8 @@ Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Fra
 In `android/settings.gradle`:
 
 ```
-include ':RCTTwilioIPMessaging', ':app'
-project(':RCTTwilioIPMessaging').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-ip-messaging/android')
+include ':RCTTwilioChat', ':app'
+project(':RCTTwilioChat').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-ip-messaging/android')
 ```
 
 In `android/app/build.gradle`:
@@ -35,15 +37,15 @@ In `android/app/build.gradle`:
 ...
 dependencies {
     ...
-    compile project(':RCTTwilioIPMessaging')
+    compile project(':RCTTwilioChat')
 }
 
 ```
 
-Register the module in `MainActivity.java` by calling addPackage():
+Register the module in `MainApplication.java`:
 ```Java
 // import package
-import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
+import com.bradbumbalough.RCTTwilioChat.RCTTwilioChatPackage;
 
 ...
 
@@ -51,9 +53,9 @@ import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
 @Override
 protected List<ReactPackage> getPackages() {
     return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new RCTTwilioChatPackage(),
         ... other packages
-        new RCTTwilioIPMessagingPackage(),
-        new MainReactPackage()
     );
 }
 ```
@@ -103,7 +105,7 @@ client.initialize();
 
 // wait for sync to finish
 client.onClientSynchronized = () => {
-    client.getChannels()
+    client.getUserChannels()
     .then((channelPaginator) => console.log(channelPaginator.items));
 }
 
