@@ -22,13 +22,11 @@ client.createChannel({
 ```
 
 ### TCHChannelStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelStatus.html)
 - Invited
 - Joined
 - NotParticipating
 
 ### TCHChannelSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelSynchronizationStatus.html)
 - None
 - Identifier
 - Metadata
@@ -36,34 +34,44 @@ client.createChannel({
 - Failed
 
 ### TCHChannelType
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHChannelType.html)
 - Public
 - Private
 
+### TCHClientConnectionState
+- Connecting
+- Connected
+- Disconnected
+- Denied
+- Error
+
 ### TCHClientSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStatus.html)
 - Started
 - ChannelListCompleted
 - Completed
 - Failed
 
 ### TCHClientSynchronizationStrategy
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStrategy.html)
 - All
 - ChannelsList
 
-### TCHLogLevel - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHLogLevel.html)
+### TCHLogLevel - iOS
 - Fatal
 - Critical
 - Warning
 - Info
 - Debug
 
+### TCHLogLevel - Android
+- Assert
+- Debug
+- Error
+- Info
+- Verbose
+- Warn
+
 ### TCHUserInfoUpdate - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TCHUserInfoUpdate.html)
-- FriendlyName
 - Attributes
-- ReachabilityOnline
+- FriendlyName
 - ReachabilityNotifiable
+- ReachabilityOnline
 

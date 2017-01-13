@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
+import android.util.Log;
 
 
 public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements ChatClientListener {
@@ -83,9 +84,25 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         connectionState.put("Connected", ChatClient.ConnectionState.CONNECTED.toString());
         connectionState.put("Disconnected", ChatClient.ConnectionState.DISCONNECTED.toString());
         connectionState.put("Denied", ChatClient.ConnectionState.DENIED.toString());
-        connectionState.put("Fatal_Error", ChatClient.ConnectionState.FATAL_ERROR.toString());
+        connectionState.put("Error", ChatClient.ConnectionState.FATAL_ERROR.toString());
         constants.put("TCHClientConnectionState", connectionState);
-        
+
+        Map<String, String> logLevel = new HashMap<>();
+        logLevel.put("Assert", Log.ASSERT);
+        logLevel.put("Debug", Log.DEBUG);
+        logLevel.put("Error", Log.ERROR);
+        logLevel.put("Info", Log.INFO);
+        logLevel.put("Verbose", Log.VERBOSE);
+        logLevel.put("Warn", Log.WARN);
+        constants.put("TCHLogLevel", logLevel);
+
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("Attributes", UserInfo.UpdateReason.ATTRIBUTES.toString());
+        userInfo.put("FriendlyName", UserInfo.UpdateReason.FRIENDLY_NAME.toString());
+        userInfo.put("ReachabilityNotifiable", UserInfo.UpdateReason.REACHABILITY_NOTIFIABLE.toString());
+        userInfo.put("ReachabilityOnline", UserInfo.UpdateReason.REACHABILITY_ONLINE.toString());
+        constants.put("TCHUserInfoUpdate", userInfo);
+
         return constants;
     }
 
@@ -219,6 +236,12 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     public void shutdown() {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.client.shutdown();
+    }
+
+    @ReactMethod
+    public void setLogLevel(Integer logLevel) {
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
+        tmp.client.setLogLevel(logLevel);
     }
 
     // UserInfo methods
