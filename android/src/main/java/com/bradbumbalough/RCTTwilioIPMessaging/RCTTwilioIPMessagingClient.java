@@ -78,7 +78,6 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         channelOption.put("Attributes", "attributes");
         constants.put("TWMChannelOption", channelOption);
 
-
         Map<String, String> logLevel = new HashMap<>();
         logLevel.put("Fatal", "Fatal");
         logLevel.put("Critical", "Critical");
