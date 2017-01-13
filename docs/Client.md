@@ -79,10 +79,12 @@ Get a single instance of a Channel. Returns `Channel`.
 
 Create a new channel. Returns `Channel`.
 
-#### `setLogLevel(logLevel)`
+#### `setLogLevel(logLevel)` **(iOS ONLY)**
 |Name |Type |Description |
 |--- |--- |--- |
 |*logLevel*|Constants.TWMLogLevel|Set the log level of the SDK
+
+Note: Android will ignore this configuration
 
 #### `register(token)`
 Register APNS token for push notifications. This can be obtained in `PushNotificationIOS.addListener('register', handler)`.
