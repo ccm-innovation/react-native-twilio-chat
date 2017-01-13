@@ -77,7 +77,15 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         channelOption.put("Type", "type");
         channelOption.put("Attributes", "attributes");
         constants.put("TWMChannelOption", channelOption);
-        
+
+        Map<String, String> logLevel = new HashMap<>();
+        logLevel.put("Fatal", "Fatal");
+        logLevel.put("Critical", "Critical");
+        logLevel.put("Warning", "Warning");
+        logLevel.put("Info", "Info");
+        logLevel.put("Debug", "Debug");
+        constants.put("TWMLogLevel", channelOption);
+
         return constants;
     }
 
@@ -256,6 +264,11 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         };
 
         tmp.client.getMyUserInfo().setAttributes(json, listener);
+    }
+
+    @ReactMethod
+    public void setLogLevel(String logLevel) {
+      // Empty body
     }
 
     // Listeners
