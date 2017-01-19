@@ -8,7 +8,7 @@
 ## Installation
 ```npm install --save react-native-twilio-ip-messaging```
 
-### iOS
+### iOS, option 1 (not working well with react native 0.40.0 at the moment)
 Install the Twilio IP Messaging SDK and this package via CocoaPods.  
 See the [full Podfile example](./Example/ios/Podfile) for more details.
 
@@ -21,6 +21,25 @@ pod 'TwilioIPMessagingClient', '~> 0.14.2'
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
+
+### iOS, option 2 - manually
+
+The twilio part of your Podfile would look like this
+
+
+```
+source 'https://github.com/twilio/cocoapod-specs'
+pod 'TwilioIPMessagingClient', '~> 0.14.2'
+```
+
+1. Open your project in Xcode, right click on `Libraries` and click `Add
+   Files to "Your Project Name"` Look under `node_modules/react-native-twilio-ip-messaging/ios` and add `RCTTwilioIPMessaging.xcodeproj`.
+1. Add `libRCTTwilioIPMessageing.a` to `Build Phases -> Link Binary With Libraries.
+1. Click on `RCTTwilioIPMessaging.xcodeproj` in `Libraries` and go the `Build
+   Settings` tab. Double click the text to the right of `Header Search
+   Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../../ios/Pods/Headers` -   if they
+   aren't, then add them.
+
 
 ### Android
 In `android/settings.gradle`:
