@@ -59,7 +59,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
-                sendEvent("ipMessagingClient:channel:messageAdded", map);
+                sendEvent("chatClient:channel:messageAdded", map);
             }
 
             @Override
@@ -68,7 +68,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
 
-                sendEvent("ipMessagingClient:channel:messageChanged", map);
+                sendEvent("chatClient:channel:messageChanged", map);
             }
 
             @Override
@@ -77,7 +77,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
 
-                sendEvent("ipMessagingClient:channel:messageDeleted", map);
+                sendEvent("chatClient:channel:messageDeleted", map);
             }
 
             @Override
@@ -86,7 +86,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
 
-                sendEvent("ipMessagingClient:channel:memberJoined", map);
+                sendEvent("chatClient:channel:memberJoined", map);
             }
 
             @Override
@@ -95,7 +95,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
 
-                sendEvent("ipMessagingClient:channel:memberChanged", map);
+                sendEvent("chatClient:channel:memberChanged", map);
             }
 
             @Override
@@ -104,7 +104,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
 
-                sendEvent("ipMessagingClient:channel:memberLeft", map);
+                sendEvent("chatClient:channel:memberLeft", map);
             }
 
             @Override
@@ -113,7 +113,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
 
-                sendEvent("ipMessagingClient:typingStartedOnChannel", map);
+                sendEvent("chatClient:typingStartedOnChannel", map);
             }
 
             @Override
@@ -122,7 +122,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
 
-                sendEvent("ipMessagingClient:typingEndedOnChannel", map);
+                sendEvent("chatClient:typingEndedOnChannel", map);
             }
 
             @Override
@@ -131,7 +131,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 map.putString("channelSid", channelSid);
                 map.putString("status", channel.getSynchronizationStatus().toString());
 
-                sendEvent("ipMessagingClient:channel:synchronizationStatusChanged", map);
+                sendEvent("chatClient:channel:synchronizationStatusChanged", map);
             }
         };
 
@@ -142,15 +142,20 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
         return RCTTwilioChatClient.getInstance().client.getChannels();
     }
 
+    private void createListener(Channel channel) {
+        String sid = channel.getSid();
+        if (!channelListeners.containsKey(sid)) {
+            ChannelListener listener = generateListener(channel);
+            channel.addListener(listener);
+            channelListeners.put(sid, listener);
+        }
+    }
+
     public void loadChannelFromSid(final String sid, final CallbackListener<Channel> callback) {
         channels().getChannel(sid, new CallbackListener<Channel>() {
             @Override
             public void onSuccess(final Channel channel) {
-                if (!channelListeners.containsKey(sid)) {
-                    ChannelListener listener = generateListener(channel);
-                    channel.addListener(listener);
-                    channelListeners.put(channel.getSid(), listener);
-                }
+                createListener(channel);
                 callback.onSuccess(channel);
             };
 
@@ -173,6 +178,9 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(final Paginator<Channel> channelPaginator) {
+                for (Channel channel: channelPaginator.getItems()) {
+                    createListener(channel);
+                }
                 String uuid = RCTTwilioChatPaginator.setPaginator(channelPaginator);
                 promise.resolve(RCTConvert.Paginator(channelPaginator, uuid, "Channel"));
             }
