@@ -37,7 +37,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
     }
 
     private ReactApplicationContext reactContext;
-    private HashMap<String,ChannelListener> channelListeners = new HashMap<String, ChannelListener>();
+    private Map<String,ChannelListener> channelListeners = new HashMap<String, ChannelListener>();
 
     public RCTTwilioChatChannels(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -554,6 +554,11 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                 });
             }
         });
+    }
+
+    @ReactMethod
+    public void shutdown() {
+        channelListeners.clear();
     }
 
 

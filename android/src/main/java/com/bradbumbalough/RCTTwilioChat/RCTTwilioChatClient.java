@@ -293,7 +293,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     }
 
     @Override
-    public void onChannelAdd(Channel channel) {
+    public void onChannelAdd(final Channel channel) {
         sendEvent("chatClient:channelAdded", RCTConvert.Channel(channel));
     }
 
