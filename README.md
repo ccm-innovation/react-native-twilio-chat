@@ -14,6 +14,7 @@
 Install the Twilio Programable Chat SDK and this package via CocoaPods.
 
 ```
+pod 'React', :subspecs => ['Core', 'RCTActionSheet', 'RCTGeolocation', 'RCTImage', 'RCTLinkingIOS', 'RCTNetwork', 'RCTText', 'RCTSettings', 'RCTAnimation', 'RCTVibration', 'RCTWebSocket'], :path => '../node_modules/react-native'
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
