@@ -54,6 +54,31 @@ RCT_REMAP_METHOD(sendMessage, channelSid:(NSString *)channelSid body:(NSString *
     }];
 }
 
+RCT_REMAP_METHOD(sendAttributedMessage, channelSid:(NSString *)channelSid body:(NSString *)body attributes:(NSDictionary<NSString *, id> *)attributes create_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
+        if (result.isSuccessful) {
+            TCHMessage* message = [messages createMessageWithBody:body];
+            [message setAttributes:attributes completion:^(TCHResult *setAttrResult) {
+                if(setAttrResult.isSuccessful) {
+                    [messages sendMessage:message completion:^(TCHResult *sendResult) {
+                        if (sendResult.isSuccessful) {
+                            resolve(@[@TRUE]);
+                        }
+                        else {
+                            reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", sendResult.error);
+                        }
+                    }];
+                } else {
+                    reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", setAttrResult.error);
+                }
+            }];
+        }
+        else {
+            reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", result.error);
+        }
+    }];
+}
+
 RCT_REMAP_METHOD(removeMessage, channelSid:(NSString *)channelSid index:(NSNumber *)index remove_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
         if (result.isSuccessful) {
