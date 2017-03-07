@@ -135,19 +135,26 @@ channel.onMemberAdded = (member) => console.log(member.identity + " joined " + c
 ## [Documentation](docs)
 
 ## Contributers 🍻
-- [plonkus](https://github.com/plonkus)
-- [jhabdas](https://github.com/jhabdas)
-- [thathirsch](https://github.com/thathirsch)
-- [Baisang](https://github.com/Baisang)
-- [jck2](https://github.com/jck2)
-- [johndrkurtcom](https://github.com/johndrkurtcom)
+Thank you for your help in maintaining this project!
 - [bradbumbalough](https://github.com/bradbumbalough)
+- [johndrkurtcom](https://github.com/johndrkurtcom)
+- [jck2](https://github.com/jck2)
+- [Baisang](https://github.com/Baisang)
+- [thathirsch](https://github.com/thathirsch)
+- [n8stowell82](https://github.com/n8stowell82)
+- [svlaev](https://github.com/svlaev)
+- [Maxwell2022](https://github.com/Maxwell2022)
+- [bbil](https://github.com/bbil)
+- [jhabdas](https://github.com/jhabdas)
+- [plonkus](https://github.com/plonkus)
 
 ## TODO 🗒
- * [ ] Copy code from `programable-chat` branch on old package
+ * [x] Copy code from `programable-chat` branch on old package
+ * [ ] Copy issues and PRs over
  * [ ] Update docs (wiki?)
  * [ ] Migration guide
  * [ ] Publish to npm
+ * [ ] Update `twilio-ip-messaging` to reference `twilio-chat`
  * [ ] 1.0 release
  * [ ] Testing
 
