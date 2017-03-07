@@ -80,8 +80,6 @@ Create a new channel. Returns `Channel`.
 |--- |--- |--- |
 |*logLevel*|Constants.TCHLogLevel|Set the log level of the SDK
 
-Note: Android will ignore this configuration
-
 #### `register(token)`
 Register APNS token for push notifications. This can be obtained in `PushNotificationIOS.addListener('register', handler)`.
 
