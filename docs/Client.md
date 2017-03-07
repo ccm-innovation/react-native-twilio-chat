@@ -75,7 +75,7 @@ Get a single instance of a Channel. Returns `Channel`.
 
 Create a new channel. Returns `Channel`.
 
-#### `setLogLevel(logLevel)` **(iOS ONLY)**
+#### `setLogLevel(logLevel)`
 |Name |Type |Description |
 |--- |--- |--- |
 |*logLevel*|Constants.TCHLogLevel|Set the log level of the SDK
