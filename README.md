@@ -150,7 +150,7 @@ Thank you for your help in maintaining this project!
 
 ## TODO 🗒
  * [x] Copy code from `programable-chat` branch on old package
- * [ ] Copy issues and PRs over
+ * [x] Copy issues and PRs over
  * [ ] Update docs (wiki?)
  * [ ] Migration guide
  * [ ] Publish to npm
