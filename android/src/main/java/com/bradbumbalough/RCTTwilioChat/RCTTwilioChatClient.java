@@ -1,4 +1,4 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import android.support.annotation.Nullable;
 
@@ -12,26 +12,27 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.twilio.common.TwilioAccessManager;
-import com.twilio.ipmessaging.Channel;
-import com.twilio.ipmessaging.Constants;
-import com.twilio.ipmessaging.ErrorInfo;
-import com.twilio.ipmessaging.IPMessagingClientListener;
-import com.twilio.ipmessaging.TwilioIPMessagingClient;
-import com.twilio.ipmessaging.TwilioIPMessagingSDK;
-import com.twilio.ipmessaging.UserInfo;
+import com.twilio.accessmanager.AccessManager;
+import com.twilio.chat.Channel;
+import com.twilio.chat.StatusListener;
+import com.twilio.chat.CallbackListener;
+import com.twilio.chat.ErrorInfo;
+import com.twilio.chat.ChatClientListener;
+import com.twilio.chat.ChatClient;
+import com.twilio.chat.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
+import android.util.Log;
 
 
-public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule implements IPMessagingClientListener {
+public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements ChatClientListener {
 
     @Override
     public String getName() {
-        return "TwilioIPMessagingClient";
+        return "TwilioChatClient";
     }
 
     // Constants
@@ -44,7 +45,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         channelStatus.put("Invited", Channel.ChannelStatus.INVITED.toString());
         channelStatus.put("Joined",Channel.ChannelStatus.JOINED.toString());
         channelStatus.put("NotParticipating",Channel.ChannelStatus.NOT_PARTICIPATING.toString());
-        constants.put("TWMChannelStatus", channelStatus);
+        constants.put("TCHChannelStatus", channelStatus);
 
         Map<String, String> channelSyncStatus = new HashMap<>();
         channelSyncStatus.put("None",Channel.SynchronizationStatus.NONE.toString());
@@ -52,74 +53,89 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         channelSyncStatus.put("Metadata",Channel.SynchronizationStatus.METADATA.toString());
         channelSyncStatus.put("All",Channel.SynchronizationStatus.ALL.toString());
         channelSyncStatus.put("Failed",Channel.SynchronizationStatus.FAILED.toString());
-        constants.put("TWMChannelSynchronizationStatus", channelSyncStatus);
+        constants.put("TCHChannelSynchronizationStatus", channelSyncStatus);
 
         Map<String, String> channelType = new HashMap<>();
-        channelType.put("Public",Channel.ChannelType.CHANNEL_TYPE_PUBLIC.toString());
-        channelType.put("Private",Channel.ChannelType.CHANNEL_TYPE_PRIVATE.toString());
-        constants.put("TWMChannelType", channelType);
+        channelType.put("Public",Channel.ChannelType.PUBLIC.toString());
+        channelType.put("Private",Channel.ChannelType.PRIVATE.toString());
+        constants.put("TCHChannelType", channelType);
 
         Map<String, String> clientSyncStatus = new HashMap<>();
-        clientSyncStatus.put("Started",TwilioIPMessagingClient.SynchronizationStatus.STARTED.toString());
-        clientSyncStatus.put("ChannelListCompleted",TwilioIPMessagingClient.SynchronizationStatus.CHANNELS_COMPLETED.toString());
-        clientSyncStatus.put("Completed",TwilioIPMessagingClient.SynchronizationStatus.COMPLETED.toString());
-        clientSyncStatus.put("Failed",TwilioIPMessagingClient.SynchronizationStatus.FAILED.toString());
-        constants.put("TWMClientSynchronizationStatus", clientSyncStatus);
+        clientSyncStatus.put("Started",ChatClient.SynchronizationStatus.STARTED.toString());
+        clientSyncStatus.put("ChannelListCompleted",ChatClient.SynchronizationStatus.CHANNELS_COMPLETED.toString());
+        clientSyncStatus.put("Completed",ChatClient.SynchronizationStatus.COMPLETED.toString());
+        clientSyncStatus.put("Failed",ChatClient.SynchronizationStatus.FAILED.toString());
+        constants.put("TCHClientSynchronizationStatus", clientSyncStatus);
 
         Map<String, String> clientSyncStrategy = new HashMap<>();
-        clientSyncStrategy.put("All",TwilioIPMessagingClient.SynchronizationStrategy.ALL.toString());
-        clientSyncStrategy.put("ChannelsList",TwilioIPMessagingClient.SynchronizationStrategy.CHANNELS_LIST.toString());
-        constants.put("TWMClientSynchronizationStrategy", clientSyncStrategy);
+        clientSyncStrategy.put("All",ChatClient.SynchronizationStrategy.ALL.toString());
+        clientSyncStrategy.put("ChannelsList",ChatClient.SynchronizationStrategy.CHANNELS_LIST.toString());
+        constants.put("TCHClientSynchronizationStrategy", clientSyncStrategy);
 
         Map<String, String> channelOption = new HashMap<>();
         channelOption.put("FriendlyName", "friendlyName");
         channelOption.put("UniqueName", "uniqueName");
         channelOption.put("Type", "type");
         channelOption.put("Attributes", "attributes");
-        constants.put("TWMChannelOption", channelOption);
+        constants.put("TCHChannelOption", channelOption);
 
-        Map<String, String> logLevel = new HashMap<>();
-        logLevel.put("Fatal", "Fatal");
-        logLevel.put("Critical", "Critical");
-        logLevel.put("Warning", "Warning");
-        logLevel.put("Info", "Info");
-        logLevel.put("Debug", "Debug");
-        constants.put("TWMLogLevel", channelOption);
+        Map<String, String> connectionState = new HashMap<>();
+        connectionState.put("Connecting", ChatClient.ConnectionState.CONNECTING.toString());
+        connectionState.put("Connected", ChatClient.ConnectionState.CONNECTED.toString());
+        connectionState.put("Disconnected", ChatClient.ConnectionState.DISCONNECTED.toString());
+        connectionState.put("Denied", ChatClient.ConnectionState.DENIED.toString());
+        connectionState.put("Error", ChatClient.ConnectionState.FATAL_ERROR.toString());
+        constants.put("TCHClientConnectionState", connectionState);
+
+        Map<String, Integer> logLevel = new HashMap<>();
+        logLevel.put("Fatal", Log.ERROR);
+        logLevel.put("Critical", Log.ERROR);
+        logLevel.put("Warning", Log.WARN);
+        logLevel.put("Info", Log.INFO);
+        logLevel.put("Debug", Log.DEBUG);
+        constants.put("TCHLogLevel", logLevel);
+
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("Attributes", UserInfo.UpdateReason.ATTRIBUTES.toString());
+        userInfo.put("FriendlyName", UserInfo.UpdateReason.FRIENDLY_NAME.toString());
+        userInfo.put("ReachabilityNotifiable", UserInfo.UpdateReason.REACHABILITY_NOTIFIABLE.toString());
+        userInfo.put("ReachabilityOnline", UserInfo.UpdateReason.REACHABILITY_ONLINE.toString());
+        constants.put("TCHUserInfoUpdate", userInfo);
 
         return constants;
     }
 
-    public TwilioIPMessagingClient client = null;
+    public ChatClient client = null;
     private ReactApplicationContext reactContext;
 
-    private static RCTTwilioIPMessagingClient rctTwilioIPMessagingClient;
+    private static RCTTwilioChatClient rctTwilioChatClient;
 
-    public static RCTTwilioIPMessagingClient getInstance() {
-        return rctTwilioIPMessagingClient;
+    public static RCTTwilioChatClient getInstance() {
+        return rctTwilioChatClient;
     }
 
-    public RCTTwilioIPMessagingClient(ReactApplicationContext reactContext) {
+    public RCTTwilioChatClient(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        rctTwilioIPMessagingClient = this;
+        rctTwilioChatClient = this;
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
 
     private void sendEvent(String eventName, @Nullable String body) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, body);
     }
 
-    private Constants.StatusListener generateStatusListener(final Promise promise, final String errorCode, final String errorMessage) {
-        return new Constants.StatusListener() {
+    private StatusListener generateStatusListener(final Promise promise, final String errorCode, final String errorMessage) {
+        return new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -136,22 +152,20 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
     // Methods
 
     @ReactMethod
-    public void createClient(ReadableMap props, final Promise promise) {
-        final RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
-        TwilioAccessManager accessManager = RCTTwilioAccessManager.getInstance().accessManager;
-
-        TwilioIPMessagingClient.Properties.Builder builder = new TwilioIPMessagingClient.Properties.Builder();
+    public void createClient(String token, ReadableMap props, final Promise promise) {
+        final RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
+        ChatClient.Properties.Builder builder = new ChatClient.Properties.Builder();
 
         if (props != null) {
             if (props.hasKey("initialMessageCount")) {
                 builder.setInitialMessageCount(props.getInt("initialMessageCount"));
             }
             if (props.hasKey("synchronizationStrategy")) {
-                builder.setSynchronizationStrategy(TwilioIPMessagingClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
+                builder.setSynchronizationStrategy(ChatClient.SynchronizationStrategy.valueOf(props.getString("synchronizationStrategy")));
             }
         }
 
-        Constants.CallbackListener<TwilioIPMessagingClient> listener = new Constants.CallbackListener<TwilioIPMessagingClient>() {
+        ChatClient.create(reactContext, token, builder.createProperties(), new CallbackListener<ChatClient>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -159,26 +173,25 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
             }
 
             @Override
-            public void onSuccess(TwilioIPMessagingClient twilioIPMessagingClient) {
-                tmp.client = twilioIPMessagingClient;
-                promise.resolve(RCTConvert.TwilioIPMessagingClient(tmp.client));
+            public void onSuccess(ChatClient twilioChatClient) {
+                tmp.client = twilioChatClient;
+                tmp.client.setListener(tmp);
+                promise.resolve(RCTConvert.ChatClient(tmp.client));
             }
-        };
-        tmp.client = TwilioIPMessagingSDK.createClient(accessManager, builder.createProperties(), listener);
-        tmp.client.setListener(this);
+        });
     }
 
     @ReactMethod
     public void userInfo(Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         promise.resolve(RCTConvert.UserInfo(tmp.client.getMyUserInfo()));
     }
 
     @ReactMethod
     public void register(String token) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -194,9 +207,9 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void unregister(String token) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -212,24 +225,30 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void handleNotification(ReadableMap notification) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         HashMap map = RCTConvert.readableMapToHashMap(notification);
-        tmp.client.handleNotification(map);
+//        TODO
+//        tmp.client.handleNotification(map);
     }
 
     @ReactMethod
     public void shutdown() {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.client.shutdown();
+    }
+
+    @ReactMethod
+    public void setLogLevel(Integer logLevel) {
+        ChatClient.setLogLevel(logLevel);
     }
 
     // UserInfo methods
 
     @ReactMethod
     public void setFriendlyName(String friendlyName, final Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -247,10 +266,10 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
 
     @ReactMethod
     public void setAttributes(ReadableMap attributes, final Promise promise) {
-        RCTTwilioIPMessagingClient tmp = RCTTwilioIPMessagingClient.getInstance();
+        RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         JSONObject json = RCTConvert.readableMapToJson(attributes);
 
-        Constants.StatusListener listener = new Constants.StatusListener() {
+        StatusListener listener = new StatusListener() {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -266,26 +285,31 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         tmp.client.getMyUserInfo().setAttributes(json, listener);
     }
 
-    @ReactMethod
-    public void setLogLevel(String logLevel) {
-      // Empty body
-    }
-
     // Listeners
 
     @Override
-    public void onChannelAdd(Channel channel) {
-        sendEvent("ipMessagingClient:channelAdded", RCTConvert.Channel(channel));
+    public void onConnectionStateChange(ChatClient.ConnectionState state) {
+        sendEvent("chatClient:connectionStateChanged", state.toString());
+    }
+
+    @Override
+    public void onChannelAdd(final Channel channel) {
+        sendEvent("chatClient:channelAdded", RCTConvert.Channel(channel));
     }
 
     @Override
     public void onChannelChange(Channel channel) {
-        sendEvent("ipMessagingClient:channelChanged", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelChanged", RCTConvert.Channel(channel));
+    }
+
+    @Override
+    public void onChannelInvite(Channel channel) {
+        sendEvent("chatClient:channelInvited", RCTConvert.Channel(channel));
     }
 
     @Override
     public void onChannelDelete(Channel channel){
-        sendEvent("ipMessagingClient:channelRemoved", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelRemoved", RCTConvert.Channel(channel));
     }
 
     @Override
@@ -294,12 +318,12 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         map.putString("channelSid",channel.getSid());
         map.putString("status", channel.getSynchronizationStatus().toString());
 
-        sendEvent("ipMessagingClient:channel:synchronizationStatusChanged", map);
+        sendEvent("chatClient:channel:synchronizationStatusChanged", map);
     }
 
     @Override
-    public void onClientSynchronization(TwilioIPMessagingClient.SynchronizationStatus synchronizationStatus) {
-        sendEvent("ipMessagingClient:synchronizationStatusChanged", synchronizationStatus.toString());
+    public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
+        sendEvent("chatClient:synchronizationStatusChanged", synchronizationStatus.toString());
     }
 
     @Override
@@ -308,16 +332,7 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         map.putString("error",errorInfo.getErrorText());
         map.putString("userInfo", errorInfo.toString());
 
-        sendEvent("ipMessagingClient:errorReceived", map);
-    }
-
-    @Override
-    public void onUserInfoChange(UserInfo userInfo) {
-        WritableMap map = Arguments.createMap();
-        map.putMap("userInfo",RCTConvert.UserInfo(userInfo));
-        map.putNull("updated");
-
-        sendEvent("ipMessagingClient:userInfoUpdated", map);
+        sendEvent("chatClient:errorReceived", map);
     }
 
     @Override
@@ -326,12 +341,12 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         map.putString("error",errorInfo.getErrorText());
         map.putString("userInfo", errorInfo.toString());
 
-        sendEvent("ipMessagingClient:toastFailed", map);
+        sendEvent("chatClient:toastFailed", map);
     }
 
     @Override
     public void onToastSubscribed() {
-        sendEvent("ipMessagingClient:toastSubscribed", "");
+        sendEvent("chatClient:toastSubscribed", "");
     }
 
     @Override
@@ -340,6 +355,12 @@ public class RCTTwilioIPMessagingClient extends ReactContextBaseJavaModule imple
         map.putString("channelSid", channelSid);
         map.putString("messageSid", messageSid);
 
-        sendEvent("ipMessagingClient:toastReceived", map);
+        sendEvent("chatClient:toastReceived", map);
+    }
+
+    @Override
+    public void onUserInfoChange(UserInfo userInfo, UserInfo.UpdateReason updateReason) {
+        WritableMap map = Arguments.createMap();
+        sendEvent("chatClient:toastReceived", updateReason.toString());
     }
 }

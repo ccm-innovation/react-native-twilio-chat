@@ -1,25 +1,24 @@
-package com.bradbumbalough.RCTTwilioIPMessaging;
+package com.bradbumbalough.RCTTwilioChat;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.twilio.common.TwilioAccessManager;
-import com.twilio.common.TwilioAccessManagerFactory;
-import com.twilio.common.TwilioAccessManagerListener;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implements TwilioAccessManagerListener {
+import com.twilio.accessmanager.AccessManager;
+
+
+public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implements AccessManager.Listener {
 
     @Override
     public String getName() {
         return "TwilioAccessManager";
     }
 
-    public TwilioAccessManager accessManager = null;
+    public AccessManager accessManager = null;
     private ReactApplicationContext reactContext;
 
     public static RCTTwilioAccessManager rctTwilioAccessManager;
@@ -37,8 +36,8 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     @ReactMethod
     public void accessManagerWithToken(String token, Promise promise) {
         RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
-        tmp.accessManager = TwilioAccessManagerFactory.createAccessManager(token, this);
-        promise.resolve(RCTConvert.TwilioAccessManager(tmp.accessManager));
+        tmp.accessManager = new AccessManager(token, this);
+        promise.resolve(RCTConvert.AccessManager(tmp.accessManager));
     }
 
     @ReactMethod
@@ -48,24 +47,26 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     }
 
     @Override
-    public void onTokenExpired(TwilioAccessManager twilioAccessManager) {
+    public void onTokenExpired(AccessManager twilioAccessManager) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("accessManager:tokenExpired", null);
     }
 
     @Override
-    public void onTokenUpdated(TwilioAccessManager twilioAccessManager) {
-
+    public void onTokenWillExpire(AccessManager twilioAccessManager) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("accessManager:tokenWillExpire", null);
     }
 
     @Override
-    public void onError(TwilioAccessManager twilioAccessManager, String s) {
+    public void onError(AccessManager twilioAccessManager, String s) {
         WritableMap params = Arguments.createMap();
         params.putString("error",s);
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("accessManager:tokenExpired",params);
+                .emit("accessManager:tokenInvalid",params);
     }
 
 }

@@ -4,43 +4,42 @@ The Client is the main interface for interacting with the Twilio SDKs.
 ## Usage
 ```JavaScript
 // create the client
-var client = new Client(accessManager);
+const client = new Client(token);
 
 // specify any global events
-client.onError = ({error, userInfo}) => console.log(error)
+client.onError = ({error, userInfo}) => console.log(error);
 
 // initialize the client
-client.initialize()
+client.initialize();
 
 // wait for sync to finish
 client.onClientSynchronized = () => {
-  client.getChannels()
-  .then((channels) => console.log(channels))
+  client.getUserChannels()
+  .then((channelPaginator) => console.log(channelPaginator));
 
   // create a new channel
   client.createChannel({
     friendlyName: 'My Channel',
     uniqueName: 'my_channel',
-    type: Constants.TWMChannelType.Private
+    type: Constants.TCHChannelType.Private
   })
-  .then((channel) => console.log(channel))
+  .then((channel) => console.log(channel));
 }
 ```
 
-## `new Client(accessManager[, synchronizationStrategy[, initialMessageCount]])`
+## `new Client(token[, synchronizationStrategy[, initialMessageCount]])`
 |Name |Type |Description |
 |--- |--- |--- |
-|*accessManager*|AccessManager|The instance of the AccessManager used to initialize the Client
-|*synchronizationStrategy*|Constants.TWMClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
+|*token*|String|The Access Token provided by your server
+|*synchronizationStrategy*|Constants.TCHClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStrategy.html)
 |*initialMessageCount*|Number|Optional. The number of most recent messages to fetch automatically when synchronizing a channel. Default: 100
 
 ## Properties
 |Name |Type |Description |
 |--- |--- |--- |
-|*accessManager*|AccessManager|Reference to the AccessManager used to initialize the client
 |*userInfo*|UserInfo|The current user properties
 |*version*|String|The version of the SDK
-|*synchronizationStatus*|Constants.TWMClientSynchronizationStatus|The current status of the client's initialization
+|*synchronizationStatus*|Constants.TCHClientSynchronizationStatus|The current status of the client's initialization
 |*isReachabilityEnabled*|Boolean|Whether or not reachability has been enabled for the messaging instance
 
 ## Methods
@@ -48,19 +47,16 @@ client.onClientSynchronized = () => {
 #### `initialize()`
 Initialize the Client with the provided Access Manager and begin synchronization.
 
-#### `getChannels()` : Promise
-Get all of the user's channels. Returns `Array<Channel>`.
+#### `getUserChannels()` : Promise
+Get all of the user's channels. Returns an instance of `Paginator`.
+
+#### `getPublicChannels()` : Promise
+Get all of the public channels. Returns an instance of `Paginator`.
 
 #### `getChannel(sid)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
 |*sid*|String|Sid of the channel to return
-Get a single instance of a Channel. Returns `Channel`.
-
-#### `getChannelByUniqueName(uniqueName)` : Promise
-|Name |Type |Description |
-|--- |--- |--- |
-|*uniqueName*|String|Unique name of the channel to return
 Get a single instance of a Channel. Returns `Channel`.
 
 #### `createChannel(options)` : Promise
@@ -74,7 +70,7 @@ Get a single instance of a Channel. Returns `Channel`.
 |--- |--- |--- |
 |*friendlyName*|String|Optional. Friendly name of channel
 |*uniqueName*|String|Optional. Unique name of channel
-|*type*|Constants.TWMChannelType|Optional. Whether the channel will be private or public (default)
+|*type*|Constants.TCHChannelType|Optional. Whether the channel will be private or public (default)
 |*attributes*|Object|Optional. Attributes to attach to the channel
 
 Create a new channel. Returns `Channel`.
@@ -82,7 +78,7 @@ Create a new channel. Returns `Channel`.
 #### `setLogLevel(logLevel)` **(iOS ONLY)**
 |Name |Type |Description |
 |--- |--- |--- |
-|*logLevel*|Constants.TWMLogLevel|Set the log level of the SDK
+|*logLevel*|Constants.TCHLogLevel|Set the log level of the SDK
 
 Note: Android will ignore this configuration
 
@@ -116,10 +112,15 @@ Instead of having to worry about creating native listeners, simply specify handl
 #### `onClientSynchronized()`
 Fired when the client has finished synchronizing and populated all of its attributes.
 
+#### `onClientConnectionStateChanged(state)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*status*|Constants.TCHClientConnectionState|The client's connection state
+
 #### `onSynchronizationStatusChanged(status)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*status*|Constants.TWMClientSynchronizationStatus|The client's synchronization status
+|*status*|Constants.TCHClientSynchronizationStatus|The client's synchronization status
 
 #### `onChannelAdded(channel)`
 |Name |Type |Description |
@@ -140,7 +141,7 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |Name |Type |Description |
 |--- |--- |--- |
 |*channelSid*|String|The sid of the channel
-|*status*|Constants.TWMChannelSynchronizationStatus|The synchronization status of the channel
+|*status*|Constants.TCHChannelSynchronizationStatus|The synchronization status of the channel
 
 #### `onMemberJoined({channelSid, member})`
 |Name |Type |Description |
@@ -164,7 +165,7 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |Name |Type |Description |
 |--- |--- |--- |
 |*channelSid*|String|The Sid of the channel the member is part of
-|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*updated*|Constants.TCHUserInfoUpdated|The type of userInfo update (**iOS Only**)
 |*userInfo*|UserInfo|The new UserInfo instance
 
 #### `onMessageAdded({channelSid, message})`
@@ -220,5 +221,5 @@ Fired when the client has finished synchronizing and populated all of its attrib
 #### `onUserInfoUpdated({updated, userInfo})`
 |Name |Type |Description |
 |--- |--- |--- |
-|*updated*|Constants.TWMUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*updated*|Constants.TCHUserInfoUpdated|The type of userInfo update (**iOS Only**)
 |*userInfo*|UserInfo|The new UserInfo instance

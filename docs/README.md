@@ -7,4 +7,5 @@
 - [Message](Message.md)
 - [Member](Member.md)
 - [UserInfo](UserInfo.md)
+- [Paginator](Paginator.md)
 - [Constants](Constants.md)

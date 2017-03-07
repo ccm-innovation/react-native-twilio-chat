@@ -7,63 +7,71 @@ let {
 } = require('react-native-twilio-ip-messaging')
 
 client.onSynchronizationStatusChanged = (status) => {
-  if (status == Constants.TWMSynchronizationStatus.Completed) {
+  if (status == Constants.TCHSynchronizationStatus.Completed) {
     console.log('Sync complete!')
   }
 }
 
-if (channel.status == Constants.TWMChannelStatus.Joined) {
+if (channel.status == Constants.TCHChannelStatus.Joined) {
   console.log('I can post!')
 }
 
 client.createChannel({
-  type: Constants.TWMChannelType.Private
+  type: Constants.TCHChannelType.Private
 }
 ```
 
-### TWMChannelStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelStatus.html)
+### TCHChannelStatus
 - Invited
 - Joined
 - NotParticipating
 
-### TWMChannelSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelSynchronizationStatus.html)
+### TCHChannelSynchronizationStatus
 - None
 - Identifier
 - Metadata
 - All
 - Failed
 
-### TWMChannelType
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMChannelType.html)
+### TCHChannelType
 - Public
 - Private
 
-### TWMClientSynchronizationStatus
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStatus.html)
+### TCHClientConnectionState
+- Connecting
+- Connected
+- Disconnected
+- Denied
+- Error
+
+### TCHClientSynchronizationStatus
 - Started
 - ChannelListCompleted
 - Completed
 - Failed
 
-### TWMClientSynchronizationStrategy
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMClientSynchronizationStrategy.html)
+### TCHClientSynchronizationStrategy
 - All
 - ChannelsList
 
-### TWMLogLevel - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TWMLogLevel.html)
+### TCHLogLevel - iOS
 - Fatal
 - Critical
 - Warning
 - Info
 - Debug
 
-### TWMUserInfoUpdate - iOS Only
-[Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.2/docs/Constants/TWMUserInfoUpdate.html)
-- FriendlyName
+### TCHLogLevel - Android
+- Assert
+- Debug
+- Error
+- Info
+- Verbose
+- Warn
+
+### TCHUserInfoUpdate - iOS Only
 - Attributes
-- ReachabilityOnline
+- FriendlyName
 - ReachabilityNotifiable
+- ReachabilityOnline
 

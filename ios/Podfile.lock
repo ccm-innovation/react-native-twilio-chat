@@ -1,15 +1,15 @@
 PODS:
-  - TwilioCommon (0.2.2)
-  - TwilioIPMessagingClient (0.14.1):
-    - TwilioCommon (~> 0.2.2)
+  - TwilioAccessManager (0.1.1)
+  - TwilioChatClient (0.16.0)
 
 DEPENDENCIES:
-  - TwilioIPMessagingClient (~> 0.14.1)
+  - TwilioAccessManager (~> 0.1.1)
+  - TwilioChatClient (~> 0.16.0)
 
 SPEC CHECKSUMS:
-  TwilioCommon: b697446b6f151255c4118f065e959c3dedee44e5
-  TwilioIPMessagingClient: 3dac0818cd382b8d4d6f77ffe8bf8adabcaadcf9
+  TwilioAccessManager: d5513425a63f469aeeb48267f9fa3c83b91f75ef
+  TwilioChatClient: 0241ea050d042395493dea8920d1fa1ac45ca478
 
-PODFILE CHECKSUM: 71ff44d237da51658d6651696d0eaf305fcc7742
+PODFILE CHECKSUM: 7ffd24c196e7a221b280de18ef37837c84912830
 
 COCOAPODS: 1.0.0

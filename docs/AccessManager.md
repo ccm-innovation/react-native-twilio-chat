@@ -1,5 +1,5 @@
 # AccessManager
-The AccessManager is Twilio's separation of authenticating your instance of Twilio from the functionality of IP Messaging.
+The AccessManager is Twilio's separation of authenticating your instance of Twilio from the functionality of Programable Chat. It is optional in the lastest release of the SDKs.
 
 ## `new AccessManager(token)`
 |Name |Type |Description |
@@ -9,7 +9,6 @@ The AccessManager is Twilio's separation of authenticating your instance of Twil
 ## Properties
 |Name |Type |Description |
 |--- |--- |--- |
-|*identity*|String|The identity (username) of your access manager
 |*token*|String|The current token
 |*isExpired*|Boolean|Whether or not the token has expired
 |*expires*|Date|The timestamp of when the token will expire
@@ -21,15 +20,20 @@ The AccessManager is Twilio's separation of authenticating your instance of Twil
 |--- |--- |--- |
 |*newToken*|String|A new token to renew your instance with
 
+#### `registerClient()`
+Call to attach the TwilioClient to the AccessManager so that `updateToken` automatically passes through. Otherwise, you'll need to update both.
+
+#### `removeListeners()`
+Call when unmounting or closing the Chat session.
+
 ### Events
 You can specify handlers for events on the `accessManager` instance itself. For example, if you wanted to listen to the token expiration event, you would set `accessManager.onTokenExpired = function() { console.log('Token expired') }`.
 
 #### `onTokenExpired()`
-Fired when the current token expires
-#### `onTokenError({error, userInfo})`
-Generic error handler for Access Manager issues. Returns the error and objective-c userInfo attributes.
+Fired when the current token expires.
 
-|Name |Type |Description |
-|--- |--- |--- |
-|*error*|String|The error message from the SDK
-|*userInfo*|Object|The contents of the userInfo method of the Error
+#### `onTokenWillExpire()`
+Fired 3 minuts before the current token will expire.
+
+#### `onTokenInvalid()`
+Fired when the token provided to the manager is invalid.

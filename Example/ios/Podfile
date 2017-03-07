@@ -27,6 +27,8 @@ target 'ReactNativeTwilioIPMessagingExample' do
     'RCTWebSocket'
   ]
 
-  pod 'TwilioIPMessagingClient', '~> 0.14.2'
-  pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
+  pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
+  source 'https://github.com/twilio/cocoapod-specs'
+  pod 'TwilioChatClient', '~> 0.16.0'
+  pod 'TwilioAccessManager', '~> 0.1.1'
 end

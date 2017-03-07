@@ -1,5 +1,6 @@
 # ios
 Example/ios/Pods
+ios/Pods
 *.xcuserstate
 
 # android
@@ -27,3 +28,6 @@ Example/node_modules
 
 .DS_Store
 
+node_modules
+
+.vscode

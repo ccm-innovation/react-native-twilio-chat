@@ -1,68 +1,71 @@
-# React Native Twilio IP Messaging
-[![npm version](https://badge.fury.io/js/react-native-twilio-ip-messaging.svg)](https://badge.fury.io/js/react-native-twilio-ip-messaging)
+# React Native Twilio Chat
+[![npm version](https://badge.fury.io/js/react-native-twilio-chat.svg)](https://badge.fury.io/js/react-native-twilio-chat)
 
->React Native wrapper for the Twilio IP Messaging SDKs
+>React Native wrapper for the Twilio Programmable Chat iOS and Android SDKs
 
-####[Changelog](CHANGELOG.md)
+*Note - this project is currently in development for a beta release. If you are looking for the legacy package for the Twilio IP Messaging SDKs, [see the original repository here](https://github.com/ccm-innovation/react-native-twilio-ip-messaging).*
 
 ## Installation
-```npm install --save react-native-twilio-ip-messaging```
-
-### iOS, option 1 (not working well with react native 0.40.0 at the moment)
-Install the Twilio IP Messaging SDK and this package via CocoaPods.  
-See the [full Podfile example](./Example/ios/Podfile) for more details.
-
 ```
-pod 'RCTTwilioIPMessaging', :path => '../node_modules/react-native-twilio-ip-messaging/ios'
+npm install --save react-native-twilio-chat
+```
 
+### iOS - CocoaPods
+Install the Twilio IP Messaging SDK and this package via CocoaPods. See the [full Podfile example](./Example/ios/Podfile) for more details.
+
+```ruby
+pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path => '../node_modules/react-native'
+pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
+  
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioIPMessagingClient', '~> 0.14.2'
+pod 'TwilioChatClient', '~> 0.16.0'
+pod 'TwilioAccessManager', '~> 0.1.1'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
 
-### iOS, option 2 - manually
+### iOS - Manually
 
-The twilio part of your Podfile would look like this
+Add the Twilio SDKs to your Podfile.
 
-
-```
+```ruby
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioIPMessagingClient', '~> 0.14.2'
+pod 'TwilioChatClient', '~> 0.16.0'
+pod 'TwilioAccessManager', '~> 0.1.1'
 ```
 
 1. Open your project in Xcode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` Look under `node_modules/react-native-twilio-ip-messaging/ios` and add `RCTTwilioIPMessaging.xcodeproj`.
-1. Add `libRCTTwilioIPMessageing.a` to `Build Phases -> Link Binary With Libraries.
-1. Click on `RCTTwilioIPMessaging.xcodeproj` in `Libraries` and go the `Build
+   Files to "Your Project Name"` Look under `node_modules/react-native-twilio-chat/ios` and add `RCTTwilioChat.xcodeproj`.
+1. Add `libRCTTwilioChat.a` to `Build Phases` -> `Link Binary With Libraries`.
+1. Click on `RCTTwilioChat.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
    Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../../ios/Pods/Headers` -   if they
    aren't, then add them.
 
-
+            
 ### Android
 In `android/settings.gradle`:
 
-```
-include ':RCTTwilioIPMessaging', ':app'
-project(':RCTTwilioIPMessaging').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-ip-messaging/android')
+```java
+include ':RCTTwilioChat', ':app'
+project(':RCTTwilioChat').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-chat/android')
 ```
 
 In `android/app/build.gradle`:
-```
+```java
 ...
 dependencies {
     ...
-    compile project(':RCTTwilioIPMessaging')
+    compile project(':RCTTwilioChat')
 }
 
 ```
 
-Register the module in `MainActivity.java` by calling addPackage():
+Register the module in `MainApplication.java`:
 ```Java
 // import package
-import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
+import com.bradbumbalough.RCTTwilioChat.RCTTwilioChatPackage;
 
 ...
 
@@ -70,15 +73,16 @@ import com.bradbumbalough.RCTTwilioIPMessaging.RCTTwilioIPMessagingPackage;
 @Override
 protected List<ReactPackage> getPackages() {
     return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new RCTTwilioChatPackage(),
         ... other packages
-        new RCTTwilioIPMessagingPackage(),
-        new MainReactPackage()
     );
 }
 ```
 
-**Note:** You might have to enable multidex in your `build.gradle` file and increase the heap size if you're getting errors while buliding. The minSdkVersion must also be at least 19, per the Twilio SDKs.
-```
+**Note:** You might have to enable multidex in your `build.gradle` file and increase the heap size if you're getting errors while buliding. The minSdkVersion must also be at least 19, per the Twilio SDKs. 
+
+```java
 android {
     ....
     dexOptions {
@@ -93,58 +97,85 @@ android {
 ```
 
 ## Usage
-```JavaScript
+```javascript
 /* Initialization */
 
-let {
+import {
     AccessManager,
     Client,
     Constants
-} = require('react-native-twilio-ip-messaging')
+} from 'react-native-twilio-chat';
 
 // create the access manager
-var accessManager = new AccessManager(token);
+const accessManager = new AccessManager(token);
 
 // specify any handlers for events
-accessManager.onTokenExpired = () => {
+accessManager.onTokenWillExpire = () => {
     getNewTokenFromServer()
-    .then(accessManager.updateToken)
+    .then(accessManager.updateToken);
 }
 
 // create the client
-var client = new Client(accessManager);
+const client = new Client(token);
 
 // specify any global events
-client.onError = ({error, userInfo}) => console.log(error)
+client.onError = ({error, userInfo}) => console.log(error);
 
 // initialize the client
-client.initialize()
+client.initialize();
 
 // wait for sync to finish
 client.onClientSynchronized = () => {
-    client.getChannels()
-    .then((channels) => console.log(channels))
+    client.getUserChannels()
+    .then((channelPaginator) => console.log(channelPaginator.items));
 }
 
 /* Individual Channel */
 
-// somehow an instance of Channel is passed down in the app
-var channel = this.props.channel
+// an instance of Channel is passed down in the app via props
+let channel = this.props.channel
 
 // specify channel specific events
-channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body)
-channel.onTypingStarted = (member) => console.log(member.identity + " started typing...")
-channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...")
-channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName)
+channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body);
+channel.onTypingStarted = (member) => console.log(member.identity + " started typing...");
+channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...");
+channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName);
 
 // sending a message
-<TextInput
-    onChangeText={(body) => {
-        this.setState({body})
-        channel.typing()
-    }}
-    onSubmitEditing={() => channel.sendMessage(this.state.body)}
+<TextInput 
+  onChangeText={(body) => {
+    this.setState({body});
+    channel.typing();
+  }}
+  onSubmitEditing={() => { channel.sendMessage(this.state.body)} }
 />
 ````
 
-####[Documentation](docs)
+## [Documentation](docs)
+
+## Contributers 🍻
+Thank you for your help in maintaining this project!
+- [bradbumbalough](https://github.com/bradbumbalough)
+- [johndrkurtcom](https://github.com/johndrkurtcom)
+- [jck2](https://github.com/jck2)
+- [Baisang](https://github.com/Baisang)
+- [thathirsch](https://github.com/thathirsch)
+- [n8stowell82](https://github.com/n8stowell82)
+- [svlaev](https://github.com/svlaev)
+- [Maxwell2022](https://github.com/Maxwell2022)
+- [bbil](https://github.com/bbil)
+- [jhabdas](https://github.com/jhabdas)
+- [plonkus](https://github.com/plonkus)
+
+## TODO 🗒
+ * [x] Copy code from `programable-chat` branch on old package
+ * [ ] Copy issues and PRs over
+ * [ ] Update docs (wiki?)
+ * [ ] Migration guide
+ * [ ] Publish to npm
+ * [ ] Update `twilio-ip-messaging` to reference `twilio-chat`
+ * [ ] 1.0 release
+ * [ ] Testing
+
+## License
+This project is licensed under the [MIT License](LICENSE).
