@@ -1,4 +1,5 @@
 # React Native Twilio Chat
+[![npm version](https://badge.fury.io/js/react-native-twilio-chat.svg)](https://badge.fury.io/js/react-native-twilio-chat)
 
 >React Native wrapper for the Twilio Programmable Chat iOS and Android SDKs
 
@@ -61,6 +62,7 @@ protected List<ReactPackage> getPackages() {
 ```
 
 **Note:** You might have to enable multidex in your `build.gradle` file and increase the heap size if you're getting errors while buliding. The minSdkVersion must also be at least 19, per the Twilio SDKs. 
+
 ```java
 android {
     ....

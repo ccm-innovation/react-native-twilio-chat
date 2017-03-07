@@ -4,7 +4,7 @@
   "description": "A React Native wrapper for the Twilio Chat iOS and Android SDKs",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,13 @@
   "bugs": {
     "url": "https://github.com/ccm-innovation/react-native-twilio-chat/issues"
   },
-  "homepage": "https://github.com/ccm-innovation/react-native-twilio-chat#readme"
+  "homepage": "https://github.com/ccm-innovation/react-native-twilio-chat#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0"
+  }
 }

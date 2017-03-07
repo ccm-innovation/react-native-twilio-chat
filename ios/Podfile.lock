@@ -1,0 +1,15 @@
+PODS:
+  - TwilioAccessManager (0.1.1)
+  - TwilioChatClient (0.16.0)
+
+DEPENDENCIES:
+  - TwilioAccessManager (~> 0.1.1)
+  - TwilioChatClient (~> 0.16.0)
+
+SPEC CHECKSUMS:
+  TwilioAccessManager: d5513425a63f469aeeb48267f9fa3c83b91f75ef
+  TwilioChatClient: 0241ea050d042395493dea8920d1fa1ac45ca478
+
+PODFILE CHECKSUM: 7ffd24c196e7a221b280de18ef37837c84912830
+
+COCOAPODS: 1.0.0
