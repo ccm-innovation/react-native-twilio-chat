@@ -3,13 +3,13 @@ A class that handles the interactions with a specific channel.
 
 ## Usage
 ```JavaScript
-var channel = this.props.channel
+let channel = this.props.channel
 
 // specify channel specific events
-channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body)
-channel.onTypingStarted = (member) => console.log(member.identity + " started typing...")
-channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...")
-channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName)
+channel.onMessageAdded = (message) => console.log(message.author + ": " + message.body);
+channel.onTypingStarted = (member) => console.log(member.identity + " started typing...");
+channel.onTypingEnded = (member) => console.log(member.identity + " stopped typing...");
+channel.onMemberAdded = (member) => console.log(member.identity + " joined " + channel.friendlyName);
 
 channel.getMessages(20)
 .then((messages) => {
@@ -22,11 +22,11 @@ channel.setAllMessagesConsumed()
 
 // sending a message
 <TextInput
-    onChangeText={(body) => {
-        this.setState({body})
-        channel.typing()
-    }}
-    onSubmitEditing={() => channel.sendMessage(this.state.body)}
+  onChangeText={(body) => {
+      this.setState({body});
+      channel.typing();
+  }}
+  onSubmitEditing={() => channel.sendMessage(this.state.body)}
 />
 ```
 
@@ -36,15 +36,18 @@ channel.setAllMessagesConsumed()
 |*sid*|String|The sid of the channel (shouldn't need this in an instance, all methods are pre-bound)
 |*friendlyName*|String|Friendly name of the channel
 |*uniqueName*|String|Unique name of the channel
+|*attributes*|Object|Any custom attributes added to the channel
 |*synchronizationStatus*|Constants.TCHChannelSynchronizationStatus|Current synchronization status of the channel
 |*status*|Constants.TCHChannelStatus|The user's association with the channel
 |*type*|Constants.TCHChannelType|Whether the channel is public or private
-|*attributes*|Object|Any custom attributes added to the channel
 |*dateCreated*|Date|When the channel was created
 |*dateUpdated*|Date|When the channel was last updated
 |*createdBy*|String|The identity of the channel creator
 
 *On public channels accessed through getPublicChannels, you will have these additional properties*
+
+|Name |Type |Description |
+|--- |--- |--- |
 |*messagesCount*|Number|Count of messages
 |*membersCount*|Number|Count of members
 

@@ -15,16 +15,17 @@ The AccessManager is Twilio's separation of authenticating your instance of Twil
 
 ### Methods
 
-#### `updateToken(newToken)`
-|Name |Type |Description |
-|--- |--- |--- |
-|*newToken*|String|A new token to renew your instance with
-
 #### `registerClient()`
 Call to attach the TwilioClient to the AccessManager so that `updateToken` automatically passes through. Otherwise, you'll need to update both.
 
 #### `removeListeners()`
 Call when unmounting or closing the Chat session.
+
+#### `updateToken(newToken)`
+Updates the token associated with the Access Manager.
+|Name |Type |Description |
+|--- |--- |--- |
+|*newToken*|String|A new token to renew your instance with
 
 ### Events
 You can specify handlers for events on the `accessManager` instance itself. For example, if you wanted to listen to the token expiration event, you would set `accessManager.onTokenExpired = function() { console.log('Token expired') }`.
