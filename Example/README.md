@@ -4,9 +4,9 @@ Run `npm install` (in this directory) and then `pod install` (for iOS) to bring 
 
 This is an example app using [React Native Gifted Messenger](https://github.com/FaridSafi/react-native-gifted-messenger).
 
-![](https://raw.githubusercontent.com/ccm-innovation/react-native-twilio-ip-messaging/master/Example/capture.png)
+![](https://raw.githubusercontent.com/ccm-innovation/react-native-twilio-chat/master/Example/capture.png)
 
-You'll need to run a server locally to generate the access_tokens. I used a version of the [IP Messaging Quickstart](https://www.twilio.com/docs/api/ip-messaging/guides/quickstart-js#download), modified to take an identity param in the `/token` route.
+You'll need to run a server locally to generate the access_tokens. I used a version of the [Twilio Chat Quickstart](https://www.twilio.com/docs/api/chat/guides/quickstart-js#download), modified to take an identity param in the `/token` route.
 
 ```JavaScript
 app.get('/token', function(request, response) {

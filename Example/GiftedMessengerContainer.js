@@ -16,7 +16,7 @@ import {
   Client,
   Constants,
   AccessManager,
-} from 'react-native-twilio-ip-messaging';
+} from 'react-native-twilio-chat';
 
 const BOT_GREETINGS = [
   "Hello!",
