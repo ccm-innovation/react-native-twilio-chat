@@ -154,7 +154,7 @@ Thank you for your help in maintaining this project!
  * [ ] Update docs (wiki?)
  * [ ] Migration guide
  * [ ] Publish to npm
- * [ ] Update `twilio-ip-messaging` to reference `twilio-chat`
+ * [x] Update `twilio-ip-messaging` to reference `twilio-chat`
  * [ ] 1.0 release
  * [ ] Testing
 
