@@ -4,7 +4,7 @@
 ```JavaScript
 let {
   Constants
-} = require('react-native-twilio-ip-messaging')
+} = require('react-native-twilio-chat')
 
 client.onSynchronizationStatusChanged = (status) => {
   if (status == Constants.TCHSynchronizationStatus.Completed) {
