@@ -137,7 +137,7 @@ channel.onMemberAdded = (member) => console.log(member.identity + " joined " + c
 ## [Documentation](docs)
 
 ## Contributers 🍻
-Thank you for your help in maintaining this project!
+Thank you for your help in maintaining this project! Haven't contributed yet? [Check out our Contributing guidelines...](CONTRIBUTING.md).
 - [bradbumbalough](https://github.com/bradbumbalough)
 - [johndrkurtcom](https://github.com/johndrkurtcom)
 - [jck2](https://github.com/jck2)
