@@ -5,6 +5,8 @@
 
 *Note - this project is currently in development for a beta release. If you are looking for the legacy package for the Twilio IP Messaging SDKs, [see the original repository here](https://github.com/ccm-innovation/react-native-twilio-ip-messaging).*
 
+### [View migration doc from react-native-ip-messaging here](MIGRATION.md)
+
 ## Installation
 ```
 npm install --save react-native-twilio-chat
