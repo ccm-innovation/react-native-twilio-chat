@@ -31,7 +31,7 @@ client.onClientSynchronized = () => {
 |Name |Type |Description |
 |--- |--- |--- |
 |*token*|String|The Access Token provided by your server
-|*synchronizationStrategy*|Constants.TCHClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/chat/releases/0.17.1/docs/Constants/TCHClientSynchronizationStrategy.html)
+|*synchronizationStrategy*|Constants.TCHClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStrategy.html)
 |*initialMessageCount*|Number|Optional. The number of most recent messages to fetch automatically when synchronizing a channel. Default: 100
 
 ## Properties
@@ -43,21 +43,6 @@ client.onClientSynchronized = () => {
 |*isReachabilityEnabled*|Boolean|Whether or not reachability has been enabled for the messaging instance
 
 ## Methods
-
-#### `initialize()`
-Initialize the Client with the provided Access Manager and begin synchronization.
-
-#### `getUserChannels()` : Promise
-Get all of the user's channels. Returns an instance of `Paginator`.
-
-#### `getPublicChannels()` : Promise
-Get all of the public channels. Returns an instance of `Paginator`.
-
-#### `getChannel(sid)` : Promise
-|Name |Type |Description |
-|--- |--- |--- |
-|*sid*|String|Sid of the channel to return
-Get a single instance of a Channel. Returns `Channel`.
 
 #### `createChannel(options)` : Promise
 |Name |Type |Description |
@@ -75,24 +60,17 @@ Get a single instance of a Channel. Returns `Channel`.
 
 Create a new channel. Returns `Channel`.
 
-#### `setLogLevel(logLevel)`
+#### `getChannel(sid)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
-|*logLevel*|Constants.TCHLogLevel|Set the log level of the SDK
+|*sid*|String|Sid of the channel to return
+Get a single instance of a Channel. Returns `Channel`.
 
-#### `register(token)`
-Register APNS token for push notifications. This can be obtained in `PushNotificationIOS.addListener('register', handler)`.
+#### `getPublicChannels()` : Promise
+Get all of the public channels. Returns an instance of `Paginator`.
 
-|Name |Type |Description |
-|--- |--- |--- |
-|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
-
-#### `unregister(token)`
-Unregister from push notification updates.
-
-|Name |Type |Description |
-|--- |--- |--- |
-|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
+#### `getUserChannels()` : Promise
+Get all of the user's channels. Returns an instance of `Paginator`.
 
 #### `handleNotification(notification)`
 Queue the incoming notification with the messaging library for processing - for React Native, this will come in `PushNotificationIOS.addEventListener('notification', handleNotification)`.
@@ -101,24 +79,33 @@ Queue the incoming notification with the messaging library for processing - for 
 |--- |--- |--- |
 |*notification*|Object|The incoming notification.
 
+#### `initialize()`
+Initialize the Client with the provided Access Manager and begin synchronization.
+
+#### `register(token)`
+Register APNS token for push notifications. This can be obtained in `PushNotificationIOS.addListener('register', handler)`.
+
+|Name |Type |Description |
+|--- |--- |--- |
+|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
+
+#### `setLogLevel(logLevel)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*logLevel*|Constants.TCHLogLevel|Set the log level of the SDK
+
 #### `shutdown()`
 Terminate the instance of the client, and remove all the listeners. Note: this does not remove channel specific listeners.
 
+#### `unregister(token)`
+Unregister from push notification updates.
+
+|Name |Type |Description |
+|--- |--- |--- |
+|*token*|String|The APNS token which usually comes from ‘didRegisterForRemoteNotificationsWithDeviceToken’.
+
 ### Events
 Instead of having to worry about creating native listeners, simply specify handlers on the client instance for the events you want to be notified about.
-
-#### `onClientSynchronized()`
-Fired when the client has finished synchronizing and populated all of its attributes.
-
-#### `onClientConnectionStateChanged(state)`
-|Name |Type |Description |
-|--- |--- |--- |
-|*status*|Constants.TCHClientConnectionState|The client's connection state
-
-#### `onSynchronizationStatusChanged(status)`
-|Name |Type |Description |
-|--- |--- |--- |
-|*status*|Constants.TCHClientSynchronizationStatus|The client's synchronization status
 
 #### `onChannelAdded(channel)`
 |Name |Type |Description |
@@ -141,17 +128,31 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |*channelSid*|String|The sid of the channel
 |*status*|Constants.TCHChannelSynchronizationStatus|The synchronization status of the channel
 
-#### `onMemberJoined({channelSid, member})`
+#### `onClientConnectionStateChanged(state)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*channelSid*|String|The sid of the channel
-|*member*|Object|The joined member
+|*status*|Constants.TCHClientConnectionState|The client's connection state
+
+#### `onClientSynchronized()`
+Fired when the client has finished synchronizing and populated all of its attributes.
+
+#### `onError({error, userId})`
+|Name |Type |Description |
+|--- |--- |--- |
+|*error*|String|The error message from the SDK
+|*userInfo*|Object|The Error's userInfo method object
 
 #### `onMemberChanged({channelSid, member})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*channelSid*|String|The sid of the channel
 |*member*|Object|The changed member
+
+#### `onMemberJoined({channelSid, member})`
+|Name |Type |Description |
+|--- |--- |--- |
+|*channelSid*|String|The sid of the channel
+|*member*|Object|The joined member
 
 #### `onMemberLeft({channelSid, member})`
 |Name |Type |Description |
@@ -184,25 +185,10 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |*channelSid*|String|The sid of the channel
 |*message*|Message|The instance of the deleted Message
 
-#### `onError({error, userId})`
+#### `onSynchronizationStatusChanged(status)`
 |Name |Type |Description |
 |--- |--- |--- |
-|*error*|String|The error message from the SDK
-|*userInfo*|Object|The Error's userInfo method object
-
-#### `onTypingStarted({channelSid, member})`
-|Name |Type |Description |
-|--- |--- |--- |
-|*channelSid*|String|The sid of the channel
-|*member*|Object|The member who started typing
-
-#### `onTypingEnded({channelSid, member})`
-|Name |Type |Description |
-|--- |--- |--- |
-|*channelSid*|String|The sid of the channel
-|*member*|Object|The member who ended typing
-
-#### `onToastSubscribed()`
+|*status*|Constants.TCHClientSynchronizationStatus|The client's synchronization status
 
 #### `onToastReceived({channelSid, messageSid})`
 |Name |Type |Description |
@@ -210,14 +196,29 @@ Fired when the client has finished synchronizing and populated all of its attrib
 |*channelSid*|String|The sid of the channel
 |*messageSid*|String|The message sid (if applicable)
 
+#### `onToastSubscribed()`
+
+#### `onTypingEnded({channelSid, member})`
+|Name |Type |Description |
+|--- |--- |--- |
+|*channelSid*|String|The sid of the channel
+|*member*|Object|The member who ended typing
+
 #### `onToastFailed({error, userId})`
 |Name |Type |Description |
 |--- |--- |--- |
 |*error*|String|The error message from the SDK
 |*userInfo*|Object|The Error's userInfo method object
 
+
+#### `onTypingStarted({channelSid, member})`
+|Name |Type |Description |
+|--- |--- |--- |
+|*channelSid*|String|The sid of the channel
+|*member*|Object|The member who started typing
+
 #### `onUserInfoUpdated({updated, userInfo})`
 |Name |Type |Description |
 |--- |--- |--- |
-|*updated*|Constants.TCHUserInfoUpdated|The type of userInfo update (**iOS Only**)
+|*updated*|Constants.TCHUserInfoUpdated|The type of userInfo update
 |*userInfo*|UserInfo|The new UserInfo instance
