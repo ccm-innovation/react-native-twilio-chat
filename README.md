@@ -153,9 +153,9 @@ Thank you for your help in maintaining this project! Haven't contributed yet? [C
 ## TODO 🗒
  * [x] Copy code from `programable-chat` branch on old package
  * [x] Copy issues and PRs over
- * [ ] Update docs (wiki?)
- * [ ] Migration guide
- * [ ] Publish to npm
+ * [x] Update docs (wiki?)
+ * [x] Migration guide
+ * [x] Publish to npm
  * [x] Update `twilio-ip-messaging` to reference `twilio-chat`
  * [ ] 1.0 release
  * [ ] Testing
