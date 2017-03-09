@@ -361,6 +361,8 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     @Override
     public void onUserInfoChange(UserInfo userInfo, UserInfo.UpdateReason updateReason) {
         WritableMap map = Arguments.createMap();
-        sendEvent("chatClient:toastReceived", updateReason.toString());
+        map.putString("updated", updateReason.toString());
+        map.putMap("userInfo", RCTConvert.UserInfo(userInfo));
+        sendEvent("chatClient:userInfoUpdated", map);
     }
 }
