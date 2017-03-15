@@ -1,29 +1,30 @@
 {
-  "name": "react-native-twilio-ip-messaging",
-  "version": "1.0.0",
-  "description": "React Native wrapper for Twilio IP Messaging SDKs",
+  "name": "react-native-twilio-chat",
+  "version": "0.1.0",
+  "description": "A React Native wrapper for the Twilio Chat iOS and Android SDKs",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ccm-innovation/react-native-twilio-ip-messaging.git"
+    "url": "git+https://github.com/ccm-innovation/react-native-twilio-chat.git"
   },
   "keywords": [
     "react-native",
     "react",
     "ios",
+    "android",
     "twilio",
     "messaging",
-    "android"
+    "chat"
   ],
   "author": "Brad Bumbalough <bradley.bumbalough@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ccm-innovation/react-native-twilio-ip-messaging/issues"
+    "url": "https://github.com/ccm-innovation/react-native-twilio-chat/issues"
   },
-  "homepage": "https://github.com/ccm-innovation/react-native-twilio-ip-messaging#readme",
+  "homepage": "https://github.com/ccm-innovation/react-native-twilio-chat#readme",
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "eslint": "^3.11.1",

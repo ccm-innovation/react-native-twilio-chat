@@ -4,7 +4,7 @@
 ```JavaScript
 let {
   Constants
-} = require('react-native-twilio-ip-messaging')
+} = require('react-native-twilio-chat')
 
 client.onSynchronizationStatusChanged = (status) => {
   if (status == Constants.TCHSynchronizationStatus.Completed) {
@@ -54,22 +54,14 @@ client.createChannel({
 - All
 - ChannelsList
 
-### TCHLogLevel - iOS
+### TCHLogLevel
 - Fatal
 - Critical
 - Warning
 - Info
 - Debug
 
-### TCHLogLevel - Android
-- Assert
-- Debug
-- Error
-- Info
-- Verbose
-- Warn
-
-### TCHUserInfoUpdate - iOS Only
+### TCHUserInfoUpdate
 - Attributes
 - FriendlyName
 - ReachabilityNotifiable
