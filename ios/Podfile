@@ -7,6 +7,6 @@ target 'RCTTwilioChat' do
 
   # Pods for RCTTwilioChat
   source 'https://github.com/twilio/cocoapod-specs'
-  pod 'TwilioChatClient', '~> 0.16.0'
-  pod 'TwilioAccessManager', '~> 0.1.1'
+  pod 'TwilioChatClient', '~> 0.17.1'
+  pod 'TwilioAccessManager', '~> 0.1.3'
 end

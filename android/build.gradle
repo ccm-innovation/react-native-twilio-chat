@@ -13,6 +13,6 @@ android {
 }
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile "com.twilio:chat-android:0.11.2"
+    compile "com.twilio:chat-android:0.12.1"
     compile "com.twilio:accessmanager-android:0.1.0"
 }
