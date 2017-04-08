@@ -12,6 +12,6 @@
     "react-native-communications": "^1.0.1",
     "react-native-extra-dimensions-android": "^0.17.0",
     "react-native-gifted-messenger": "^0.1.4",
-    "react-native-twilio-ip-messaging": "git://github.com/ccm-innovation/react-native-twilio-ip-messaging.git#programable-chat"
+    "react-native-twilio-ip-chat": "^0.1.1"
   }
 }
