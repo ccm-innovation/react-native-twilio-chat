@@ -150,6 +150,7 @@ Thank you for your help in maintaining this project! Haven't contributed yet? [C
 - [jhabdas](https://github.com/jhabdas)
 - [plonkus](https://github.com/plonkus)
 - [mattshen](https://github.com/mattshen)
+- [Kabangi](https://github.com/Kabangi)
 
 ## TODO 🗒
  * [x] Copy code from `programable-chat` branch on old package
