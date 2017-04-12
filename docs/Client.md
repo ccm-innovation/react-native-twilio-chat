@@ -117,15 +117,15 @@ Instead of having to worry about creating native listeners, simply specify handl
 |--- |--- |--- |
 |*channel*|Channel|An instance of the changed channel
 
-#### `onChannelInvited(channel)`
-|Name |Type |Description |
-|--- |--- |--- |
-|*channel*|Channel|An instance of the changed channel
-
 #### `onChannelDeleted(channel)`
 |Name |Type |Description |
 |--- |--- |--- |
 |*channel*|Channel|An instance of the deleted channel
+
+#### `onChannelInvited(channel)`
+|Name |Type |Description |
+|--- |--- |--- |
+|*channel*|Channel|An instance of the changed channel
 
 #### `onChannelSynchronizationStatusChanged({channelSid, status})`
 |Name |Type |Description |
