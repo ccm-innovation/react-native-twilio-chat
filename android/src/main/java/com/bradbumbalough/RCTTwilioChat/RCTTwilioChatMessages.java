@@ -66,7 +66,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendMessage(String channelSid, final String body,  ReadableMap attributes, final Promise promise) {
+    public void sendMessage(String channelSid, final String body, final ReadableMap attributes, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
             public void onError(ErrorInfo errorInfo) {
@@ -75,7 +75,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess(Messages messages) {
+            public void onSuccess(final Messages messages) {
                 final Message newMessage = messages.createMessage(body);
 
                 final StatusListener sendListener = new StatusListener() {
