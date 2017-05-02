@@ -113,46 +113,6 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendAttributedMessage(String channelSid, final String body, ReadableMap attributes, final Promise promise) {
-        final JSONObject json = RCTConvert.readableMapToJson(attributes);
-        loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                super.onError(errorInfo);
-                promise.reject("send-attributed-message-error","Error occurred while attempting to sendAttributedMessage.");
-            }
-
-            @Override
-            public void onSuccess(final Messages messages) {
-                final Message newMessage = messages.createMessage(body);
-                newMessage.setAttributes(json, new StatusListener() {
-                    @Override
-                    public void onSuccess() {
-                        messages.sendMessage(newMessage, new StatusListener() {
-                            @Override
-                            public void onError(ErrorInfo errorInfo) {
-                                super.onError(errorInfo);
-                                promise.reject("send-attributed-message-error","Error occurred while attempting to send message in sendAttributedMessage.");
-                            }
-
-                            @Override
-                            public void onSuccess() {
-                                promise.resolve(true);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(ErrorInfo errorInfo) {
-                        super.onError(errorInfo);
-                        promise.reject("send-attributed-message-error","Error occurred while attempting to set attributes in sendAttributedMessage.");
-                    }
-                });
-            }
-        });
-    }
-
-    @ReactMethod
     public void removeMessage(String channelSid, final Integer index, final Promise promise) {
         loadMessagesFromChannelSid(channelSid, new CallbackListener<Messages>() {
             @Override
