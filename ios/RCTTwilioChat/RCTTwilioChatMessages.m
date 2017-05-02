@@ -36,45 +36,33 @@ RCT_REMAP_METHOD(getLastConsumedMessageIndex, channelSid:(NSString *)channelSid 
 }
 
 
-RCT_REMAP_METHOD(sendMessage, channelSid:(NSString *)channelSid body:(NSString *)body send_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(sendMessage, channelSid:(NSString *)channelSid body:(NSString *)body attributes:(NSDictionary<NSString *, id> *)attributes send_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
         if (result.isSuccessful) {
-            [messages sendMessage:[messages createMessageWithBody:body] completion:^(TCHResult *result) {
-                if (result.isSuccessful) {
-                    resolve(@[@TRUE]);
-                }
-                else {
-                    reject(@"send-message-error", @"Error occured while attempting to send a message.", result.error);
-                }
-            }];
-        }
-        else {
-            reject(@"send-message-error", @"Error occured while attempting to send a message.", result.error);
-        }
-    }];
-}
-
-RCT_REMAP_METHOD(sendAttributedMessage, channelSid:(NSString *)channelSid body:(NSString *)body attributes:(NSDictionary<NSString *, id> *)attributes create_message_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
-        if (result.isSuccessful) {
-            TCHMessage* message = [messages createMessageWithBody:body];
+          TCHMessage* message = [messages createMessageWithBody:body];
+          void (^sendListener)(TCHResult * sendResult) = ^(TCHResult *sendResult) {
+              if (sendResult.isSuccessful) {
+                  resolve(@[@TRUE]);
+              }
+              else {
+                  reject(@"send-message-error", @"Error occured while attempting to send a message.", sendResult.error);
+              }
+          };
+          if (attributes != nil) {
             [message setAttributes:attributes completion:^(TCHResult *setAttrResult) {
                 if(setAttrResult.isSuccessful) {
-                    [messages sendMessage:message completion:^(TCHResult *sendResult) {
-                        if (sendResult.isSuccessful) {
-                            resolve(@[@TRUE]);
-                        }
-                        else {
-                            reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", sendResult.error);
-                        }
-                    }];
+                    [messages sendMessage:message completion:sendListener];
                 } else {
                     reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", setAttrResult.error);
                 }
             }];
+          }
+          else {
+            [messages sendMessage:message completion:sendListener];
+          }
         }
         else {
-            reject(@"send-attributed-message-error", @"Error occured while attempting to send attributed message.", result.error);
+            reject(@"send-message-error", @"Error occured while attempting to send a message.", result.error);
         }
     }];
 }
