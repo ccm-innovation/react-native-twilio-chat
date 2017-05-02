@@ -92,6 +92,7 @@ public class RCTTwilioChatMessages extends ReactContextBaseJavaModule {
                 };
 
                 if(attributes != null) {
+                  final JSONObject json = RCTConvert.readableMapToJson(attributes);
                   newMessage.setAttributes(json, new StatusListener() {
                       @Override
                       public void onSuccess() {
