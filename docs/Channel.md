@@ -147,10 +147,11 @@ Leave a channel.
 |--- |--- |--- |
 |*index*|Number|The index of the message to delete
 
-#### `sendMessage(body)` : Promise
+#### `sendMessage(body, attributes)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |
 |*body*|String|The message body
+|*attributes*|Object|Any properties you want associated with the message (Optional)
 
 #### `setAllMessagesConsumed()`
 Update the last consumed index for this Member and Channel to the max message currently on this device.
