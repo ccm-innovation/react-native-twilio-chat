@@ -12,7 +12,7 @@ target 'ReactNativeTwilioIPMessagingExample' do
 
   pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   source 'https://github.com/twilio/cocoapod-specs'
-  pod 'TwilioChatClient', '~> 0.16.0'
-  pod 'TwilioAccessManager', '~> 0.1.1'
+  pod 'TwilioChatClient'
+  pod 'TwilioAccessManager'
 
 end
