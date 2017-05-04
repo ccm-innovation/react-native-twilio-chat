@@ -41,9 +41,10 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
     }
 
     @ReactMethod
-    public void updateToken(String token) {
+    public void updateToken(String token, Promise promise) {
       RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
       tmp.accessManager.updateToken(token);
+      promise.resolve(RCTConvert.AccessManager(tmp.accessManager));
     }
 
     @Override
