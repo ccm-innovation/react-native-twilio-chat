@@ -37,23 +37,33 @@ RCT_EXPORT_MODULE()
 RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
     TwilioChatClientProperties *props = nil;
     if (properties.count > 0) {
-        props = [[TwilioChatClientProperties alloc] init];
-        props.synchronizationStrategy = [RCTConvert TCHClientSynchronizationStrategy:properties[@"synchronizationStrategy"]];
-        props.initialMessageCount = [RCTConvert NSUInteger:properties[@"initialMessageCount"]];
+      props = [[TwilioChatClientProperties alloc] init];
+      if (properties[@"region"]) {
+        props.region = [RCTConvert NSString:properties[@"region"]];
+      }
     }
-    RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-    _client.client = [TwilioChatClient chatClientWithToken:token properties:props delegate:self];
-    resolve([RCTConvert TwilioChatClient:_client.client]);
+    [TwilioChatClient chatClientWithToken:token properties:props delegate:self completion:^(TCHResult *result, TwilioChatClient *chatClient) {
+      RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
+      _client.client = chatClient;
+      resolve([RCTConvert TwilioChatClient:_client.client]);
+    }];
 }
 
 RCT_EXPORT_METHOD(updateToken:(NSString *)token) {
     RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-    [[_client client] updateToken:token];
+    [[_client client] updateToken:token completion:^(TCHResult *result) {
+      if (result.isSuccessful) {
+        NSLog(@"Client token updated");
+      }
+      else {
+        NSLog(@"Client token update failed: %@", result.error.localizedDescription);
+      }
+    }];
 }
 
-RCT_REMAP_METHOD(userInfo, userInfo_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(user, userInfo_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  resolve([RCTConvert TCHUserInfo:_client.client.userInfo]);
+  resolve([RCTConvert TCHUser:_client.client.user]);
 }
 
 RCT_EXPORT_METHOD(synchronizationStatus:(RCTResponseSenderBlock)callback) {
@@ -67,17 +77,38 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback) {
 
 RCT_EXPORT_METHOD(register:(NSString *)token) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  [[_client client] registerWithToken:[RCTConvert dataWithHexString:token]];
+  [[_client client] registerWithNotificationToken:[RCTConvert dataWithHexString:token] completion:^(TCHResult *result) {
+    if (result.isSuccessful) {
+      NSLog(@"Notification token registered");
+    }
+    else {
+      NSLog(@"Notification token registration failed: %@", result.error.localizedDescription);
+    }
+  }];
 }
 
 RCT_EXPORT_METHOD(unregister:(NSString *)token) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  [[_client client] deregisterWithToken:[RCTConvert dataWithHexString:token]];
+  [[_client client] deregisterWithNotificationToken:[RCTConvert dataWithHexString:token] completion:^(TCHResult *result) {
+    if (result.isSuccessful) {
+      NSLog(@"Notification token deregistered");
+    }
+    else {
+      NSLog(@"Notification token deregistration failed: %@", result.error.localizedDescription);
+    }
+  }];
 }
 
 RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)notification) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  [[_client client] handleNotification:notification];
+  [[_client client] handleNotification:notification completion:^(TCHResult *result) {
+    if (result.isSuccessful) {
+      NSLog(@"Notification handled successfully");
+    }
+    else {
+      NSLog(@"Notification handling failed: %@", result.error.localizedDescription);
+    }
+  }];
 }
 
 RCT_EXPORT_METHOD(shutdown) {
@@ -95,7 +126,7 @@ RCT_EXPORT_METHOD(logLevel:(TCHLogLevel)logLevel callback:(RCTResponseSenderBloc
 
 RCT_REMAP_METHOD(setFriendlyName, friendlyName:(NSString *)friendlyName friendlyName_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  [[[_client client]userInfo] setFriendlyName:friendlyName completion:^(TCHResult *result) {
+  [[[_client client] user] setFriendlyName:friendlyName completion:^(TCHResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
@@ -107,7 +138,7 @@ RCT_REMAP_METHOD(setFriendlyName, friendlyName:(NSString *)friendlyName friendly
 
 RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
-  [[[_client client]userInfo] setAttributes:attributes completion:^(TCHResult *result) {
+  [[[_client client] user] setAttributes:attributes completion:^(TCHResult *result) {
     if (result.isSuccessful) {
       resolve(@[@TRUE]);
     }
@@ -251,14 +282,14 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                       }];
 }
 
-- (void)chatClient:(TwilioChatClient *)client userInfo:(TCHUserInfo *)userInfo updated:(TCHUserInfoUpdate)updated {
+- (void)chatClient:(TwilioChatClient *)client user:(TCHUser *)user updated:(TCHUserUpdate)updated {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:userInfoUpdated"
                                                body: @{@"updated": @(updated),
-                                                       @"userInfo": [RCTConvert TCHUserInfo:userInfo]
+                                                       @"userInfo": [RCTConvert TCHUser:user]
                                                        }];
 }
 
-- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member userInfo:(TCHUserInfo *)userInfo updated:(TCHUserInfoUpdate)updated {
+- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member updated:(TCHMemberUpdate)updated {
     [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:member:userInfoUpdated"
                                                  body: @{@"channelSid": channel.sid,
                                                          @"updated": @(updated),

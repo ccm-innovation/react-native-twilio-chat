@@ -25,13 +25,13 @@ RCT_EXPORT_MODULE();
 
 RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] userChannelsWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+    [[client channelsList] userChannelDescriptorsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
         if (result.isSuccessful) {
             NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
                       @"type": @"Channel",
-                      @"paginator": [RCTConvert TCHChannelPaginator:paginator]
+                      @"paginator": [RCTConvert TCHChannelDescriptorPaginator:paginator]
                       });
             
         }
@@ -43,7 +43,7 @@ RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)
 
 RCT_REMAP_METHOD(getPublicChannels, publicChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] publicChannelsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
+    [[client channelsList] publicChannelDescriptorsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
         if (result.isSuccessful) {
             NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
@@ -84,24 +84,6 @@ RCT_REMAP_METHOD(getChannel, sidOrUniqueName:(NSString *)sidOrUniqueName sid_res
 }
 
 #pragma mark Channel Instance Methods
-
-RCT_REMAP_METHOD(synchronize, sid:(NSString *)sid synchronize_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
-        if (result.isSuccessful) {
-            [channel synchronizeWithCompletion:^(TCHResult *result) {
-                if (result.isSuccessful) {
-                    resolve(@[@TRUE]);
-                }
-                else {
-                    reject(@"sync-error", @"Error occured during channel syncronization.", result.error);
-                }
-            }];
-        }
-        else {
-            reject(@"sync-error", @"Error occured during channel syncronization.", result.error);
-        }
-    }];
-}
 
 RCT_REMAP_METHOD(setAttributes, sid:(NSString *)sid attributes:(NSDictionary *)attributes attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
