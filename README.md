@@ -20,8 +20,8 @@ pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path 
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioChatClient', '~> 0.16.0'
-pod 'TwilioAccessManager', '~> 0.1.1'
+pod 'TwilioChatClient', '~> 0.17.1'
+pod 'TwilioAccessManager', '~> 0.1.3'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
@@ -149,6 +149,7 @@ Thank you for your help in maintaining this project! Haven't contributed yet? [C
 - [bbil](https://github.com/bbil)
 - [jhabdas](https://github.com/jhabdas)
 - [plonkus](https://github.com/plonkus)
+- [mattshen](https://github.com/mattshen)
 - [Kabangi](https://github.com/Kabangi)
 
 ## TODO 🗒
