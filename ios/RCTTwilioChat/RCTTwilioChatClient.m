@@ -165,9 +165,9 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                body: [RCTConvert TCHChannel:channel]];
 }
 
-- (void)chatClient:(TwilioChatClient *)client channelChanged:(TCHChannel *)channel {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channelChanged"
-                                               body: [RCTConvert TCHChannel:channel]];
+- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel updated:(TCHChannelUpdate)updated {
+  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:updated"
+                                               body:[RCTConvert TCHChannel:channel]];
 }
 
 - (void)chatClient:(TwilioChatClient *)client channelDeleted:(TCHChannel *)channel {
@@ -278,23 +278,23 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 - (void)chatClient:(TwilioChatClient *)client toastRegistrationFailedWithError:(TCHError *)error {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:toastFailed"
                                                body:@{@"error": [error localizedDescription],
-                                                      @"userInfo": [error userInfo]
+                                                      @"userInfo": @""
                                                       }];
 }
 
 - (void)chatClient:(TwilioChatClient *)client user:(TCHUser *)user updated:(TCHUserUpdate)updated {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:userInfoUpdated"
+  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:userUpdated"
                                                body: @{@"updated": @(updated),
-                                                       @"userInfo": [RCTConvert TCHUser:user]
+                                                       @"user": [RCTConvert TCHUser:user]
                                                        }];
 }
 
 - (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member updated:(TCHMemberUpdate)updated {
   [member userDescriptorWithCompletion:^(TCHResult *result, TCHUserDescriptor *user) {
-    [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:member:userInfoUpdated"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:member:userUpdated"
                                                  body: @{@"channelSid": channel.sid,
                                                          @"updated": @(updated),
-                                                         @"userInfo": [RCTConvert TCHUserDescriptor:user]
+                                                         @"userDescriptor": [RCTConvert TCHUserDescriptor:user]
                                                          }];
   }];
 
