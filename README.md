@@ -27,25 +27,6 @@ pod 'TwilioAccessManager', '~> 0.1.3'
 
 Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
 
-### iOS - Manually
-
-Add the Twilio SDKs to your Podfile.
-
-```ruby
-source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioChatClient', '~> 0.16.0'
-pod 'TwilioAccessManager', '~> 0.1.1'
-```
-
-1. Open your project in Xcode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` Look under `node_modules/react-native-twilio-chat/ios` and add `RCTTwilioChat.xcodeproj`.
-1. Add `libRCTTwilioChat.a` to `Build Phases` -> `Link Binary With Libraries`.
-1. Click on `RCTTwilioChat.xcodeproj` in `Libraries` and go the `Build
-   Settings` tab. Double click the text to the right of `Header Search
-   Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../../ios/Pods/Headers` -   if they
-   aren't, then add them.
-
-            
 ### Android
 In `android/settings.gradle`:
 
