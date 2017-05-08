@@ -40,13 +40,13 @@ RCT_EXPORT_MODULE()
 
 RCT_REMAP_METHOD(requestNextPageChannels, sid:(NSString*)sid requestNextPageChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
     NSMutableDictionary *_paginators = [[RCTTwilioChatPaginator sharedManager] paginators];
-    [[_paginators objectForKey:sid] requestNextPageWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+    [[_paginators objectForKey:sid] requestNextPageWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
         if (result.isSuccessful) {
             NSString* uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
                       @"type": @"Channel",
-                      @"paginator": [RCTConvert TCHChannelPaginator:paginator]
+                      @"paginator": [RCTConvert TCHChannelDescriptorPaginator:paginator]
                       });
         }
         else {

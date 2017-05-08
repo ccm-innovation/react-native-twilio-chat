@@ -290,11 +290,13 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 }
 
 - (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member updated:(TCHMemberUpdate)updated {
+  [member userDescriptorWithCompletion:^(TCHResult *result, TCHUserDescriptor *user) {
     [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:member:userInfoUpdated"
                                                  body: @{@"channelSid": channel.sid,
                                                          @"updated": @(updated),
-                                                         @"userInfo": [RCTConvert TCHUserInfo:userInfo]
+                                                         @"userInfo": [RCTConvert TCHUserDescriptor:user]
                                                          }];
+  }];
 
 }
 
@@ -325,15 +327,11 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                     @"Public": @(TCHChannelTypePublic),
                     @"Private": @(TCHChannelTypePrivate)
                     },
-                @"TCHClientSynchronizationStrategy": @{
-                    @"All": @(TCHClientSynchronizationStrategyAll),
-                    @"ChannelsList": @(TCHClientSynchronizationStrategyChannelsList)
-                    },
                 @"TCHUserInfoUpdate": @{
-                    @"FriendlyName": @(TCHUserInfoUpdateFriendlyName),
-                    @"Attributes": @(TCHUserInfoUpdateAttributes),
-                    @"ReachabilityOnline": @(TCHUserInfoUpdateReachabilityOnline),
-                    @"ReachabilityNotifiable": @(TCHUserInfoUpdateReachabilityNotifiable)
+                    @"FriendlyName": @(TCHUserUpdateFriendlyName),
+                    @"Attributes": @(TCHUserUpdateAttributes),
+                    @"ReachabilityOnline": @(TCHUserUpdateReachabilityOnline),
+                    @"ReachabilityNotifiable": @(TCHUserUpdateReachabilityNotifiable)
                     },
                 @"TCHLogLevel": @{
                     @"Fatal" : @(TCHLogLevelFatal),

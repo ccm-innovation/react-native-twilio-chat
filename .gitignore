@@ -2,6 +2,7 @@
 Example/ios/Pods
 ios/Pods
 *.xcuserstate
+ios/RCTTwilioChat.xcodeproj/xcuserdata/
 
 # android
 *.iml
