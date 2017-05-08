@@ -12,8 +12,8 @@
 npm install --save react-native-twilio-chat
 ```
 
-### iOS
-Install the Twilio Programable Chat SDK and this package via CocoaPods.
+### iOS - CocoaPods
+Install the Twilio Chat SDK and this package via CocoaPods. See the [full Podfile example](./Example/ios/Podfile) for more details.
 
 ```ruby
 pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path => '../node_modules/react-native'
@@ -25,8 +25,8 @@ pod 'TwilioAccessManager', '~> 0.1.3'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
-Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings.
-            
+Make sure that you add the `$(inherited)` value to `Other Linker Flags` and `Framework Search Paths` for your target's Build Settings. This is also assuming you have already loaded React via CocoaPods as well.
+
 ### Android
 In `android/settings.gradle`:
 
@@ -71,7 +71,7 @@ android {
     dexOptions {
         javaMaxHeapSize "2048M"
     }
-    
+
     defaultConfig {
         ...
         minSdkVersion 19

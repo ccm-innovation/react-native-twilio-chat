@@ -13,8 +13,6 @@
 #import "RCTTwilioChatClient.h"
 #import "RCTEventDispatcher.h"
 
-
-
 @interface RCTTwilioAccessManager() <TwilioAccessManagerDelegate>
 @end
 

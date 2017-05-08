@@ -1,5 +1,9 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '9.0'
+# NOTE: The underlying Twilio SDKs require a minimum deployment target of 8.1
+platform :ios, '8.1'
+
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/twilio/cocoapod-specs'
 
 target 'ReactNativeTwilioIPMessagingExample' do
   # Uncomment this line if you're using Swift or would like to use dynamic frameworks
@@ -7,12 +11,24 @@ target 'ReactNativeTwilioIPMessagingExample' do
 
   # Pods for ReactNativeTwilioIPMessagingExample
   inherit! :search_paths
-  source 'https://github.com/CocoaPods/Specs.git'
-  pod 'React', :subspecs => ['Core', 'RCTActionSheet', 'RCTGeolocation', 'RCTImage', 'RCTLinkingIOS', 'RCTNetwork', 'RCTText', 'RCTSettings', 'RCTAnimation', 'RCTVibration', 'RCTWebSocket'], :path => '../node_modules/react-native'
+
+  # Import required Lib from react-native
+  # https://facebook.github.io/react-native/docs/integration-with-existing-apps.html#podfile
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'RCTActionSheet',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTText',
+    'RCTSettings',
+    'RCTVibration',
+    'RCTWebSocket'
+  ]
 
   pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   source 'https://github.com/twilio/cocoapod-specs'
   pod 'TwilioChatClient', '~> 0.16.0'
   pod 'TwilioAccessManager', '~> 0.1.1'
-
 end
