@@ -171,7 +171,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 }
 
 - (void)chatClient:(TwilioChatClient *)client channelDeleted:(TCHChannel *)channel {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channelRemoved"
+  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channelDeleted"
                                                body: [RCTConvert TCHChannel:channel]];
 }
 
@@ -268,7 +268,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 }
 
 - (void)chatClient:(TwilioChatClient *)client toastReceivedOnChannel:(TCHChannel *)channel message:(TCHMessage *)message {
-    [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:toastReceived"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:toastReceivedOnChannel"
                                                body: @{
                                                        @"channelSid": channel.sid,
                                                        @"messageSid": message.sid

@@ -309,7 +309,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
 
     @Override
     public void onChannelDelete(Channel channel){
-        sendEvent("chatClient:channelRemoved", RCTConvert.Channel(channel));
+        sendEvent("chatClient:channelDeleted", RCTConvert.Channel(channel));
     }
 
     @Override
@@ -355,7 +355,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         map.putString("channelSid", channelSid);
         map.putString("messageSid", messageSid);
 
-        sendEvent("chatClient:toastReceived", map);
+        sendEvent("chatClient:toastReceivedOnChannel", map);
     }
 
     @Override
