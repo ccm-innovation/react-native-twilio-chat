@@ -54,22 +54,14 @@ client.createChannel({
 - All
 - ChannelsList
 
-### TCHLogLevel - iOS
+### TCHLogLevel
 - Fatal
 - Critical
 - Warning
 - Info
 - Debug
 
-### TCHLogLevel - Android
-- Assert
-- Debug
-- Error
-- Info
-- Verbose
-- Warn
-
-### TCHUserInfoUpdate - iOS Only
+### TCHUserInfoUpdate
 - Attributes
 - FriendlyName
 - ReachabilityNotifiable

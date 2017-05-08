@@ -5,6 +5,8 @@
 
 *Note - this project is currently in development for a beta release. If you are looking for the legacy package for the Twilio IP Messaging SDKs, [see the original repository here](https://github.com/ccm-innovation/react-native-twilio-ip-messaging).*
 
+### [View migration doc from react-native-ip-messaging here](MIGRATION.md)
+
 ## Installation
 ```
 npm install --save react-native-twilio-chat
@@ -18,8 +20,8 @@ pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path 
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   
 source 'https://github.com/twilio/cocoapod-specs'
-pod 'TwilioChatClient', '~> 0.16.0'
-pod 'TwilioAccessManager', '~> 0.1.1'
+pod 'TwilioChatClient', '~> 0.17.1'
+pod 'TwilioAccessManager', '~> 0.1.3'
 ```
 **Note: the underlying Twilio SDKs require a minimum deployment target of `8.1`**. If your project's target is less than this you will get a CocoaPods install error (`Unable to satisfy the following requirements...`).
 
@@ -154,7 +156,7 @@ channel.onMemberAdded = (member) => console.log(member.identity + " joined " + c
 ## [Documentation](docs)
 
 ## Contributers 🍻
-Thank you for your help in maintaining this project!
+Thank you for your help in maintaining this project! Haven't contributed yet? [Check out our Contributing guidelines...](CONTRIBUTING.md).
 - [bradbumbalough](https://github.com/bradbumbalough)
 - [johndrkurtcom](https://github.com/johndrkurtcom)
 - [jck2](https://github.com/jck2)
@@ -166,14 +168,16 @@ Thank you for your help in maintaining this project!
 - [bbil](https://github.com/bbil)
 - [jhabdas](https://github.com/jhabdas)
 - [plonkus](https://github.com/plonkus)
+- [mattshen](https://github.com/mattshen)
+- [Kabangi](https://github.com/Kabangi)
 
 ## TODO 🗒
  * [x] Copy code from `programable-chat` branch on old package
- * [ ] Copy issues and PRs over
- * [ ] Update docs (wiki?)
- * [ ] Migration guide
- * [ ] Publish to npm
- * [ ] Update `twilio-ip-messaging` to reference `twilio-chat`
+ * [x] Copy issues and PRs over
+ * [x] Update docs (wiki?)
+ * [x] Migration guide
+ * [x] Publish to npm
+ * [x] Update `twilio-ip-messaging` to reference `twilio-chat`
  * [ ] 1.0 release
  * [ ] Testing
 
