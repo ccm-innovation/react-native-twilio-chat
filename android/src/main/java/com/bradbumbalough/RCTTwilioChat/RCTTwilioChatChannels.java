@@ -199,7 +199,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onSuccess(final Paginator<ChannelDescriptor> channelDescriptorPaginator) {
                 String uuid = RCTTwilioChatPaginator.setPaginator(channelDescriptorPaginator);
-                promise.resolve(RCTConvert.Paginator(channelDescriptorPaginator, uuid, "Channel"));
+                promise.resolve(RCTConvert.Paginator(channelDescriptorPaginator, uuid, "ChannelDescriptor"));
             }
         });
     }

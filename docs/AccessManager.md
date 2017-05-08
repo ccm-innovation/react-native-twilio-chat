@@ -14,7 +14,7 @@ The AccessManager is Twilio's abstraction of authenticating your instance of Twi
 
 ### Methods
 
-#### `registerClient()`
+#### `registerClient()` **iOS Only**
 Call to attach the TwilioClient to the AccessManager so that `updateToken` automatically passes through. Otherwise, you'll need to update both.
 
 #### `removeListeners()`

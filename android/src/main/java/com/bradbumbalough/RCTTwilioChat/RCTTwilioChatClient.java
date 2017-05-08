@@ -363,6 +363,6 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         WritableMap map = Arguments.createMap();
         map.putString("updated", updateReason.toString());
         map.putMap("userInfo", RCTConvert.UserInfo(userInfo));
-        sendEvent("chatClient:toastReceived", map);
+        sendEvent("chatClient:userInfoUpdated", map);
     }
 }
