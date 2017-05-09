@@ -10,8 +10,8 @@
 
 ## Methods
 
-#### `userDescriptor()` : Promise
+#### `getUserDescriptor()` : Promise
 Returns a snapshot in time of user information for the current member
 
-#### `subscribedUser()` : Promise
+#### `getAndSubscribeUser()` : Promise
 Returns user information for the current member
