@@ -51,7 +51,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B8F444105179A6A245010D4 /* Pods_RCTTwilioChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +91,6 @@
 				1DAE2D341D086CFD00D3FE06 /* RCTTwilioChatMessages.h */,
 				1DAE2D351D086CFD00D3FE06 /* RCTTwilioChatMessages.m */,
 			);
-			name = RCTTwilioChat;
 			path = RCTTwilioChat;
 			sourceTree = "<group>";
 		};
@@ -247,6 +245,43 @@
 			};
 			name = Release;
 		};
+		D2EA9F3D1EC1AEE30040EF5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../../ios/**",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/**",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited}";
+				PRODUCT_NAME = RCTTwilioChat;
+			};
+			name = Debug;
+		};
+		D2EA9F3E1EC1AEE30040EF5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../../../ios/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/**",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited}";
+				PRODUCT_NAME = RCTTwilioChat;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -262,8 +297,8 @@
 		1DAE2D271D086CD600D3FE06 /* Build configuration list for PBXNativeTarget "RCTTwilioChat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DAE2D281D086CD600D3FE06 /* Debug */,
-				1DAE2D291D086CD600D3FE06 /* Release */,
+				D2EA9F3D1EC1AEE30040EF5B /* Debug */,
+				D2EA9F3E1EC1AEE30040EF5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
