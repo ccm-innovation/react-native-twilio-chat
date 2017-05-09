@@ -30,7 +30,7 @@ RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)
             NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
-                      @"type": @"Channel",
+                      @"type": @"ChannelDescriptor",
                       @"paginator": [RCTConvert TCHChannelDescriptorPaginator:paginator]
                       });
             
