@@ -72,6 +72,9 @@ Get all of the public channels. Returns an instance of `Paginator`.
 #### `getUserChannels()` : Promise
 Get all of the user's channels. Returns an instance of `Paginator`.
 
+#### `getSubscribedChannels()` : Promise
+Get the current list of all subscribed Channels. Returns a list of `Channel`
+
 #### `handleNotification(notification)`
 Queue the incoming notification with the messaging library for processing - for React Native, this will come in `PushNotificationIOS.addEventListener('notification', handleNotification)`.
 

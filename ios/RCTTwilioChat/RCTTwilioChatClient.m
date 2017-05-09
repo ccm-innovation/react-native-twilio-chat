@@ -43,6 +43,10 @@ RCT_REMAP_METHOD(createClient, token:(NSString*)token properties:(NSDictionary *
       }
     }
     [TwilioChatClient chatClientWithToken:token properties:props delegate:self completion:^(TCHResult *result, TwilioChatClient *chatClient) {
+      if (!result.isSuccessful) {
+        reject(@"create-client-error", @"Error occurred while attempting to create the [client. Error Message:", result.error);
+        return;
+      }
       RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
       _client.client = chatClient;
       resolve([RCTConvert TwilioChatClient:_client.client]);
@@ -192,14 +196,6 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
 
 - (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel memberJoined:(TCHMember *)member {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:memberJoined"
-                                               body: @{
-                                                       @"channelSid": channel.sid,
-                                                       @"member": [RCTConvert TCHMember:member]
-                                                       }];
-}
-
-- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member updated:(TCHMemberUpdate)updated {
-  [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:memberChanged"
                                                body: @{
                                                        @"channelSid": channel.sid,
                                                        @"member": [RCTConvert TCHMember:member]
