@@ -289,4 +289,17 @@ RCT_REMAP_METHOD(getMember, sid:(NSString *)sid identity:(NSString *)identity me
     }];
 }
 
+RCT_REMAP_METHOD(getChannel, sid:(NSString *)sid channel_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
+    if (result.isSuccessful) {
+      resolve([RCTConvert TCHChannel:channel]);
+    }
+    else {
+      reject(@"get-full-channel-object", @"Error occured while attempting to get full channel object from channel descriptor.", result.error);
+    }
+  }];
+}
+
+
+
 @end
