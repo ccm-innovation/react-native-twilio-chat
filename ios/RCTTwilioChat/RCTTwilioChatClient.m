@@ -175,7 +175,6 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                body: [RCTConvert TCHChannel:channel]];
 }
 
-
 - (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel synchronizationStatusChanged:(TCHChannelSynchronizationStatus)status {
   NSString *channelSid;
   if (channel) {
@@ -199,7 +198,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                        }];
 }
 
-- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel memberChanged:(TCHMember *)member {
+- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel member:(TCHMember *)member updated:(TCHMemberUpdate)updated {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:memberChanged"
                                                body: @{
                                                        @"channelSid": channel.sid,
@@ -223,7 +222,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                        }];
 }
 
-- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel messageChanged:(TCHMessage *)message {
+- (void)chatClient:(TwilioChatClient *)client channel:(TCHChannel *)channel message:(TCHMessage *)message updated:(TCHMessageUpdate)updated {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:channel:messageChanged"
                                                body: @{
                                                        @"channelSid": channel.sid,
