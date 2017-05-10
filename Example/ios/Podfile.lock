@@ -1,5 +1,5 @@
 PODS:
-  - RCTTwilioChat (1.0.0):
+  - RCTTwilioChat (0.1.1):
     - React
     - TwilioAccessManager
     - TwilioChatClient
@@ -9,8 +9,6 @@ PODS:
     - React/CSSLayout
   - React/CSSLayout (0.39.2)
   - React/RCTActionSheet (0.39.2):
-    - React/Core
-  - React/RCTAnimation (0.39.2):
     - React/Core
   - React/RCTGeolocation (0.39.2):
     - React/Core
@@ -36,7 +34,6 @@ DEPENDENCIES:
   - RCTTwilioChat (from `../node_modules/react-native-twilio-chat/ios`)
   - React/Core (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTAnimation (from `../node_modules/react-native`)
   - React/RCTGeolocation (from `../node_modules/react-native`)
   - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
@@ -45,8 +42,8 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
-  - TwilioAccessManager
-  - TwilioChatClient
+  - TwilioAccessManager (~> 0.1.3)
+  - TwilioChatClient (~> 1.0.0)
 
 EXTERNAL SOURCES:
   RCTTwilioChat:
@@ -55,11 +52,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
 
 SPEC CHECKSUMS:
-  RCTTwilioChat: 93c05413c72d58bc8687e4e9348fa0b80499132b
+  RCTTwilioChat: 644c4ae5997636e0c30b2bb9677957b6410f89c6
   React: 8c26f75b7d3a78fd1ddad8ab0e40e1a3e945960a
   TwilioAccessManager: 30ce2f7cf78ef5dd4cf19562fc204313bac625f6
   TwilioChatClient: b980c896945e171e5397564443b2483ccf68f906
 
-PODFILE CHECKSUM: 55871660c6dbe8b8785854bb6e5c4edd86ffc089
+PODFILE CHECKSUM: 231d719d863fbde8a403488f22f8d241769361e6
 
 COCOAPODS: 1.2.1.beta.1
