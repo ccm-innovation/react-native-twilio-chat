@@ -67,25 +67,6 @@ public class RCTTwilioChatPaginator extends ReactContextBaseJavaModule {
         });
     }
 
-    public void requestNextPageChannels(String sid, final Promise promise) {
-        final RCTTwilioChatPaginator tmp = RCTTwilioChatPaginator.getInstance();
-        Paginator<Channel> _paginator = (Paginator<Channel>)tmp.paginators.get(sid);
-
-        _paginator.requestNextPage(new CallbackListener<Paginator<Channel>>() {
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                super.onError(errorInfo);
-                promise.reject("request-next-page", "Error occurred while attempting to request the next page. Error Message: " + errorInfo.getMessage());
-            }
-
-            @Override
-            public void onSuccess(Paginator<Channel> paginator) {
-                String uuid = RCTTwilioChatPaginator.setPaginator(paginator);
-                promise.resolve(RCTConvert.Paginator(paginator, uuid, "Channel"));
-            }
-        });
-    }
-
     public void requestNextPageUserDescriptors(String sid, final Promise promise) {
         final RCTTwilioChatPaginator tmp = RCTTwilioChatPaginator.getInstance();
         Paginator<UserDescriptor> _paginator = (Paginator<UserDescriptor>)tmp.paginators.get(sid);
