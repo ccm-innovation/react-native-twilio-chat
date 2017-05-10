@@ -118,13 +118,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ReactNativeTwilioIPMessagingExample" */;
 			buildPhases = (
-				51B06197E774E8FB5A737FDD /* 📦 Check Pods Manifest.lock */,
+				51B06197E774E8FB5A737FDD /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				5C7A6E186F48D8F4F571BE27 /* 📦 Embed Pods Frameworks */,
-				855F5FCCA00F92FC04F5917B /* 📦 Copy Pods Resources */,
+				5C7A6E186F48D8F4F571BE27 /* [CP] Embed Pods Frameworks */,
+				855F5FCCA00F92FC04F5917B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -194,29 +194,29 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
 		};
-		51B06197E774E8FB5A737FDD /* 📦 Check Pods Manifest.lock */ = {
+		51B06197E774E8FB5A737FDD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		5C7A6E186F48D8F4F571BE27 /* 📦 Embed Pods Frameworks */ = {
+		5C7A6E186F48D8F4F571BE27 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,14 +224,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ReactNativeTwilioIPMessagingExample/Pods-ReactNativeTwilioIPMessagingExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		855F5FCCA00F92FC04F5917B /* 📦 Copy Pods Resources */ = {
+		855F5FCCA00F92FC04F5917B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

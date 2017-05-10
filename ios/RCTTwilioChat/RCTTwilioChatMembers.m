@@ -85,7 +85,6 @@ RCT_REMAP_METHOD(invite, channelSid:(NSString *)channelSid identity:(NSString *)
 }
 
 RCT_REMAP_METHOD(remove, channelSid:(NSString *)channelSid identity:(NSString *)identity remove_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-
     [RCTTwilioChatChannels loadChannelFromSid:channelSid :^(TCHResult *result, TCHChannel *channel) {
         TCHMember *member = [channel memberWithIdentity:identity];
         [[channel members] removeMember:member completion:^(TCHResult *result) {
@@ -98,4 +97,33 @@ RCT_REMAP_METHOD(remove, channelSid:(NSString *)channelSid identity:(NSString *)
         }];
     }];
 }
+
+RCT_REMAP_METHOD(userDescriptor, channelSid:(NSString *)channelSid identity:(NSString *)identity descriptor_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [RCTTwilioChatChannels loadChannelFromSid:channelSid :^(TCHResult *result, TCHChannel *channel) {
+        TCHMember *member = [channel memberWithIdentity:identity];
+        [member userDescriptorWithCompletion: ^(TCHResult *descriptorResult, TCHUserDescriptor *user) {
+            if (descriptorResult.isSuccessful) {
+                resolve([RCTConvert TCHUserDescriptor:user]);
+            }
+            else {
+                reject(@"member-user-descriptor-error", @"Error occured while attempting to get user descriptor of a channel member", result.error);
+            }
+        }];
+    }];
+}
+
+RCT_REMAP_METHOD(subscribedUser, channelSid:(NSString *)channelSid identity:(NSString *)identity user_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [RCTTwilioChatChannels loadChannelFromSid:channelSid :^(TCHResult *result, TCHChannel *channel) {
+        TCHMember *member = [channel memberWithIdentity:identity];
+        [member subscribedUserWithCompletion:^(TCHResult *userResult, TCHUser *user) {
+            if (userResult.isSuccessful) {
+                resolve([RCTConvert TCHUser:user]);
+            }
+            else {
+                reject(@"member-subscribed-user-error", @"Error occured while attempting to get subscribed user of a channel member", result.error);
+            }
+        }];
+    }];
+}
+
 @end

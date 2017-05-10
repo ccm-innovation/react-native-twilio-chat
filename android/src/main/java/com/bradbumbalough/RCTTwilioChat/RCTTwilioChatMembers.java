@@ -1,10 +1,17 @@
 package com.bradbumbalough.RCTTwilioChat;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.twilio.chat.Member;
 import com.twilio.chat.StatusListener;
 import com.twilio.chat.ErrorInfo;
@@ -15,6 +22,8 @@ import com.twilio.chat.Paginator;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
@@ -54,19 +63,30 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Members members) {
-                members.getMembers(new CallbackListener<Paginator<Member>>() {
-                    @Override
-                    public void onError(ErrorInfo errorInfo) {
-                        super.onError(errorInfo);
-                        promise.reject("get-members-error","Error occurred while attempting to get members on channel.");
+                try {
+                    // There is a difference between this method and the iOS SDK method getMembers.
+                    // The iOS method is async and uses MemberPaginator
+                    // iOS SDK: - (void)membersWithCompletion:(TCHMemberPaginatorCompletion)completion
+                    // https://media.twiliocdn.com/sdk/ios/chat/releases/1.0.0/docs/Classes/TCHMembers.html#//api/name/membersWithCompletion:
+                    // Android SDK: public java.util.List<Member> getMembersList()
+                    // https://media.twiliocdn.com/sdk/android/chat/releases/1.0.0/docs/com/twilio/chat/Members.html#getMembersList--
+                    // Carl Olivier from Twilio team said this change will be addressed soon, so
+                    // this code is temporary
+                    List<Member> membersArr = members.getMembersList();
+                    WritableArray memberItems = Arguments.createArray();
+                    for(Member m : membersArr) {
+                        memberItems.pushMap(RCTConvert.Member(m));
                     }
-
-                    @Override
-                    public void onSuccess(Paginator<Member> memberPaginator) {
-                        String uuid = RCTTwilioChatPaginator.setPaginator(memberPaginator);
-                        promise.resolve(RCTConvert.Paginator(memberPaginator, uuid, "Member"));
-                    }
-                });
+                    WritableMap map = Arguments.createMap();
+                    map.putString("sid", UUID.randomUUID().toString());
+                    map.putString("type", "Member");
+                    map.putArray("items", memberItems);
+                    promise.resolve(map);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    promise.reject("get-members-error","Error occurred while attempting to get members on channel.");
+                }
             }
         });
     }
@@ -140,11 +160,11 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
                 ArrayList<Member> memberList = ((Paginator<Member>)_paginator.paginators.get(paginatorSid)).getItems();
                 Member memberToDelete = null;
                 for (Member m : memberList) {
-                    if (m.getUserInfo().getIdentity() == identity) {
+                    if (m.getIdentity() == identity) {
                         memberToDelete = m;
                     }
                 }
-                members.removeMember(memberToDelete, new StatusListener() {
+                members.remove(memberToDelete, new StatusListener() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
