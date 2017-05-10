@@ -1,5 +1,5 @@
 # AccessManager
-The AccessManager is Twilio's separation of authenticating your instance of Twilio from the functionality of Programable Chat. It is optional in the lastest release of the SDKs.
+The AccessManager is Twilio's abstraction of authenticating your instance of Twilio from the functionality of Programable Chat. It is optional in the lastest release of the SDKs.
 
 ## `new AccessManager(token)`
 |Name |Type |Description |
@@ -10,7 +10,6 @@ The AccessManager is Twilio's separation of authenticating your instance of Twil
 |Name |Type |Description |
 |--- |--- |--- |
 |*token*|String|The current token
-|*isExpired*|Boolean|Whether or not the token has expired
 |*expires*|Date|The timestamp of when the token will expire
 
 ### Methods
@@ -31,7 +30,7 @@ Updates the token associated with the Access Manager.
 You can specify handlers for events on the `accessManager` instance itself. For example, if you wanted to listen to the token expiration event, you would set `accessManager.onTokenExpired = function() { console.log('Token expired') }`.
 
 #### `onTokenExpired()`
-Fired when the current token expires.
+Fired when the current token has expired.
 
 #### `onTokenWillExpire()`
 Fired 3 minuts before the current token will expire.

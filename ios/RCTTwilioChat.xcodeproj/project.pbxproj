@@ -12,7 +12,7 @@
 		1DAE2D371D086CFD00D3FE06 /* RCTTwilioAccessManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D2D1D086CFD00D3FE06 /* RCTTwilioAccessManager.m */; };
 		1DAE2D381D086CFD00D3FE06 /* RCTTwilioChatChannels.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D2F1D086CFD00D3FE06 /* RCTTwilioChatChannels.m */; };
 		1DAE2D391D086CFD00D3FE06 /* RCTTwilioChatClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D311D086CFD00D3FE06 /* RCTTwilioChatClient.m */; };
-		1DAE2D3A1D086CFD00D3FE06 /* RCTTwilioIChatMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D331D086CFD00D3FE06 /* RCTTwilioIChatMembers.m */; };
+		1DAE2D3A1D086CFD00D3FE06 /* RCTTwilioChatMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D331D086CFD00D3FE06 /* RCTTwilioChatMembers.m */; };
 		1DAE2D3B1D086CFD00D3FE06 /* RCTTwilioChatMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DAE2D351D086CFD00D3FE06 /* RCTTwilioChatMessages.m */; };
 		7B8F444105179A6A245010D4 /* Pods_RCTTwilioChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A2ED7ADADE24A2D925FE78 /* Pods_RCTTwilioChat.framework */; };
 /* End PBXBuildFile section */
@@ -42,8 +42,8 @@
 		1DAE2D2F1D086CFD00D3FE06 /* RCTTwilioChatChannels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatChannels.m; sourceTree = "<group>"; };
 		1DAE2D301D086CFD00D3FE06 /* RCTTwilioChatClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatClient.h; sourceTree = "<group>"; };
 		1DAE2D311D086CFD00D3FE06 /* RCTTwilioChatClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatClient.m; sourceTree = "<group>"; };
-		1DAE2D321D086CFD00D3FE06 /* RCTTwilioIChatMembers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioIChatMembers.h; sourceTree = "<group>"; };
-		1DAE2D331D086CFD00D3FE06 /* RCTTwilioIChatMembers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioIChatMembers.m; sourceTree = "<group>"; };
+		1DAE2D321D086CFD00D3FE06 /* RCTTwilioChatMembers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatMembers.h; sourceTree = "<group>"; };
+		1DAE2D331D086CFD00D3FE06 /* RCTTwilioChatMembers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatMembers.m; sourceTree = "<group>"; };
 		1DAE2D341D086CFD00D3FE06 /* RCTTwilioIChatMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioIChatMessages.h; sourceTree = "<group>"; };
 		1DAE2D351D086CFD00D3FE06 /* RCTTwilioChatMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatMessages.m; sourceTree = "<group>"; };
 		B1D72C1ECF91E477F227ED9D /* Pods-RCTTwilioChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCTTwilioChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RCTTwilioChat/Pods-RCTTwilioChat.debug.xcconfig"; sourceTree = "<group>"; };
@@ -91,8 +91,8 @@
 				1DAE2D2F1D086CFD00D3FE06 /* RCTTwilioChatChannels.m */,
 				1DAE2D301D086CFD00D3FE06 /* RCTTwilioChatClient.h */,
 				1DAE2D311D086CFD00D3FE06 /* RCTTwilioChatClient.m */,
-				1DAE2D321D086CFD00D3FE06 /* RCTTwilioIChatMembers.h */,
-				1DAE2D331D086CFD00D3FE06 /* RCTTwilioIChatMembers.m */,
+				1DAE2D321D086CFD00D3FE06 /* RCTTwilioChatMembers.h */,
+				1DAE2D331D086CFD00D3FE06 /* RCTTwilioChatMembers.m */,
 				1D6F099A1DF1EBE100611A19 /* RCTTwilioChatPaginator.h */,
 				1D6F099B1DF1EBE200611A19 /* RCTTwilioChatPaginator.m */,
 				1DAE2D341D086CFD00D3FE06 /* RCTTwilioIChatMessages.h */,
@@ -212,7 +212,7 @@
 			files = (
 				1DAE2D381D086CFD00D3FE06 /* RCTTwilioChatChannels.m in Sources */,
 				1DAE2D361D086CFD00D3FE06 /* RCTConvert+TwilioChatClient.m in Sources */,
-				1DAE2D3A1D086CFD00D3FE06 /* RCTTwilioIChatMembers.m in Sources */,
+				1DAE2D3A1D086CFD00D3FE06 /* RCTTwilioChatMembers.m in Sources */,
 				1DAE2D391D086CFD00D3FE06 /* RCTTwilioChatClient.m in Sources */,
 				1D6F099C1DF1EBE200611A19 /* RCTTwilioChatPaginator.m in Sources */,
 				1DAE2D371D086CFD00D3FE06 /* RCTTwilioAccessManager.m in Sources */,
@@ -315,8 +315,8 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../React/**",
-					"$(SRCROOT)/../../node_modules/react-native/React/**",
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/**",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -338,8 +338,8 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../React/**",
-					"$(SRCROOT)/../../node_modules/react-native/React/**",
+					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/**",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

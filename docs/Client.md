@@ -31,7 +31,7 @@ client.onClientSynchronized = () => {
 |Name |Type |Description |
 |--- |--- |--- |
 |*token*|String|The Access Token provided by your server
-|*synchronizationStrategy*|Constants.TCHClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/ip-messaging/releases/0.14.1/docs/Constants/TCHClientSynchronizationStrategy.html)
+|*synchronizationStrategy*|Constants.TCHClientSynchronizationStrategy|Optional. The synchronization strategy to use during client initialization. Default: ChannelsList [See Twilio Docs](https://media.twiliocdn.com/sdk/ios/chat/releases/0.17.1/docs/Constants/TCHClientSynchronizationStrategy.html)
 |*initialMessageCount*|Number|Optional. The number of most recent messages to fetch automatically when synchronizing a channel. Default: 100
 
 ## Properties
