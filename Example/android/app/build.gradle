@@ -26,7 +26,7 @@ android {
     dexOptions {
         javaMaxHeapSize "2048M"
     }
-    
+
     defaultConfig {
         applicationId "com.reactnativetwilioipmessagingexample"
         minSdkVersion 19
@@ -73,7 +73,7 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':ExtraDimensions')
     compile project(':RCTTwilioChat')
-    compile 'com.twilio:chat-android:0.12.1'
+    compile 'com.twilio:chat-android:1.0.0'
     compile 'com.twilio:accessmanager-android:0.1.0'
 }
 
