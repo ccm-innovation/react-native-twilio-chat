@@ -16,6 +16,7 @@ npm install --save react-native-twilio-chat
 Install the Twilio Chat SDK and this package via CocoaPods. See the [full Podfile example](./Example/ios/Podfile) for more details.
 
 ```ruby
+pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path => '../node_modules/react-native'
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   
