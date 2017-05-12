@@ -7,7 +7,7 @@
 //
 
 #import <TwilioChatClient/TwilioChatClient.h>
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface RCTTwilioChatClient : NSObject <RCTBridgeModule> {
   TwilioChatClient *client;

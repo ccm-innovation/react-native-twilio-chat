@@ -8,7 +8,7 @@
 
 #import <TwilioChatClient/TCHChannels.h>
 #import <TwilioChatClient/TCHChannel.h>
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface RCTTwilioChatChannels : NSObject <RCTBridgeModule>
 

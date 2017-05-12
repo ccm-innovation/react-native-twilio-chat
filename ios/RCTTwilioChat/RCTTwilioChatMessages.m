@@ -10,7 +10,7 @@
 #import "RCTTwilioChatChannels.h"
 #import "RCTTwilioChatClient.h"
 #import "RCTConvert+TwilioChatClient.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @implementation RCTTwilioChatMessages
 

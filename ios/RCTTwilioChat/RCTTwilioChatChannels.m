@@ -10,7 +10,7 @@
 #import "RCTTwilioChatClient.h"
 #import "RCTConvert+TwilioChatClient.h"
 #import "RCTTwilioChatPaginator.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @implementation RCTTwilioChatChannels
 
@@ -33,7 +33,7 @@ RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)
                       @"type": @"Channel",
                       @"paginator": [RCTConvert TCHChannelPaginator:paginator]
                       });
-            
+
         }
         else {
             reject(@"get-user-channels-error", @"Error occured while attempting to get the user channels.", result.error);
@@ -51,7 +51,7 @@ RCT_REMAP_METHOD(getPublicChannels, publicChannels_resolver:(RCTPromiseResolveBl
                       @"type": @"ChannelDescriptor",
                       @"paginator": [RCTConvert TCHChannelDescriptorPaginator:paginator]
                       });
-            
+
         }
         else {
             reject(@"get-public-channels-error", @"Error occured while attempting to get the public channels.", result.error);
