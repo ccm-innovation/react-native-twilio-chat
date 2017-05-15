@@ -339,7 +339,7 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
 
     @Override
     public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
-        sendEvent("chatClient:synchronizationStatusChanged", synchronizationStatus.toString());
+        sendEvent("chatClient:synchronizationStatusUpdated", synchronizationStatus.toString());
     }
 
     @Override
