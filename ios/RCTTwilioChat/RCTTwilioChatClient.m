@@ -158,7 +158,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
                                                  body:@(state)];
 }
 
-- (void)chatClient:(TwilioChatClient *)client synchronizationStatusChanged:(TCHClientSynchronizationStatus)status {
+- (void)chatClient:(TwilioChatClient *)client synchronizationStatusUpdated:(TCHClientSynchronizationStatus)status {
   [self.bridge.eventDispatcher sendAppEventWithName:@"chatClient:synchronizationStatusChanged"
                                                body:@(status)];
 }
