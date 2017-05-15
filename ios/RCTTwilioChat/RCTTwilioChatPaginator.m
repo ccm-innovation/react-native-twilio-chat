@@ -8,7 +8,7 @@
 
 #import "RCTTwilioChatPaginator.h"
 #import "RCTConvert+TwilioChatClient.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @interface RCTTwilioChatPaginator()
 @end

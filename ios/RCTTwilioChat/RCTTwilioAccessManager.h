@@ -6,7 +6,7 @@
 //  Copyright © 2016 Facebook. All rights reserved.
 //
 #import <TwilioAccessManager/TwilioAccessManager.h>
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface RCTTwilioAccessManager : NSObject <RCTBridgeModule> {
   TwilioAccessManager *accessManager;

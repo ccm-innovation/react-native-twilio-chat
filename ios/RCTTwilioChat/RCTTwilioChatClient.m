@@ -8,10 +8,9 @@
 
 #import "RCTTwilioChatClient.h"
 #import "RCTTwilioAccessManager.h"
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTEventDispatcher.h>
 #import "RCTConvert+TwilioChatClient.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @interface RCTTwilioChatClient() <TwilioChatClientDelegate>
 @end
@@ -148,7 +147,7 @@ RCT_REMAP_METHOD(setAttributes, attributes:(NSDictionary *)attributes attributes
     }
     else {
       reject(@"set-attributes-error", @"Error occured while attempting to set attributes for the user.", result.error);
-    }  
+    }
   }];
 }
 

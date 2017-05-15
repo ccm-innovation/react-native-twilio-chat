@@ -7,7 +7,7 @@
 //
 #import <TwilioChatClient/TwilioChatClient.h>
 #import <TwilioAccessManager/TwilioAccessManager.h>
-#import "RCTConvert.h"
+#import <React/RCTConvert.h>
 
 @interface RCTConvert (TwilioChatClient)
 

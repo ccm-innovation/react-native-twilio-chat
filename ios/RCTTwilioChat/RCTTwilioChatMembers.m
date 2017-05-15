@@ -11,7 +11,7 @@
 #import "RCTTwilioChatClient.h"
 #import "RCTTwilioChatChannels.h"
 #import "RCTTwilioChatPaginator.h"
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @implementation RCTTwilioChatMembers
 
