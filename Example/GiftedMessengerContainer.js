@@ -130,9 +130,7 @@ class GiftedMessengerContainer extends Component {
         .then(res => console.log(res));
 
         client.getChannel('general')
-        .then((channel) => {
-          channel.initialize()
-          .then(() => {
+        .then(channel => {
             console.log(channel);
             if (channel.status !== Constants.TCHChannelStatus.Joined) {
               channel.join();
