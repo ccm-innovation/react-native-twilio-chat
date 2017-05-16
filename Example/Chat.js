@@ -60,7 +60,7 @@ export default class Chat extends Component {
   }
 
   getToken(identity) {
-    return fetch(`http://api.dev.neighboursecure.com/v1/chats/refresh_token?device=${identity}`, {
+    return fetch(`http://localhost:3001/token/${identity}`, {
       method: 'post',
     })
       .then(res => res.json());
