@@ -16,6 +16,7 @@ npm install --save react-native-twilio-chat
 Install the Twilio Chat SDK and this package via CocoaPods. See the [full Podfile example](./Example/ios/Podfile) for more details.
 
 ```ruby
+pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 pod 'React', :subspecs => ['Core', /* any other subspecs you require */], :path => '../node_modules/react-native'
 pod 'RCTTwilioChat', :path => '../node_modules/react-native-twilio-chat/ios'
   
@@ -134,6 +135,52 @@ channel.onMemberAdded = (member) => console.log(member.identity + " joined " + c
 />
 ````
 
+## Development
+
+If you want to develop this package perform the following steps:
+
+* Fork
+* Clone
+
+Install js dependencies
+```
+cd react-native-twilio-chat
+npm install
+```
+
+Link package
+```
+npm link
+cd Example
+npm link react-native-twilio-chat
+watchman watch-del-all
+```
+
+Install pods
+```
+cd ios
+pod install
+```
+
+Configure your twilio credentials
+```
+cd server
+cp .env.example .env
+npm install
+```
+ 
+Run server
+```
+cd server
+npm start server
+```
+
+Run client
+```
+react-native run-ios
+```
+
+
 ## [Documentation](docs)
 
 ## Contributers 🍻
@@ -151,6 +198,7 @@ Thank you for your help in maintaining this project! Haven't contributed yet? [C
 - [plonkus](https://github.com/plonkus)
 - [mattshen](https://github.com/mattshen)
 - [Kabangi](https://github.com/Kabangi)
+- [benoist](https://github.com/benoist)
 
 ## TODO 🗒
  * [x] Copy code from `programable-chat` branch on old package

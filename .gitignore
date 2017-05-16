@@ -2,6 +2,8 @@
 Example/ios/Pods
 ios/Pods
 *.xcuserstate
+ios/RCTTwilioChat.xcodeproj/xcuserdata/
+Example/server/.env
 
 # android
 *.iml
@@ -31,3 +33,7 @@ Example/node_modules
 node_modules
 
 .vscode
+
+build
+xcuserdata
+.idea/

@@ -7,7 +7,7 @@
 //
 
 #import <TwilioChatClient/TCHConstants.h>
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface RCTTwilioChatPaginator : NSObject <RCTBridgeModule> {
     NSMutableDictionary *paginators;

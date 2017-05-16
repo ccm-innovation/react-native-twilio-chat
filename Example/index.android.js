@@ -1,9 +1,13 @@
-'use strict';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+import {
+  AppRegistry,
+} from 'react-native';
 
-var ReactNative = require('react-native');
-var {
-  AppRegistry
-} = ReactNative;
+import Chat from './Chat';
 
 
-AppRegistry.registerComponent('ReactNativeTwilioIPMessagingExample', () => require('./Navigation'));
+AppRegistry.registerComponent('Example', () => Chat);
