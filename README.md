@@ -135,6 +135,52 @@ channel.onMemberAdded = (member) => console.log(member.identity + " joined " + c
 />
 ````
 
+## Development
+
+If you want to develop this package perform the following steps:
+
+* Fork
+* Clone
+
+Install js dependencies
+```
+cd react-native-twilio-chat
+npm install
+```
+
+Link package
+```
+npm link
+cd Example
+npm link react-native-twilio-chat
+watchman watch-del-all
+```
+
+Install pods
+```
+cd ios
+pod install
+```
+
+Configure your twilio credentials
+```
+cd server
+cp .env.example .env
+npm install
+```
+ 
+Run server
+```
+cd server
+npm start server
+```
+
+Run client
+```
+react-native run-ios
+```
+
+
 ## [Documentation](docs)
 
 ## Contributers 🍻
