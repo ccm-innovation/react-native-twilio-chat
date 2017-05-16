@@ -1,3 +1,6 @@
 rootProject.name = 'Example'
 
 include ':app'
+
+include ':react-native-twilio-chat'
+project(':react-native-twilio-chat').projectDir = new File(rootProject.projectDir, '../../android')

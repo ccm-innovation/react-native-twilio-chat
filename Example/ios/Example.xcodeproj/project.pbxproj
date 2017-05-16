@@ -38,7 +38,20 @@
 		6C7F9F8CAB16A66E096BC38C /* libPods-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86CC26A7ED491D12774819B3 /* libPods-ExampleTests.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		988B41657A46431A1E42C440 /* libPods-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D507B202A13974FCCF90DE97 /* libPods-Example.a */; };
-		D2C5ABB61ECAD8CA009A1791 /* libRCTTwilioChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2C5ABAA1ECAD7F0009A1791 /* libRCTTwilioChat.a */; };
+		D2C5AC231ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC161ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m */; };
+		D2C5AC241ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC161ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m */; };
+		D2C5AC251ECADBB6009A1791 /* RCTTwilioAccessManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC181ECADBB6009A1791 /* RCTTwilioAccessManager.m */; };
+		D2C5AC261ECADBB6009A1791 /* RCTTwilioAccessManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC181ECADBB6009A1791 /* RCTTwilioAccessManager.m */; };
+		D2C5AC271ECADBB6009A1791 /* RCTTwilioChatChannels.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1A1ECADBB6009A1791 /* RCTTwilioChatChannels.m */; };
+		D2C5AC281ECADBB6009A1791 /* RCTTwilioChatChannels.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1A1ECADBB6009A1791 /* RCTTwilioChatChannels.m */; };
+		D2C5AC291ECADBB6009A1791 /* RCTTwilioChatClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1C1ECADBB6009A1791 /* RCTTwilioChatClient.m */; };
+		D2C5AC2A1ECADBB6009A1791 /* RCTTwilioChatClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1C1ECADBB6009A1791 /* RCTTwilioChatClient.m */; };
+		D2C5AC2B1ECADBB6009A1791 /* RCTTwilioChatMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1E1ECADBB6009A1791 /* RCTTwilioChatMembers.m */; };
+		D2C5AC2C1ECADBB6009A1791 /* RCTTwilioChatMembers.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC1E1ECADBB6009A1791 /* RCTTwilioChatMembers.m */; };
+		D2C5AC2D1ECADBB6009A1791 /* RCTTwilioChatMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC201ECADBB6009A1791 /* RCTTwilioChatMessages.m */; };
+		D2C5AC2E1ECADBB6009A1791 /* RCTTwilioChatMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC201ECADBB6009A1791 /* RCTTwilioChatMessages.m */; };
+		D2C5AC2F1ECADBB6009A1791 /* RCTTwilioChatPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC221ECADBB6009A1791 /* RCTTwilioChatPaginator.m */; };
+		D2C5AC301ECADBB6009A1791 /* RCTTwilioChatPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C5AC221ECADBB6009A1791 /* RCTTwilioChatPaginator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,13 +244,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		D2C5ABA91ECAD7F0009A1791 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D2C5AB971ECAD7F0009A1791 /* RCTTwilioChat.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1DAE2D1E1D086CD600D3FE06;
-			remoteInfo = RCTTwilioChat;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -270,7 +276,20 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		86CC26A7ED491D12774819B3 /* libPods-ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD59F7805960BA0B96D88B7E /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		D2C5AB971ECAD7F0009A1791 /* RCTTwilioChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTTwilioChat.xcodeproj; path = ../../ios/RCTTwilioChat.xcodeproj; sourceTree = "<group>"; };
+		D2C5AC151ECADBB6009A1791 /* RCTConvert+TwilioChatClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+TwilioChatClient.h"; sourceTree = "<group>"; };
+		D2C5AC161ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+TwilioChatClient.m"; sourceTree = "<group>"; };
+		D2C5AC171ECADBB6009A1791 /* RCTTwilioAccessManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioAccessManager.h; sourceTree = "<group>"; };
+		D2C5AC181ECADBB6009A1791 /* RCTTwilioAccessManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioAccessManager.m; sourceTree = "<group>"; };
+		D2C5AC191ECADBB6009A1791 /* RCTTwilioChatChannels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatChannels.h; sourceTree = "<group>"; };
+		D2C5AC1A1ECADBB6009A1791 /* RCTTwilioChatChannels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatChannels.m; sourceTree = "<group>"; };
+		D2C5AC1B1ECADBB6009A1791 /* RCTTwilioChatClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatClient.h; sourceTree = "<group>"; };
+		D2C5AC1C1ECADBB6009A1791 /* RCTTwilioChatClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatClient.m; sourceTree = "<group>"; };
+		D2C5AC1D1ECADBB6009A1791 /* RCTTwilioChatMembers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatMembers.h; sourceTree = "<group>"; };
+		D2C5AC1E1ECADBB6009A1791 /* RCTTwilioChatMembers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatMembers.m; sourceTree = "<group>"; };
+		D2C5AC1F1ECADBB6009A1791 /* RCTTwilioChatMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatMessages.h; sourceTree = "<group>"; };
+		D2C5AC201ECADBB6009A1791 /* RCTTwilioChatMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatMessages.m; sourceTree = "<group>"; };
+		D2C5AC211ECADBB6009A1791 /* RCTTwilioChatPaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTTwilioChatPaginator.h; sourceTree = "<group>"; };
+		D2C5AC221ECADBB6009A1791 /* RCTTwilioChatPaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTTwilioChatPaginator.m; sourceTree = "<group>"; };
 		D507B202A13974FCCF90DE97 /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -288,7 +307,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2C5ABB61ECAD8CA009A1791 /* libRCTTwilioChat.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -476,7 +494,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				D2C5AB971ECAD7F0009A1791 /* RCTTwilioChat.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -504,6 +521,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D2C5AC141ECADBB6009A1791 /* RCTTwilioChat */,
 				13B07FAE1A68108700A75B9A /* Example */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ExampleTests */,
@@ -526,12 +544,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D2C5AB981ECAD7F0009A1791 /* Products */ = {
+		D2C5AC141ECADBB6009A1791 /* RCTTwilioChat */ = {
 			isa = PBXGroup;
 			children = (
-				D2C5ABAA1ECAD7F0009A1791 /* libRCTTwilioChat.a */,
+				D2C5AC151ECADBB6009A1791 /* RCTConvert+TwilioChatClient.h */,
+				D2C5AC161ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m */,
+				D2C5AC171ECADBB6009A1791 /* RCTTwilioAccessManager.h */,
+				D2C5AC181ECADBB6009A1791 /* RCTTwilioAccessManager.m */,
+				D2C5AC191ECADBB6009A1791 /* RCTTwilioChatChannels.h */,
+				D2C5AC1A1ECADBB6009A1791 /* RCTTwilioChatChannels.m */,
+				D2C5AC1B1ECADBB6009A1791 /* RCTTwilioChatClient.h */,
+				D2C5AC1C1ECADBB6009A1791 /* RCTTwilioChatClient.m */,
+				D2C5AC1D1ECADBB6009A1791 /* RCTTwilioChatMembers.h */,
+				D2C5AC1E1ECADBB6009A1791 /* RCTTwilioChatMembers.m */,
+				D2C5AC1F1ECADBB6009A1791 /* RCTTwilioChatMessages.h */,
+				D2C5AC201ECADBB6009A1791 /* RCTTwilioChatMessages.m */,
+				D2C5AC211ECADBB6009A1791 /* RCTTwilioChatPaginator.h */,
+				D2C5AC221ECADBB6009A1791 /* RCTTwilioChatPaginator.m */,
 			);
-			name = Products;
+			name = RCTTwilioChat;
+			path = ../../ios/RCTTwilioChat;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -682,10 +714,6 @@
 				{
 					ProductGroup = 832341B11AAA6A8300B99B32 /* Products */;
 					ProjectRef = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
-				},
-				{
-					ProductGroup = D2C5AB981ECAD7F0009A1791 /* Products */;
-					ProjectRef = D2C5AB971ECAD7F0009A1791 /* RCTTwilioChat.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302E01ABCB9EE00DB3ED1 /* Products */;
@@ -886,13 +914,6 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D2C5ABAA1ECAD7F0009A1791 /* libRCTTwilioChat.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTTwilioChat.a;
-			remoteRef = D2C5ABA91ECAD7F0009A1791 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1055,7 +1076,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2C5AC2A1ECADBB6009A1791 /* RCTTwilioChatClient.m in Sources */,
+				D2C5AC301ECADBB6009A1791 /* RCTTwilioChatPaginator.m in Sources */,
+				D2C5AC261ECADBB6009A1791 /* RCTTwilioAccessManager.m in Sources */,
+				D2C5AC241ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m in Sources */,
+				D2C5AC2C1ECADBB6009A1791 /* RCTTwilioChatMembers.m in Sources */,
 				00E356F31AD99517003FC87E /* ExampleTests.m in Sources */,
+				D2C5AC2E1ECADBB6009A1791 /* RCTTwilioChatMessages.m in Sources */,
+				D2C5AC281ECADBB6009A1791 /* RCTTwilioChatChannels.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1063,8 +1091,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2C5AC291ECADBB6009A1791 /* RCTTwilioChatClient.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				D2C5AC2F1ECADBB6009A1791 /* RCTTwilioChatPaginator.m in Sources */,
+				D2C5AC251ECADBB6009A1791 /* RCTTwilioAccessManager.m in Sources */,
+				D2C5AC2D1ECADBB6009A1791 /* RCTTwilioChatMessages.m in Sources */,
+				D2C5AC231ECADBB6009A1791 /* RCTConvert+TwilioChatClient.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				D2C5AC271ECADBB6009A1791 /* RCTTwilioChatChannels.m in Sources */,
+				D2C5AC2B1ECADBB6009A1791 /* RCTTwilioChatMembers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
