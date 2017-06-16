@@ -213,7 +213,7 @@ public class RCTTwilioChatMembers extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getAndSubscribeUser(String channelSid, final String identity, final Promise promise){
+    public void subscribedUser(String channelSid, final String identity, final Promise promise){
       loadMembersFromChannelSid(channelSid, new CallbackListener<Members>() {
         @Override
         public void onError(ErrorInfo errorInfo) {
