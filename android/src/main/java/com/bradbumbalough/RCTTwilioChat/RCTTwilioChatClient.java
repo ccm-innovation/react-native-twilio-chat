@@ -234,7 +234,10 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     @ReactMethod
     public void shutdown() {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
-        if (tmp.client != null) tmp.client.shutdown();
+        if (tmp.client != null) {
+          tmp.client.shutdown();
+          tmp.client = null;
+        }
     }
 
     @ReactMethod
