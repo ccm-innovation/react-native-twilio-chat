@@ -263,6 +263,7 @@ public class RCTConvert {
         map.putInt("index", (int) message.getMessageIndex());
         map.putString("author", message.getAuthor());
         map.putString("body", message.getMessageBody());
+        map.putString("_channelSid", message.getChannelSid());
         map.putString("timestamp", message.getTimeStamp());
 
         WritableMap attributes = Arguments.createMap();
