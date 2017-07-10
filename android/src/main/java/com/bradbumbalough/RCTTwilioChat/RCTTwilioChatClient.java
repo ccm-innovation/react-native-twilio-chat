@@ -365,6 +365,27 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     }
 
     @Override
+    public void onMessageAdded(Message message) {
+      WritableMap map = Arguments.createMap();
+      map.putMap("message", RCTConvert.Message(message));
+      sendEvent("chatClient:messageAdded", map);
+    }
+
+    @Override
+    public void onMessageUpdated(Message message) {
+        WritableMap map = Arguments.createMap();
+        map.putMap("message", RCTConvert.Message(message));
+        sendEvent("chatClient:messageChanged", map);
+    }
+
+    @Override
+    public void onMessageDeleted(Message message) {
+        WritableMap map = Arguments.createMap();
+        map.putMap("message", RCTConvert.Message(message));
+        sendEvent("chatClient:messageDeleted", map);
+    }
+
+    @Override
     public void onError(ErrorInfo errorInfo) {
         WritableMap map = Arguments.createMap();
         map.putString("error",errorInfo.getMessage());
