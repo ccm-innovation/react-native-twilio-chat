@@ -20,6 +20,7 @@ import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.ChatClientListener;
 import com.twilio.chat.ChatClient;
 import com.twilio.chat.User;
+import com.twilio.chat.Message;
 
 import java.util.HashMap;
 import java.util.Map;
