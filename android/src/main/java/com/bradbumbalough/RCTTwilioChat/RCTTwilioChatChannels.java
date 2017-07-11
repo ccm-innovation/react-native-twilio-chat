@@ -214,7 +214,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
         final JSONObject attributes = RCTConvert.readableMapToJson(options.getMap("attributes"));
         final String uniqueName = options.getString("uniqueName");
         String friendlyName = options.getString("friendlyName");
-        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.PRIVATE : Channel.ChannelType.PUBLIC;
+        Channel.ChannelType type = (options.getString("type").compareTo("PRIVATE") == 0) ? Channel.ChannelType.PRIVATE : Channel.ChannelType.PUBLIC;
 
         channels().channelBuilder()
                 .withUniqueName(uniqueName)
