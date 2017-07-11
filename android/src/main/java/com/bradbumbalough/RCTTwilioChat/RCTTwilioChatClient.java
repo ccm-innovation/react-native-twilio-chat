@@ -18,6 +18,7 @@ import com.twilio.chat.StatusListener;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.ChatClientListener;
+import com.twilio.chat.ChannelListener;
 import com.twilio.chat.ChatClient;
 import com.twilio.chat.User;
 import com.twilio.chat.Message;
@@ -363,27 +364,6 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
         WritableMap map = Arguments.createMap();
         map.putMap("user", RCTConvert.User(user));
         sendEvent("chatClient:userUnsubscribed", map);
-    }
-
-    @Override
-    public void onMessageAdded(Message message) {
-      WritableMap map = Arguments.createMap();
-      map.putMap("message", RCTConvert.Message(message));
-      sendEvent("chatClient:messageAdded", map);
-    }
-
-    @Override
-    public void onMessageUpdated(Message message) {
-        WritableMap map = Arguments.createMap();
-        map.putMap("message", RCTConvert.Message(message));
-        sendEvent("chatClient:messageChanged", map);
-    }
-
-    @Override
-    public void onMessageDeleted(Message message) {
-        WritableMap map = Arguments.createMap();
-        map.putMap("message", RCTConvert.Message(message));
-        sendEvent("chatClient:messageDeleted", map);
     }
 
     @Override
