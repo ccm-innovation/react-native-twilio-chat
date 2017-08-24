@@ -180,17 +180,18 @@ public class RCTTwilioChatClient extends ReactContextBaseJavaModule implements C
     }
 
     @ReactMethod
-    public void updateToken(String token) {
+    public void updateToken(String token,final Promise promise) {
         RCTTwilioChatClient tmp = RCTTwilioChatClient.getInstance();
         tmp.client.updateToken(token, new StatusListener() {
             @Override
             public void onSuccess() {
-
+              promise.resolve(true);
             }
 
             @Override
             public void onError(ErrorInfo errorInfo) {
-
+              super.onError(errorInfo);
+              promise.reject("update-client--token-error", "Error occurred while attempting to update the client token. Error Message: " + errorInfo.getMessage());
             }
         });
     }

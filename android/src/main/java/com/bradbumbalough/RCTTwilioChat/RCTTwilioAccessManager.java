@@ -8,10 +8,11 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+
 import com.twilio.accessmanager.AccessManager;
 
 
-public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implements AccessManager.Listener {
+public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implements AccessManager.Listener,AccessManager.TokenUpdateListener {
 
     @Override
     public String getName() {
@@ -47,6 +48,26 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
       promise.resolve(RCTConvert.AccessManager(tmp.accessManager));
     }
 
+    @ReactMethod
+    public void getTokenExpirationDate(Promise promise){
+      RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
+      String expirationDate = tmp.accessManager.getTokenExpirationDate().toString();
+      promise.resolve(expirationDate);
+    }
+
+    @ReactMethod
+    public void getToken(Promise promise){
+      RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
+      promise.resolve(RCTConvert.AccessManager(tmp.accessManager));
+    }
+
+    @ReactMethod
+    public void isTokenExpired(Promise promise){
+      RCTTwilioAccessManager tmp = RCTTwilioAccessManager.getInstance();
+      Boolean expired = tmp.accessManager.isTokenExpired();
+      promise.resolve(expired);
+    }
+
     @Override
     public void onTokenExpired(AccessManager twilioAccessManager) {
         reactContext
@@ -59,6 +80,13 @@ public class RCTTwilioAccessManager extends ReactContextBaseJavaModule implement
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("accessManager:tokenWillExpire", null);
+    }
+
+    @Override
+    public void onTokenUpdated(String token){
+      reactContext
+              .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+              .emit("accessManager:tokenUpdated", token);
     }
 
     @Override

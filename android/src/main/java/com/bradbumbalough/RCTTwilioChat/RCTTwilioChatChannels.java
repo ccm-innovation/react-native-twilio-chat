@@ -535,8 +535,18 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void shutdown() {
-        channelListeners.clear();
+    public void shutdown(String channelSid) {
+      loadChannelFromSid(channelSid, new CallbackListener<Channel>() {
+          @Override
+          public void onError(ErrorInfo errorInfo) {
+          }
+
+          @Override
+          public void onSuccess(Channel channel) {
+            channel.dispose();
+          }
+      });
+      channelListeners.clear();
     }
 
 
