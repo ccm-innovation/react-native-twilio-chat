@@ -246,7 +246,7 @@ RCT_REMAP_METHOD(updateBody, channelSid:(NSString *)channelSid index:(NSNumber *
 }
 
 
-RCT_REMAP_METHOD(setAttributes, channelSid:(NSString *)channelSid index:(NSNumber *)index attributes:(NSDictionary *)attributes set_attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RRCT_REMAP_METHOD(setAttributes, channelSid:(NSString * __nonnull)channelSid index:(NSNumber * __nonnull)index attributes:(NSDictionary * __nonnull)attributes set_attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
         if (result.isSuccessful) {
             [messages messageWithIndex:index completion:^(TCHResult *result, TCHMessage *message) {
