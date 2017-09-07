@@ -182,7 +182,7 @@ RCT_REMAP_METHOD(messageForConsumptionIndex, channelSid:(NSString *)channelSid i
     }];
 }
 
-RCT_REMAP_METHOD(setLastConsumedMessageIndex, channelSid:(NSString *)channelSid set_index:(NSNumber *)index setLastConsumedMessageIndex_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(setLastConsumedMessageIndex, channelSid:(NSString * __nonnull)channelSid set_index:(NSNumber * __nonnull)index setLastConsumedMessageIndex_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
         if (result.isSuccessful) {
             [messages setLastConsumedMessageIndex:index];
@@ -206,7 +206,7 @@ RCT_REMAP_METHOD(advanceLastConsumedMessageIndex, channelSid:(NSString *)channel
     }];
 }
 
-RCT_REMAP_METHOD(setAllMessagesConsumed, channelSid:(NSString *)channelSid setAllMessagesConsumed:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(setAllMessagesConsumed, channelSid:(NSString * __nonnull)channelSid setAllMessagesConsumed:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [self loadMessagesFromChannelSid:channelSid :^(TCHResult *result, TCHMessages *messages) {
         if (result.isSuccessful) {
             [messages setAllMessagesConsumed];
