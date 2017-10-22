@@ -1,17 +1,23 @@
 {
-  "name": "ReactNativeTwilioIPMessagingExample",
-  "version": "0.2.1",
+  "name": "Example",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
   "dependencies": {
-    "@exponent/react-native-navigator": "^0.4.2",
-    "react": "^15.4.1",
-    "react-native": "^0.39.0",
-    "react-native-communications": "^1.0.1",
-    "react-native-extra-dimensions-android": "^0.17.0",
-    "react-native-gifted-messenger": "^0.1.4",
-    "react-native-twilio-ip-chat": "^0.1.1"
+    "react": "16.0.0-alpha.6",
+    "react-native": "0.44.0",
+    "react-native-gifted-chat": "^0.1.4"
+  },
+  "devDependencies": {
+    "babel-jest": "20.0.1",
+    "babel-preset-react-native": "1.9.2",
+    "jest": "20.0.1",
+    "react-test-renderer": "16.0.0-alpha.6"
+  },
+  "jest": {
+    "preset": "react-native"
   }
 }

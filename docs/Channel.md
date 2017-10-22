@@ -123,9 +123,6 @@ Returns the number of messages for this channel.
 #### `getUnconsumedMessagesCount()` : Promise
 Returns the number of unread messages for this channel.
 
-#### `initialize()` : Promise
-Synchronize the channel with the server. May not be needed depending on if you set synchronizationStrategy to `All` during the client initialization. Otherwise, without calling `initialize` you won't get notificed when any events pertaining to this channel occur.
-
 #### `invite(identity)` : Promise
 |Name |Type |Description |
 |--- |--- |--- |

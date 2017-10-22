@@ -13,7 +13,8 @@ import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelDescriptor;
 import com.twilio.chat.Channels;
 import com.twilio.chat.ChatClient;
-import com.twilio.chat.UserInfo;
+import com.twilio.chat.User;
+import com.twilio.chat.UserDescriptor;
 import com.twilio.chat.Message;
 import com.twilio.chat.Member;
 import com.twilio.chat.Paginator;
@@ -223,21 +224,34 @@ public class RCTConvert {
         map.putString("friendlyName", channel.getFriendlyName());
         map.putString("uniqueName", channel.getUniqueName());
         map.putMap("attributes", jsonToWritableMap(channel.getAttributes()));
+        map.putInt("messagesCount", (int) channel.getMessagesCount());
+        map.putInt("membersCount", (int) channel.getMembersCount());
         map.putString("dateCreated", channel.getDateCreated().toString());
         map.putString("dateUpdated", channel.getDateUpdated().toString());
-        map.putInt("membersCount", (int) channel.getMembersCount());
-        map.putInt("messagesCount", (int) channel.getMessagesCount());
+        map.putString("createdBy", channel.getCreatedBy());
         return map;
     }
 
-    public static WritableMap UserInfo(UserInfo userInfo) {
+    public static WritableMap User(User user) {
         WritableMap map = Arguments.createMap();
 
-        map.putString("identity", userInfo.getIdentity());
-        map.putString("friendlyName", userInfo.getFriendlyName());
-        map.putMap("attributes", jsonToWritableMap(userInfo.getAttributes()));
-        map.putBoolean("isOnline", userInfo.isOnline());
-        map.putBoolean("isNotifiable", userInfo.isNotifiable());
+        map.putString("identity", user.getIdentity());
+        map.putString("friendlyName", user.getFriendlyName());
+        map.putMap("attributes", jsonToWritableMap(user.getAttributes()));
+        map.putBoolean("isOnline", user.isOnline());
+        map.putBoolean("isNotifiable", user.isNotifiable());
+
+        return map;
+    }
+
+    public static WritableMap UserDescriptor(UserDescriptor userDescriptor) {
+        WritableMap map = Arguments.createMap();
+
+        map.putString("identity", userDescriptor.getIdentity());
+        map.putString("friendlyName", userDescriptor.getFriendlyName());
+        map.putMap("attributes", jsonToWritableMap(userDescriptor.getAttributes()));
+        map.putBoolean("isOnline", userDescriptor.isOnline());
+        map.putBoolean("isNotifiable", userDescriptor.isNotifiable());
 
         return map;
     }
@@ -249,6 +263,7 @@ public class RCTConvert {
         map.putInt("index", (int) message.getMessageIndex());
         map.putString("author", message.getAuthor());
         map.putString("body", message.getMessageBody());
+        map.putString("_channelSid", message.getChannelSid());
         map.putString("timestamp", message.getTimeStamp());
 
         WritableMap attributes = Arguments.createMap();
@@ -263,7 +278,7 @@ public class RCTConvert {
     public static WritableMap Member(Member member) {
         WritableMap map = Arguments.createMap();
 
-        map.putMap("userInfo", UserInfo(member.getUserInfo()));
+        map.putString("identity", member.getIdentity());
         if (member.getLastConsumedMessageIndex() == null) {
             map.putNull("lastConsumedMessageIndex");
         }
@@ -283,7 +298,8 @@ public class RCTConvert {
     public static WritableMap ChatClient(ChatClient client) {
         WritableMap map = Arguments.createMap();
 
-        map.putMap("userInfo", UserInfo(client.getMyUserInfo()));
+        map.putMap("user", User(client.getUsers().getMyUser()));
+        map.putString("version", client.getSdkVersion());
         map.putBoolean("isReachabilityEnabled", client.isReachabilityEnabled());
 
         return map;
@@ -339,14 +355,20 @@ public class RCTConvert {
         return array;
     }
 
+    public static WritableArray UserDescriptors(List<UserDescriptor> userDescriptors) {
+        WritableArray array = Arguments.createArray();
+
+        for (UserDescriptor u : userDescriptors) {
+            array.pushMap(UserDescriptor(u));
+        }
+
+        return array;
+    }
+
     public static WritableMap Paginator(Object paginator, String sid, String type) {
         WritableMap map = Arguments.createMap();
         WritableMap _paginator = Arguments.createMap();
         switch (type) {
-            case "Channel":
-                _paginator.putArray("items", Channels(((Paginator<Channel>)paginator).getItems()));
-                _paginator.putBoolean("hasNextPage", ((Paginator<Channel>)paginator).hasNextPage());
-                break;
             case "ChannelDescriptor":
                 _paginator.putArray("items", ChannelDescriptors(((Paginator<ChannelDescriptor>)paginator).getItems()));
                 _paginator.putBoolean("hasNextPage", ((Paginator<ChannelDescriptor>)paginator).hasNextPage());
@@ -354,6 +376,10 @@ public class RCTConvert {
             case "Member":
                 _paginator.putArray("items", Members(((Paginator<Member>)paginator).getItems()));
                 _paginator.putBoolean("hasNextPage", ((Paginator<Member>)paginator).hasNextPage());
+                break;
+            case "UserDescriptor":
+                _paginator.putArray("items", UserDescriptors(((Paginator<UserDescriptor>)paginator).getItems()));
+                _paginator.putBoolean("hasNextPage", ((Paginator<UserDescriptor>)paginator).hasNextPage());
                 break;
         }
         map.putString("sid", sid);

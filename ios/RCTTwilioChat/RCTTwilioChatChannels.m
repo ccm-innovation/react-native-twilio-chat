@@ -25,13 +25,13 @@ RCT_EXPORT_MODULE();
 
 RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] userChannelsWithCompletion:^(TCHResult *result, TCHChannelPaginator *paginator) {
+    [[client channelsList] userChannelDescriptorsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
         if (result.isSuccessful) {
             NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
                       @"sid":uuid,
-                      @"type": @"Channel",
-                      @"paginator": [RCTConvert TCHChannelPaginator:paginator]
+                      @"type": @"ChannelDescriptor",
+                      @"paginator": [RCTConvert TCHChannelDescriptorPaginator:paginator]
                       });
 
         }
@@ -43,7 +43,7 @@ RCT_REMAP_METHOD(getUserChannels, userChannels_resolver:(RCTPromiseResolveBlock)
 
 RCT_REMAP_METHOD(getPublicChannels, publicChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
-    [[client channelsList] publicChannelsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
+    [[client channelsList] publicChannelDescriptorsWithCompletion:^(TCHResult *result, TCHChannelDescriptorPaginator *paginator) {
         if (result.isSuccessful) {
             NSString *uuid = [RCTTwilioChatPaginator setPaginator:paginator];
             resolve(@{
@@ -58,6 +58,13 @@ RCT_REMAP_METHOD(getPublicChannels, publicChannels_resolver:(RCTPromiseResolveBl
         }
     }];
 }
+
+RCT_REMAP_METHOD(getSubscribedChannels, subscribedChannels_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
+  NSArray<TCHChannel *>* channels = [[client channelsList] subscribedChannels];
+  resolve([RCTConvert TCHChannels:channels]);
+}
+
 
 RCT_REMAP_METHOD(createChannel, options:(NSDictionary *)options create_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   TwilioChatClient *client = [[RCTTwilioChatClient sharedManager] client];
@@ -85,24 +92,6 @@ RCT_REMAP_METHOD(getChannel, sidOrUniqueName:(NSString *)sidOrUniqueName sid_res
 
 #pragma mark Channel Instance Methods
 
-RCT_REMAP_METHOD(synchronize, sid:(NSString *)sid synchronize_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
-        if (result.isSuccessful) {
-            [channel synchronizeWithCompletion:^(TCHResult *result) {
-                if (result.isSuccessful) {
-                    resolve(@[@TRUE]);
-                }
-                else {
-                    reject(@"sync-error", @"Error occured during channel syncronization.", result.error);
-                }
-            }];
-        }
-        else {
-            reject(@"sync-error", @"Error occured during channel syncronization.", result.error);
-        }
-    }];
-}
-
 RCT_REMAP_METHOD(setAttributes, sid:(NSString *)sid attributes:(NSDictionary *)attributes attributes_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
         if (result.isSuccessful) {
@@ -111,12 +100,12 @@ RCT_REMAP_METHOD(setAttributes, sid:(NSString *)sid attributes:(NSDictionary *)a
                     resolve(@[@TRUE]);
                 }
                 else {
-                    reject(@"set-attributes-error", @"Error occuring while attempting to setAttributes on channel.", result.error);
+                    reject(@"set-attributes-error", @"Error occurred while attempting to setAttributes on channel.", result.error);
                 }
             }];
         }
         else {
-            reject(@"set-attributes-error", @"Error occuring while attempting to setAttributes on channel.", result.error);
+            reject(@"set-attributes-error", @"Error occurred while attempting to setAttributes on channel.", result.error);
         }
     }];
 }
@@ -220,12 +209,12 @@ RCT_REMAP_METHOD(destroy, sid:(NSString *)sid destroy_resolver:(RCTPromiseResolv
                     resolve(@[@TRUE]);
                 }
                 else {
-                    reject(@"destroy-channel-error", @"Error occured while attempting to delete the channel.", result.error);
+                    reject(@"destroy-channel-error", @"Error occurred while attempting to delete channel.", result.error);
                 }
             }];
         }
         else {
-            reject(@"destroy-channel-error", @"Error occured while attempting to delete the channel.", result.error);
+            reject(@"destroy-channel-error", @"Error occurred while attempting to delete channel.", result.error);
         }
     }];
 }
@@ -256,12 +245,12 @@ RCT_REMAP_METHOD(getMessagesCount, sid:(NSString *)sid messagesCount_resolver:(R
                     resolve(@(count));
                 }
                 else {
-                    reject(@"get-messages-count-error", @"Error occured while attempting to get message count.", result.error);
+                    reject(@"get-messages-count-error", @"Error occured while attempting to get channel messages count.", result.error);
                 }
              }];
         }
         else {
-            reject(@"get-messages-count-error", @"Error occured while attempting to get message count.", result.error);
+            reject(@"get-messages-count-error", @"Error occured while attempting to get channel messages count.", result.error);
         }
     }];
 }
@@ -274,13 +263,13 @@ RCT_REMAP_METHOD(getMembersCount, sid:(NSString *)sid membersCount_resolver:(RCT
                     resolve(@(count));
                 }
                 else {
-                    reject(@"get-members-count-error", @"Error occured while attempting to get members count.", result.error);
+                    reject(@"get-members-count-error", @"Error occurred while attempting to get channel members count.", result.error);
                 }
             }];
 
         }
         else {
-            reject(@"get-members-count-error", @"Error occured while attempting to get members count.", result.error);
+            reject(@"get-members-count-error", @"Error occurred while attempting to get channel members count.", result.error);
         }
     }];
 }
@@ -301,10 +290,22 @@ RCT_REMAP_METHOD(getMember, sid:(NSString *)sid identity:(NSString *)identity me
             resolve([RCTConvert TCHMember:[channel memberWithIdentity:identity]]);
         }
         else {
-            reject(@"get-member", @"Error occured while attempting to get member.", result.error);
-
+            reject(@"get-member-error", @"Error occured while attempting to get channel member.", result.error);
         }
     }];
 }
+
+RCT_REMAP_METHOD(getChannel, sid:(NSString *)sid channel_resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  [RCTTwilioChatChannels loadChannelFromSid:sid :^(TCHResult *result, TCHChannel *channel) {
+    if (result.isSuccessful) {
+      resolve([RCTConvert TCHChannel:channel]);
+    }
+    else {
+      reject(@"get-full-channel-object-error", @"Error occured while attempting to get full channel object.", result.error);
+    }
+  }];
+}
+
+
 
 @end

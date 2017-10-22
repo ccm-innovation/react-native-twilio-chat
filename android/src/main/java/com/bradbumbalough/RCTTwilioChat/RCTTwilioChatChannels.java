@@ -22,7 +22,9 @@ import com.twilio.chat.Message;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Paginator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.lang.Integer;
 
@@ -55,7 +57,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
         ChannelListener listener = new ChannelListener() {
             @Override
-            public void onMessageAdd(Message message) {
+            public void onMessageAdded(Message message) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
@@ -63,7 +65,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onMessageChange(Message message) {
+            public void onMessageUpdated(Message message) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
@@ -72,7 +74,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onMessageDelete(Message message) {
+            public void onMessageDeleted(Message message) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("message", RCTConvert.Message(message));
@@ -81,7 +83,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onMemberJoin(Member member) {
+            public void onMemberAdded(Member member) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
@@ -90,7 +92,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onMemberChange(Member member) {
+            public void onMemberUpdated(Member member) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
@@ -99,7 +101,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onMemberDelete(Member member) {
+            public void onMemberDeleted(Member member) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putMap("member", RCTConvert.Member(member));
@@ -126,7 +128,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSynchronizationChange(Channel channel) {
+            public void onSynchronizationChanged(Channel channel) {
                 WritableMap map = Arguments.createMap();
                 map.putString("channelSid", channelSid);
                 map.putString("status", channel.getSynchronizationStatus().toString());
@@ -169,7 +171,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getUserChannels(final Promise promise) {
-        channels().getUserChannels(new CallbackListener<Paginator<Channel>>() {
+        channels().getUserChannelsList(new CallbackListener<Paginator<ChannelDescriptor>>() {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -177,19 +179,22 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onSuccess(final Paginator<Channel> channelPaginator) {
-                for (Channel channel: channelPaginator.getItems()) {
-                    createListener(channel);
-                }
+            public void onSuccess(final Paginator<ChannelDescriptor> channelPaginator) {
                 String uuid = RCTTwilioChatPaginator.setPaginator(channelPaginator);
-                promise.resolve(RCTConvert.Paginator(channelPaginator, uuid, "Channel"));
+                promise.resolve(RCTConvert.Paginator(channelPaginator, uuid, "ChannelDescriptor"));
             }
         });
     }
 
     @ReactMethod
+    public void getSubscribedChannels(final Promise promise) {
+        List<Channel> list = channels().getSubscribedChannels();
+        promise.resolve(RCTConvert.Channels(new ArrayList<Channel>(list)));
+    }
+
+    @ReactMethod
     public void getPublicChannels(final Promise promise) {
-        channels().getPublicChannels(new CallbackListener<Paginator<ChannelDescriptor>>() {
+        channels().getPublicChannelsList(new CallbackListener<Paginator<ChannelDescriptor>>() {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
@@ -209,7 +214,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
         final JSONObject attributes = RCTConvert.readableMapToJson(options.getMap("attributes"));
         final String uniqueName = options.getString("uniqueName");
         String friendlyName = options.getString("friendlyName");
-        Channel.ChannelType type = (options.getString("type").compareTo("CHANNEL_TYPE_PRIVATE") == 0) ? Channel.ChannelType.PRIVATE : Channel.ChannelType.PUBLIC;
+        Channel.ChannelType type = (options.getString("type").compareTo("PRIVATE") == 0) ? Channel.ChannelType.PRIVATE : Channel.ChannelType.PUBLIC;
 
         channels().channelBuilder()
                 .withUniqueName(uniqueName)
@@ -236,7 +241,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(final ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("get-channel-error", "Error occurred while attempting to getChannel.");
+                promise.reject("get-full-channel-object-error", "Error occured while attempting to get full channel object.");
             }
 
             @Override
@@ -247,33 +252,6 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
     }
 
     // Channel Instance Methods
-
-    @ReactMethod
-    public void synchronize(String sid, final Promise promise) {
-        loadChannelFromSid(sid, new CallbackListener<Channel>() {
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                super.onError(errorInfo);
-                promise.reject("synchronize-error", "Error occurred while attempting to synchronize channel.");
-            }
-
-            @Override
-            public void onSuccess(Channel channel) {
-                channel.synchronize(new CallbackListener<Channel>() {
-                    @Override
-                    public void onError(ErrorInfo errorInfo) {
-                        super.onError(errorInfo);
-                        promise.reject("synchronize-error", "Error occurred while attempting to synchronize channel.");
-                    }
-
-                    @Override
-                    public void onSuccess(Channel channel) {
-                        promise.resolve(true);
-                    }
-                });
-            }
-        });
-    }
 
     @ReactMethod
     public void setAttributes(String sid, final ReadableMap attributes, final Promise promise) {
@@ -390,7 +368,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("decline-error", "Error occurred while attempting to decline channel.");
+                promise.reject("decline-invitation-error", "Error occured while attempting to decline the invitation to join the channel.");
             }
 
             @Override
@@ -399,7 +377,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        promise.reject("decline-error", "Error occurred while attempting to decline channel.");
+                        promise.reject("decline-invitation-error", "Error occured while attempting to decline the invitation to join the channel.");
                     }
 
                     @Override
@@ -417,7 +395,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("leave-error", "Error occurred while attempting to leave channel.");
+                promise.reject("leave-channel-error", "Error occurred while attempting to leave channel.");
             }
 
             @Override
@@ -426,7 +404,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        promise.reject("leave-error", "Error occurred while attempting to leave channel.");
+                        promise.reject("leave-channel-error", "Error occurred while attempting to leave channel.");
                     }
 
                     @Override
@@ -444,7 +422,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("delete-error", "Error occurred while attempting to delete channel.");
+                promise.reject("destroy-channel-error", "Error occurred while attempting to delete channel.");
             }
 
             @Override
@@ -453,7 +431,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        promise.reject("delete-error", "Error occurred while attempting to delete channel.");
+                        promise.reject("destroy-channel-error", "Error occurred while attempting to delete channel.");
                     }
 
                     @Override
@@ -486,7 +464,7 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.getUnconsumedMessagesCount(new CallbackListener<Integer>() {
+                channel.getUnconsumedMessagesCount(new CallbackListener<Long>() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
@@ -494,8 +472,8 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
                     }
 
                     @Override
-                    public void onSuccess(Integer count) {
-                        promise.resolve(count);
+                    public void onSuccess(Long count) {
+                        promise.resolve(Long.toString(count));
                     }
                 });
             }
@@ -508,21 +486,21 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("get-messages-count-error", "Error occurred while attempting to getMessagesCount.");
+                promise.reject("get-messages-count-error", "Error occured while attempting to get channel messages count.");
             }
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.getMessagesCount(new CallbackListener<Integer>() {
+                channel.getMessagesCount(new CallbackListener<Long>() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        promise.reject("get-messages-count-error", "Error occurred while attempting to getMessagesCount.");
+                        promise.reject("get-messages-count-error", "Error occured while attempting to get channel messages count.");
                     }
 
                     @Override
-                    public void onSuccess(Integer count) {
-                        promise.resolve(count);
+                    public void onSuccess(Long count) {
+                        promise.resolve(Long.toString(count));
                     }
                 });
             }
@@ -535,21 +513,21 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
             @Override
             public void onError(ErrorInfo errorInfo) {
                 super.onError(errorInfo);
-                promise.reject("get-members-count-error", "Error occurred while attempting to getMembersCount.");
+                promise.reject("get-members-count-error", "Error occurred while attempting to get channel members count.");
             }
 
             @Override
             public void onSuccess(Channel channel) {
-                channel.getMembersCount(new CallbackListener<Integer>() {
+                channel.getMembersCount(new CallbackListener<Long>() {
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        promise.reject("get-members-count-error", "Error occurred while attempting to getMembersCount.");
+                        promise.reject("get-members-count-error", "Error occurred while attempting to get channel members count.");
                     }
 
                     @Override
-                    public void onSuccess(Integer count) {
-                        promise.resolve(count);
+                    public void onSuccess(Long count) {
+                        promise.resolve(Long.toString(count));
                     }
                 });
             }
@@ -558,26 +536,29 @@ public class RCTTwilioChatChannels extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void shutdown() {
-        channelListeners.clear();
+      channelListeners.clear();
     }
 
 
-    /*
     @ReactMethod
-    public void getMember(String channelSid, String identity, final Promise promise) {
-        Member[] members = loadChannelFromSid(channelSid).getMembers().getMembers();
-        try {
-            for (Member m : members) {
-                if (m.getUserInfo().getIdentity() == identity) {
+    public void getMember(String channelSid, final String identity, final Promise promise) {
+        loadChannelFromSid(channelSid, new CallbackListener<Channel>() {
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                promise.reject("get-member-error", "Error occured while attempting to get channel member");
+            }
+
+            @Override
+            public void onSuccess(Channel channel) {
+                try {
+                    Member m = channel.getMembers().getMember(identity);
                     promise.resolve(RCTConvert.Member(m));
-                    break;
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    promise.reject("get-member-error", "Error occured while attempting to get channel member.");
                 }
             }
-        }
-        catch (Exception e) {
-            promise.reject("get-member-error","Error occurred while attempting to getMember.");
-        }
+        });
     }
-    */
-
 }

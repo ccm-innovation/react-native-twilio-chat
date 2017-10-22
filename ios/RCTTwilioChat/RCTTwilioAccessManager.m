@@ -52,7 +52,9 @@ RCT_EXPORT_METHOD(registerClient){
     RCTTwilioAccessManager *_accessManager = [RCTTwilioAccessManager sharedManager];
     __weak RCTTwilioChatClient *_client = [RCTTwilioChatClient sharedManager];
     [_accessManager.accessManager registerClient:_client.client forUpdates:^(NSString * _Nonnull updatedToken) {
-        [_client.client updateToken:updatedToken];
+        [_client.client updateToken:updatedToken completion:^(TCHResult *result) {
+          NSLog(@"Access token updated");
+        }];
     }];
 }
 
